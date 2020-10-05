@@ -1,9 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FleetManagement.Controllers
 {
@@ -16,22 +11,16 @@ namespace FleetManagement.Controllers
 
         }
 
-        [HttpGet]
-        public string Test()
-        {
-            return "Hello World!";
-        }
-
         [HttpPost]
         public string LogIn([FromQuery] string login, string password)
         {
-            return "";
+            return $"Witaj {login}!";
         }
 
         [HttpPost]
         public string LogOut()
         {
-            return "";
+            return "Żegnaj!";
         }
     }
 }

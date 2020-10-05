@@ -2,11 +2,6 @@
 using FleetManagement.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FleetManagement.Extensions
 {
@@ -22,7 +17,22 @@ namespace FleetManagement.Extensions
             => services.Configure<DataBaseSettings>(configuration.GetSection(nameof(DataBaseSettings)))
                        .Configure<HashSettings>(configuration.GetSection(nameof(HashSettings)));
 
-        public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
+        /// <summary>
+        /// Dodaje sesję połączenia z bazą danych
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddDatabaseConnection(this IServiceCollection services, IConfiguration configuration)
             => services.AddSingleton(StartUpConfiguration.CreateSession(configuration));
+
+        /// <summary>
+        /// Dodaje usługi haszowania oraz autentykacji użytkownika
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        //public static IServiceCollection AddServices(this IServiceCollection services)
+        //    => services.AddTransient<IHashService, HashService>()
+        //               .AddTransient<IAuthService, AuthService>();
     }
 }

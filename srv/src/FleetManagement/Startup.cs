@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using FleetManagement.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 
 namespace FleetManagement
 {
@@ -22,33 +17,63 @@ namespace FleetManagement
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Dodanie zarz¹dzania routingiem.
+            services.AddRouting();
+
+            //Dodanie obs³ugi kontrolerów.
             services.AddControllers();
-            services.AddSwaggerGen();
+
+            //Dodanie us³ug:
+            services.AddAllSettings(Configuration)
+                .AddDatabaseConnection(Configuration);
+                //.AddServices();
+            
+            //Dodanie swaggera:
+            services.AddSwaggerGen(s => 
+            {
+                s.SwaggerDoc("v1",
+                    new OpenApiInfo
+                    {
+                        Title = "FleetManagement API",
+                        Description = "Api documentation for app that helps managing vehicles in companies.",
+                        Version = "0.0.1",
+                    }
+                );
+            });
+
+            //Dodanie autentykacji - logowanie.
+            //services.AddAuthenticationWithCookies();
+
+            //Dodanie autoryzacji - mo¿liwoœci u¿ytkownika.
+            //services.AddAuthorizationWithPolicies();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
+            }
 
             app.UseHttpsRedirection();
 
             app.UseSwagger();
-
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "FleetManagement");
                 c.RoutePrefix = string.Empty;
             });
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
