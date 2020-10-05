@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FleetManagement.Utils;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FleetManagement.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [DefaultRoute]
     public class AuthenticationController : ControllerBase
     {
         public AuthenticationController()
