@@ -2,11 +2,7 @@
 using FleetManagement.Entities.UserAccounts;
 using FleetManagement.Entities.UserAccounts.Models;
 using NHibernate;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FleetManagement.Db.Repositories
 {
@@ -14,6 +10,17 @@ namespace FleetManagement.Db.Repositories
     {
         public UserAccountsRepository(ISessionFactory sessionFactory) : base(sessionFactory)
         {
+        }
+
+        /// <summary>
+        /// Zwraca użytkownika o podanym mailu lub null gdy takiego nie ma.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public UserAccount GetUserByEmail(string email)
+        {
+            return GetAll().
+                FirstOrDefault(x => x.Email.Equals(email)) ?? null;
         }
     }
 }

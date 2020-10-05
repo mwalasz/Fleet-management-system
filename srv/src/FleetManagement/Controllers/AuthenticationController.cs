@@ -1,26 +1,45 @@
-﻿using FleetManagement.Utils;
+﻿using FleetManagement.Authentication;
+using FleetManagement.Extensions;
+using FleetManagement.Utils;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace FleetManagement.Controllers
 {
     [ApiController]
     [DefaultRoute]
+    [AllowAnonymous]
     public class AuthenticationController : ControllerBase
     {
-        public AuthenticationController()
-        {
+        private readonly IAuthService authService;
 
+        public AuthenticationController(IAuthService authService)
+        {
+            this.authService = authService;
         }
 
         [HttpPost]
-        public string LogIn([FromQuery] string login, string password)
+        public async Task<string> LogIn([FromQuery] string mail, string password)
         {
-            return $"Witaj {login}!";
+            var user = authService.ReturnValidUser(mail, password);
+
+            if (user == null)
+                return "niepoprawny login lub hasło!";
+
+            await HttpContext.SignInAsync(user);
+
+            return $"Witaj {user.FirstName}!";
         }
 
         [HttpPost]
-        public string LogOut()
+        public async Task<string> LogOut()
         {
+            if (!HttpContext.IsUserLoggedIn())
+                return "Niepoprawny użytkownik!";
+
+            await HttpContext.SignOutAsync();
             return "Żegnaj!";
         }
     }

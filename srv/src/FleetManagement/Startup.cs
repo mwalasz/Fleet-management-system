@@ -29,8 +29,8 @@ namespace FleetManagement
             services.AddAllSettings(Configuration)
                 .AddDatabaseConnection(Configuration)
                 .AddAllRepositories()
-                .AddAllSeeders();
-                //.AddServices();
+                .AddAllSeeders()
+                .AddServices();
 
             //Dodanie swaggera:
             services.AddSwaggerGen(s => 
@@ -46,10 +46,10 @@ namespace FleetManagement
             });
 
             //Dodanie autentykacji - logowanie.
-            //services.AddAuthenticationWithCookies();
+            services.AddCookieAuthentication();
 
             //Dodanie autoryzacji - mo¿liwoœci u¿ytkownika.
-            //services.AddAuthorizationWithPolicies();
+            services.AddPolicyAuthorization();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
