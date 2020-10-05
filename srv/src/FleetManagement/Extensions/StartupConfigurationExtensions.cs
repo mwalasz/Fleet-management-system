@@ -1,6 +1,8 @@
 ﻿using FleetManagement.Db.Configuration;
 using FleetManagement.Db.Repositories;
+using FleetManagement.Db.Seeds;
 using FleetManagement.Entities.UserAccounts;
+using FleetManagement.Entities.UserAccounts.Models;
 using FleetManagement.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,6 +38,8 @@ namespace FleetManagement.Extensions
         public static IServiceCollection AddAllRepositories(this IServiceCollection services)
             => services.AddTransient<IUserAccountProvider, UserAccountsRepository>();
 
+        public static IServiceCollection AddAllSeeders(this IServiceCollection services)
+            => services.AddTransient<IDbSeeder<IUserAccountProvider, UserAccount>, DbSeeder<IUserAccountProvider, UserAccount>>();
 
         /// <summary>
         /// Dodaje usługi haszowania oraz autentykacji użytkownika
