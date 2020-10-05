@@ -27,7 +27,8 @@ namespace FleetManagement
 
             //Dodanie us³ug:
             services.AddAllSettings(Configuration)
-                .AddDatabaseConnection(Configuration);
+                .AddDatabaseConnection(Configuration)
+                .AddAllRepositories();
                 //.AddServices();
             
             //Dodanie swaggera:
