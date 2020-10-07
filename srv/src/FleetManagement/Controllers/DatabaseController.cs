@@ -1,15 +1,13 @@
-﻿using AutoWrapper.Wrappers;
-using FleetManagement.Authentication.Hashes;
+﻿using FleetManagement.Authentication.Hashes;
 using FleetManagement.Authentication.Policies;
 using FleetManagement.Db.Seeds;
+using FleetManagement.Entities.ManagerAccounts;
+using FleetManagement.Entities.ManagerAccounts.Models;
 using FleetManagement.Entities.UserAccounts;
 using FleetManagement.Entities.UserAccounts.Models;
 using FleetManagement.Utils;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace FleetManagement.Controllers
 {
@@ -19,23 +17,29 @@ namespace FleetManagement.Controllers
     {
         private readonly IHashService hashService;
         private readonly IDbSeeder<IUserAccountProvider, UserAccount> userAccountsSeeder;
+        private readonly IDbSeeder<IManagerAccountProvider, ManagerAccount> managerAccountsSeeder;
 
         public DataBaseController(IHashService hashService,
-            IDbSeeder<IUserAccountProvider, UserAccount> accountsSeeder)
+            IDbSeeder<IUserAccountProvider, UserAccount> usersSeeder,
+            IDbSeeder<IManagerAccountProvider, ManagerAccount> managersSeeder)
         {
             this.hashService = hashService;
-            this.userAccountsSeeder = accountsSeeder;
+            this.userAccountsSeeder = usersSeeder;
+            this.managerAccountsSeeder = managersSeeder;
         }
 
         [HttpGet]
         public void Seed()
         {
             UserAccounts.AddRange(CreateUserAccounts());
+            ManagerAccounts.AddRange(CreateManagerAccounts());
     
             userAccountsSeeder.Seed(UserAccounts);
+            managerAccountsSeeder.Seed(ManagerAccounts);
         }
 
         private List<UserAccount> UserAccounts = new List<UserAccount>();
+        private List<ManagerAccount> ManagerAccounts = new List<ManagerAccount>();
 
         private IEnumerable<UserAccount> CreateUserAccounts()
         {
@@ -43,6 +47,7 @@ namespace FleetManagement.Controllers
             { 
                 new UserAccount()
                 {
+                    Id = 1,
                     FirstName = "Ala",
                     LastName = "Elementarzowa",
                     Email = "ala@poczta.pl",
@@ -52,14 +57,46 @@ namespace FleetManagement.Controllers
                 },
                 new UserAccount()
                 {
+                    Id = 2,
                     FirstName = "Mietek",
                     LastName = "Mietczynski",
                     Email = "mietek@poczta.pl",
                     PasswordHash = hashService.GenerateHash("mietek"),
                     PhoneNumber = "987654321",
                     Role = "test",
+                },
+                new UserAccount()
+                {
+                    Id = 3,
+                    FirstName = "Waldek",
+                    LastName = "Waldkowski",
+                    Email = "waldek@poczta.pl",
+                    PasswordHash = hashService.GenerateHash("waldek"),
+                    PhoneNumber = "987654321",
+                    Role = "test",
+                },
+                new UserAccount()
+                {
+                    Id = 4,
+                    FirstName = "Stasiek",
+                    LastName = "Stasiowski",
+                    Email = "stasiek@poczta.pl",
+                    PasswordHash = hashService.GenerateHash("stasiek"),
+                    PhoneNumber = "987654321",
+                    Role = "test",
                 }
             };   
+        }
+
+        private IEnumerable<ManagerAccount> CreateManagerAccounts()
+        {
+            return new List<ManagerAccount>()
+            { 
+                new ManagerAccount()
+                {
+                    UserAccountId = 3,
+                }
+            };
         }
     }
 }

@@ -4,6 +4,8 @@ using FleetManagement.Authentication.Policies;
 using FleetManagement.Db.Configuration;
 using FleetManagement.Db.Repositories;
 using FleetManagement.Db.Seeds;
+using FleetManagement.Entities.ManagerAccounts;
+using FleetManagement.Entities.ManagerAccounts.Models;
 using FleetManagement.Entities.UserAccounts;
 using FleetManagement.Entities.UserAccounts.Models;
 using FleetManagement.Settings;
@@ -45,7 +47,8 @@ namespace FleetManagement.Extensions
         /// <param name="services"></param>
         /// <returns></returns>
         public static IServiceCollection AddAllRepositories(this IServiceCollection services)
-            => services.AddTransient<IUserAccountProvider, UserAccountsRepository>();
+            => services.AddTransient<IUserAccountProvider, UserAccountsRepository>()
+                       .AddTransient<IManagerAccountProvider, ManagerAccountsRepository>();
 
         /// <summary>
         /// Dodaje usługi do wypełniania bazy danych.
@@ -53,7 +56,8 @@ namespace FleetManagement.Extensions
         /// <param name="services"></param>
         /// <returns></returns>
         public static IServiceCollection AddAllSeeders(this IServiceCollection services)
-            => services.AddTransient<IDbSeeder<IUserAccountProvider, UserAccount>, DbSeeder<IUserAccountProvider, UserAccount>>();
+            => services.AddTransient<IDbSeeder<IUserAccountProvider, UserAccount>, DbSeeder<IUserAccountProvider, UserAccount>>()
+                       .AddTransient<IDbSeeder<IManagerAccountProvider, ManagerAccount>, DbSeeder<IManagerAccountProvider, ManagerAccount>>();
 
         /// <summary>
         /// Dodaje usługi haszowania oraz autentykacji użytkownika
