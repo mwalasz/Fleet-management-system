@@ -1,4 +1,6 @@
+using AutoMapper;
 using AutoWrapper;
+using FleetManagement.AutoMapper.Profiles;
 using FleetManagement.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
 
 namespace FleetManagement
 {
@@ -25,6 +28,12 @@ namespace FleetManagement
 
             //Dodanie obs³ugi kontrolerów.
             services.AddControllers();
+
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile<DefaultMappingProfile>();
+            },
+            AppDomain.CurrentDomain.GetAssemblies());
 
             //Dodanie us³ug:
             services.AddAllSettings(Configuration)
