@@ -64,6 +64,11 @@ namespace FleetManagement.Extensions
             => services.AddTransient<IHashService, HashService>()
                        .AddTransient<IAuthService, AuthService>();
 
+        /// <summary>
+        /// Dodaje autentykację z wykorzystaniem ciasteczek.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public static AuthenticationBuilder AddCookieAuthentication(this IServiceCollection services)
             => services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(cfg =>
@@ -102,11 +107,22 @@ namespace FleetManagement.Extensions
                         };
                     });
 
+        /// <summary>
+        /// Dodaje autoryzację na podstawie uprawnień.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public static IServiceCollection AddPolicyAuthorization(this IServiceCollection services)
             => services.AddAuthorization(cfg =>
                 {
-                    cfg.AddPolicy(Policy.Administrator, policy =>
+                    cfg.AddPolicy(Policy.AdminsAcces, policy =>
                         policy.RequireRole(Roles.Admin));
+
+                    cfg.AddPolicy(Policy.ManagersAccess, policy =>
+                        policy.RequireRole(Roles.Manager));
+
+                    cfg.AddPolicy(Policy.DriversAccess, policy =>
+                        policy.RequireRole(Roles.Driver));
                 });
     }
 }

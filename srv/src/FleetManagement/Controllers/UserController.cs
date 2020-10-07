@@ -14,7 +14,7 @@ namespace FleetManagement.Controllers
 {
     [ApiController]
     [DefaultRoute]
-    [Authorize(Policy = Policy.Administrator)]
+    [Authorize(Policy = Policy.AdminsAcces)]
     public class UserController : ControllerBase
     {
         private readonly IUserAccountProvider userAccountProvider;

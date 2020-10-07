@@ -25,12 +25,22 @@ namespace FleetManagement.Extensions
             );
         }
 
+        /// <summary>
+        /// Sprawdza, czy jakiś użytkownik jest zalogowany.
+        /// </summary>
+        /// <param name="httpContext"></param>
+        /// <returns></returns>
         public static bool IsUserLoggedIn(this HttpContext httpContext)
         {
             return !string.IsNullOrEmpty(httpContext.User?.Identity?.Name);
         }
 
-        public static string GetName(this HttpContext httpContext)
+        /// <summary>
+        /// Zwraca nazwę użytkownika z kontekstu.
+        /// </summary>
+        /// <param name="httpContext"></param>
+        /// <returns></returns>
+        public static string GetUserName(this HttpContext httpContext)
         {
             return httpContext.User.Identity.Name;
         }

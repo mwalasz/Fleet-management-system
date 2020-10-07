@@ -14,7 +14,11 @@ namespace FleetManagement.Extensions
                 ? id
                 : throw new InvalidCookieException();
 
-
+        /// <summary>
+        /// Tworzy claimsy dla użytkownika na podstawie jego danych.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public static ClaimsPrincipal CreateAndGetClaims(this UserAccount user)
         {
             var claims = new List<Claim>
