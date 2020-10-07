@@ -1,11 +1,26 @@
-﻿using FleetManagement.Entities.UserAccounts.Models;
+﻿using FluentNHibernate.Mapping;
 
 namespace FleetManagement.Entities.DriverAccounts.Models
 {
-    public class DriverAccount : UserAccount
+    public class DriverAccount
     {
-        public string DrivingLicenseNumber { get; set; }
+        public virtual int Id { get; set; }
+        public virtual int UserAccountId { get; set; }
+        public virtual string DrivingLicenseNumber { get; set; }
+        public virtual string Vehicles { get; set; } //TODO: zmiana typu
+    }
 
-        //TODO: lista przydzielonych pojazdów
+    public class DriverAccountMap : ClassMap<DriverAccount>
+    {
+        public DriverAccountMap()
+        {
+            Id(x => x.Id);
+            Map(x => x.UserAccountId)
+                .Not.Nullable();
+            Map(x => x.DrivingLicenseNumber)
+                .Not.Nullable();
+            Map(x => x.Vehicles)
+                .Nullable();
+        }
     }
 }

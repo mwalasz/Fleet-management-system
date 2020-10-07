@@ -1,6 +1,8 @@
 ﻿using FleetManagement.Authentication.Hashes;
 using FleetManagement.Authentication.Policies;
 using FleetManagement.Db.Seeds;
+using FleetManagement.Entities.DriverAccounts;
+using FleetManagement.Entities.DriverAccounts.Models;
 using FleetManagement.Entities.ManagerAccounts;
 using FleetManagement.Entities.ManagerAccounts.Models;
 using FleetManagement.Entities.UserAccounts;
@@ -18,28 +20,35 @@ namespace FleetManagement.Controllers
         private readonly IHashService hashService;
         private readonly IDbSeeder<IUserAccountProvider, UserAccount> userAccountsSeeder;
         private readonly IDbSeeder<IManagerAccountProvider, ManagerAccount> managerAccountsSeeder;
+        private readonly IDbSeeder<IDriverAccountProvider, DriverAccount> driversSeeder;
+
+        private readonly List<UserAccount> userAccounts = new List<UserAccount>();
+        private readonly List<ManagerAccount> managerAccounts = new List<ManagerAccount>();
+        private readonly List<DriverAccount> driverAccounts = new List<DriverAccount>();
 
         public DataBaseController(IHashService hashService,
             IDbSeeder<IUserAccountProvider, UserAccount> usersSeeder,
-            IDbSeeder<IManagerAccountProvider, ManagerAccount> managersSeeder)
+            IDbSeeder<IManagerAccountProvider, ManagerAccount> managersSeeder,
+            IDbSeeder<IDriverAccountProvider, DriverAccount> driversSeeder)
         {
             this.hashService = hashService;
             this.userAccountsSeeder = usersSeeder;
             this.managerAccountsSeeder = managersSeeder;
+            this.driversSeeder = driversSeeder;
         }
 
         [HttpGet]
         public void Seed()
         {
-            UserAccounts.AddRange(CreateUserAccounts());
-            ManagerAccounts.AddRange(CreateManagerAccounts());
-    
-            userAccountsSeeder.Seed(UserAccounts);
-            managerAccountsSeeder.Seed(ManagerAccounts);
-        }
+            userAccounts.AddRange(CreateUserAccounts());
+            userAccountsSeeder.Seed(userAccounts);
+            
+            managerAccounts.AddRange(CreateManagerAccounts());
+            managerAccountsSeeder.Seed(managerAccounts);
 
-        private List<UserAccount> UserAccounts = new List<UserAccount>();
-        private List<ManagerAccount> ManagerAccounts = new List<ManagerAccount>();
+            driverAccounts.AddRange(CreateDriverAccounts());
+            driversSeeder.Seed(driverAccounts);
+        }
 
         private IEnumerable<UserAccount> CreateUserAccounts()
         {
@@ -95,6 +104,19 @@ namespace FleetManagement.Controllers
                 new ManagerAccount()
                 {
                     UserAccountId = 3,
+                }
+            };
+        }
+
+        private IEnumerable<DriverAccount> CreateDriverAccounts()
+        {
+            return new List<DriverAccount>()
+            {
+                new DriverAccount()
+                {
+                    UserAccountId = 2,
+                    DrivingLicenseNumber = "jebacpis",
+                    Vehicles = "VW Polo",
                 }
             };
         }

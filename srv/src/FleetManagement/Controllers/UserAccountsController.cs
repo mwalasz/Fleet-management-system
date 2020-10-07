@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
 using FleetManagement.Authentication.Policies;
+using FleetManagement.Entities.DriverAccounts;
+using FleetManagement.Entities.DriverAccounts.DTO;
+using FleetManagement.Entities.DriverAccounts.Models;
 using FleetManagement.Entities.ManagerAccounts;
 using FleetManagement.Entities.ManagerAccounts.DTO;
 using FleetManagement.Entities.ManagerAccounts.Models;
@@ -24,14 +27,17 @@ namespace FleetManagement.Controllers
     {
         private readonly IUserAccountProvider userAccountProvider;
         private readonly IManagerAccountProvider managerAccountProvider;
+        private readonly IDriverAccountProvider driverAccountProvider;
         private readonly IMapper mapper;
 
         public UserAccountsController(IUserAccountProvider userAccountProvider,
             IManagerAccountProvider managerAccountProvider,
+            IDriverAccountProvider driverAccountProvider,
             IMapper mapper)
         {
             this.userAccountProvider = userAccountProvider;
             this.managerAccountProvider = managerAccountProvider;
+            this.driverAccountProvider = driverAccountProvider;
             this.mapper = mapper;
         }
 
@@ -47,6 +53,13 @@ namespace FleetManagement.Controllers
         {
             return managerAccountProvider.GetAll()
                 .Select(manager => mapper.Map<ManagerAccount, ManagerAccountDto>(manager));
+        }
+
+        [HttpGet]
+        public IEnumerable<DriverAccountDto> GetAllDriversAccounts()
+        {
+            return driverAccountProvider.GetAll()
+                .Select(driver => mapper.Map<DriverAccount, DriverAccountDto>(driver));
         }
     }
 }
