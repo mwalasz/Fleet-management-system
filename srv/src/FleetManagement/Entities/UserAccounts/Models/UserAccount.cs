@@ -5,6 +5,7 @@ namespace FleetManagement.Entities.UserAccounts.Models
     public class UserAccount
     {
         public virtual int Id { get; set; }
+        public virtual bool IsActive { get; set; }
         public virtual string FirstName { get; set; }
         public virtual string LastName { get; set; }
         public virtual string Email { get; set; }
@@ -18,6 +19,8 @@ namespace FleetManagement.Entities.UserAccounts.Models
         public UserAccountMap()
         {
             Id(x => x.Id);
+            Map(x => x.IsActive)
+                .Not.Nullable();
             Map(x => x.FirstName);
             Map(x => x.LastName);
             Map(x => x.Email)

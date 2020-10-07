@@ -57,6 +57,7 @@ namespace FleetManagement.Controllers
                 new UserAccount()
                 {
                     Id = 1,
+                    IsActive = true,
                     FirstName = "Ala",
                     LastName = "Elementarzowa",
                     Email = "ala@poczta.pl",
@@ -67,6 +68,7 @@ namespace FleetManagement.Controllers
                 new UserAccount()
                 {
                     Id = 2,
+                    IsActive = true,
                     FirstName = "Mietek",
                     LastName = "Mietczynski",
                     Email = "mietek@poczta.pl",
@@ -77,6 +79,7 @@ namespace FleetManagement.Controllers
                 new UserAccount()
                 {
                     Id = 3,
+                    IsActive = true,
                     FirstName = "Waldek",
                     LastName = "Waldkowski",
                     Email = "waldek@poczta.pl",
@@ -87,6 +90,7 @@ namespace FleetManagement.Controllers
                 new UserAccount()
                 {
                     Id = 4,
+                    IsActive = true,
                     FirstName = "Stasiek",
                     LastName = "Stasiowski",
                     Email = "stasiek@poczta.pl",
