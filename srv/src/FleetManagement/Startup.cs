@@ -1,3 +1,4 @@
+using AutoWrapper;
 using FleetManagement.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -72,6 +73,8 @@ namespace FleetManagement
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "FleetManagement");
                 c.RoutePrefix = string.Empty;
             });
+
+            app.UseApiResponseAndExceptionWrapper();
 
             app.UseRouting();
 

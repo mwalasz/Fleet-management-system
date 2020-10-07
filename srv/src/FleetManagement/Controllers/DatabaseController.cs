@@ -1,4 +1,5 @@
-﻿using FleetManagement.Authentication.Hashes;
+﻿using AutoWrapper.Wrappers;
+using FleetManagement.Authentication.Hashes;
 using FleetManagement.Authentication.Policies;
 using FleetManagement.Db.Seeds;
 using FleetManagement.Entities.UserAccounts;
@@ -6,7 +7,9 @@ using FleetManagement.Entities.UserAccounts.Models;
 using FleetManagement.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FleetManagement.Controllers
 {
@@ -22,14 +25,13 @@ namespace FleetManagement.Controllers
         {
             this.hashService = hashService;
             this.userAccountsSeeder = accountsSeeder;
-
         }
 
         [HttpGet]
         public void Seed()
         {
             UserAccounts.AddRange(CreateUserAccounts());
-
+    
             userAccountsSeeder.Seed(UserAccounts);
         }
 

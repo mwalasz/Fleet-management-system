@@ -1,5 +1,7 @@
-﻿using FleetManagement.Authentication;
+﻿using AutoWrapper.Wrappers;
+using FleetManagement.Authentication;
 using FleetManagement.Extensions;
+using FleetManagement.ResponseWrapper;
 using FleetManagement.Utils;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -21,26 +23,25 @@ namespace FleetManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<string> LogIn([FromQuery] string mail, string password)
+        public async Task<ApiResponse> LogIn([FromQuery] string mail, string password)
         {
             var user = authService.ReturnValidUser(mail, password);
 
             if (user == null)
-                return "niepoprawny login lub hasło!";
+                return Responses.AboutUserEvents(ResponseType.User.NotFound);
 
             await HttpContext.SignInAsync(user);
-
-            return $"Witaj {user.FirstName}!";
+            return Responses.AboutUserEvents(ResponseType.User.SignedIn);
         }
 
         [HttpPost]
-        public async Task<string> LogOut()
+        public async Task<ApiResponse> LogOut()
         {
             if (!HttpContext.IsUserLoggedIn())
-                return "Niepoprawny użytkownik!";
+                return Responses.AboutUserEvents(ResponseType.User.NotLogged);
 
             await HttpContext.SignOutAsync();
-            return "Żegnaj!";
+            return Responses.AboutUserEvents(ResponseType.User.SignedOut);
         }
     }
 }
