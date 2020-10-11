@@ -24,6 +24,7 @@ namespace FleetManagement.Entities.UserAccounts.Models
             Map(x => x.FirstName);
             Map(x => x.LastName);
             Map(x => x.Email)
+                .Unique()
                 .Not.Nullable();
             Map(x => x.PhoneNumber)
                 .Not.Nullable();

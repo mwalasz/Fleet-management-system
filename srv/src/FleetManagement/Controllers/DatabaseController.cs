@@ -1,4 +1,5 @@
-﻿using FleetManagement.Authentication.Hashes;
+﻿using AutoWrapper.Wrappers;
+using FleetManagement.Authentication.Hashes;
 using FleetManagement.Authentication.Policies;
 using FleetManagement.Db.Seeds;
 using FleetManagement.Entities.DriverAccounts;
@@ -8,13 +9,17 @@ using FleetManagement.Entities.ManagerAccounts.Models;
 using FleetManagement.Entities.UserAccounts;
 using FleetManagement.Entities.UserAccounts.Models;
 using FleetManagement.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FleetManagement.Controllers
 {
     [ApiController]
     [DefaultRoute]
+    [AllowAnonymous]
     public class DataBaseController : ControllerBase
     {
         private readonly IHashService hashService;
@@ -38,16 +43,25 @@ namespace FleetManagement.Controllers
         }
 
         [HttpGet]
-        public void Seed()
+        public async Task<ApiResponse> Seed()
         {
-            userAccounts.AddRange(CreateUserAccounts());
-            userAccountsSeeder.Seed(userAccounts);
+            try
+            {
+                userAccounts.AddRange(CreateUserAccounts());
+                userAccountsSeeder.Seed(userAccounts);
             
-            managerAccounts.AddRange(CreateManagerAccounts());
-            managerAccountsSeeder.Seed(managerAccounts);
+                managerAccounts.AddRange(CreateManagerAccounts());
+                managerAccountsSeeder.Seed(managerAccounts);
 
-            driverAccounts.AddRange(CreateDriverAccounts());
-            driversSeeder.Seed(driverAccounts);
+                driverAccounts.AddRange(CreateDriverAccounts());
+                driversSeeder.Seed(driverAccounts);
+            }
+            catch (Exception e)
+            {
+                return new ApiResponse($"Błąd w trakcie dodawania elementów do bazy danych: {e.InnerException.Message}");
+            }
+
+            return new ApiResponse($"Pomyślnie dodano elementy do BD.");
         }
 
         private IEnumerable<UserAccount> CreateUserAccounts()
