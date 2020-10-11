@@ -1,4 +1,6 @@
-﻿using FleetManagement.Db.BaseOperations;
+﻿using FleetManagement.Authentication.Hashes;
+using FleetManagement.Authentication.Policies;
+using FleetManagement.Db.BaseOperations;
 using FleetManagement.Entities.UserAccounts;
 using FleetManagement.Entities.UserAccounts.Models;
 using NHibernate;
@@ -8,8 +10,37 @@ namespace FleetManagement.Db.Repositories
 {
     public class UserAccountsRepository : DbBasicOperations<UserAccount>, IUserAccountProvider
     {
-        public UserAccountsRepository(ISessionFactory sessionFactory) : base(sessionFactory)
+        private readonly IHashService hashService;
+
+        public UserAccountsRepository(IHashService hashService,
+            ISessionFactory sessionFactory) : base(sessionFactory)
         {
+            this.hashService = hashService;
+        }
+
+        public int AddNewAndGetId(INewAccountParams newAccountParams)
+        {
+            try
+            {
+                Add(new UserAccount()
+                {
+                    Email = newAccountParams.Email,
+                    PasswordHash = hashService.GenerateHash(newAccountParams.Password),
+                    FirstName = newAccountParams.FirstName,
+                    LastName = newAccountParams.LastName,
+                    PhoneNumber = newAccountParams.PhoneNumber,
+                    Role = Roles.Admin,
+                    IsActive = true,
+                });
+
+                var newUser = GetByMail(newAccountParams.Email);
+
+                return (newUser != null) ? newUser.Id : -1;
+            }
+            catch (System.Exception)
+            {
+                return -1;
+            }
         }
 
         /// <summary>
@@ -21,6 +52,23 @@ namespace FleetManagement.Db.Repositories
         {
             return GetAll()
                 .FirstOrDefault(x => x.Email.Equals(email)) ?? null;
+        }
+
+        /// <summary>
+        /// Aktualizuje hasło użytkownika.
+        /// </summary>
+        /// <param name="mail">Mail identyfikujący użytkownika.</param>
+        /// <param name="password">Nowe hasło.</param>
+        public void UpdateCredentials(string mail, string password)
+        {
+            var user = GetByMail(mail);
+
+            if (user != null)
+            {
+                user.PasswordHash = hashService.GenerateHash(password);
+                
+                Update(user);
+            }
         }
     }
 }

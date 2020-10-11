@@ -6,6 +6,5 @@ namespace FleetManagement.Entities.DriverAccounts
 {
     public interface IDriverAccountProvider : IBaseOperations<DriverAccount>, IUserAccountsOperations<DriverAccount>
     {
-        public int AddNewAndGetId(NewDriverAccountParams newDriver);
     }
 }

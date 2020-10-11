@@ -35,34 +35,36 @@ namespace FleetManagement.Db.Repositories
             else return null;
         }
 
-        public int AddNewAndGetId(NewDriverAccountParams newDriver)
+        public int AddNewAndGetId(INewAccountParams newAccount)
         {
+            var newAccountParams = (NewDriverAccountParams)newAccount;
+
             try
             {
                 userAccountProvider.Add(new UserAccount()
                 {
-                    Email = newDriver.Email,
-                    PasswordHash = hashService.GenerateHash(newDriver.Password),
-                    FirstName = newDriver.FirstName,
-                    LastName = newDriver.LastName,
-                    PhoneNumber = newDriver.PhoneNumber,
+                    Email = newAccountParams.Email,
+                    PasswordHash = hashService.GenerateHash(newAccountParams.Password),
+                    FirstName = newAccountParams.FirstName,
+                    LastName = newAccountParams.LastName,
+                    PhoneNumber = newAccountParams.PhoneNumber,
                     Role = Roles.Driver,
                     IsActive = true,
                 });
 
-                var newUser = userAccountProvider.GetByMail(newDriver.Email);
+                var newUser = userAccountProvider.GetByMail(newAccountParams.Email);
 
                 if (newUser != null)
                 {
                     Add(new DriverAccount()
                     {
-                        DrivingLicenseNumber = newDriver.DrivingLicenseNumber,
+                        DrivingLicenseNumber = newAccountParams.DrivingLicenseNumber,
                         UserAccountId = newUser.Id,
                     });
 
-                    var driver = GetByMail(newDriver.Email);
+                    var driver = GetByMail(newAccountParams.Email);
 
-                    return (newDriver != null) ? driver.Id : -1;
+                    return (newAccountParams != null) ? driver.Id : -1;
                 }
 
                 return -1;

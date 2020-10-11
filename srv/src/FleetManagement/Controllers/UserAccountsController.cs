@@ -8,6 +8,7 @@ using FleetManagement.Entities.DriverAccounts.Params;
 using FleetManagement.Entities.ManagerAccounts;
 using FleetManagement.Entities.ManagerAccounts.DTO;
 using FleetManagement.Entities.ManagerAccounts.Models;
+using FleetManagement.Entities.ManagerAccounts.Params;
 using FleetManagement.Entities.UserAccounts;
 using FleetManagement.Entities.UserAccounts.DTO;
 using FleetManagement.Entities.UserAccounts.Models;
@@ -92,13 +93,32 @@ namespace FleetManagement.Controllers
             return new ApiResponse("Błąd w trakcie dodawania nowego kierowcy!", null, 400);
         }
 
+        [HttpPost]
+        public async Task<ApiResponse> AddNewManager([FromQuery] NewManagerAccountParams newDriverParams)
+        {
+            var newManagerId = managerAccountProvider.AddNewAndGetId(newDriverParams);
+
+            if (newManagerId != -1)
+            {
+                var newManager = managerAccountProvider.GetById(newManagerId);
+
+                var toReturn = (newManager != null)
+                    ? mapper.Map<ManagerAccount, ManagerAccountDto>(newManager)
+                    : null;
+
+                return new ApiResponse(toReturn);
+            }
+
+            return new ApiResponse("Błąd w trakcie dodawania nowego menadżera!", null, 400);
+        }
+
         /// <summary>
         /// Zmienia dostępność konta użytkownika. Domyślnie dezaktywuje konto.
         /// </summary>
         /// <param name="ids">Lista kont do dezaktywacji.</param>
         /// <param name="isActive">Czy konta mają być aktywne, czy nie.</param>
         [HttpPut]
-        public async Task<ApiResponse> ChangeUserAccountAvailability(IEnumerable<int> ids, bool isActive = false)
+        public async Task<ApiResponse> ChangeUserAvailability(IEnumerable<int> ids, bool isActive = false)
         {
             var users = userAccountProvider.GetAll().
                 Where(user => ids.Contains(user.Id));
@@ -113,6 +133,21 @@ namespace FleetManagement.Controllers
             }
 
             return new ApiResponse("Pomyślnie zaktualizowano dostępność podanych użytkowników.", 200);
+        }
+
+        [HttpPut]
+        public async Task<ApiResponse> UpdateUserPassword(string mail, string password)
+        {
+            try
+            {
+                userAccountProvider.UpdateCredentials(mail, password);
+
+                return new ApiResponse("Pomyślnie zaktualizowano hasło użytkownika.", 200);
+            }
+            catch (Exception e)
+            {
+                return new ApiResponse($"Nie udało się zaktualizować hasła z powodu: {e.Message}", 204);
+            }
         }
     }
 }
