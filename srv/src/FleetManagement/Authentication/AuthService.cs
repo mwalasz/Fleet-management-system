@@ -22,7 +22,7 @@ namespace FleetManagement.Authentication
 
         public UserAccount ReturnValidUser(string mail, string password)
         {
-            var user = userAccountProvider.GetUserByEmail(mail);
+            var user = userAccountProvider.GetByMail(mail);
 
             if (user == null)
                 return null;

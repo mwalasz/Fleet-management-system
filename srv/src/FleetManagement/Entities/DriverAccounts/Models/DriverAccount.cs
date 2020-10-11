@@ -1,4 +1,5 @@
-﻿using FluentNHibernate.Mapping;
+﻿using FleetManagement.Db.BaseOperations;
+using FluentNHibernate.Mapping;
 
 namespace FleetManagement.Entities.DriverAccounts.Models
 {

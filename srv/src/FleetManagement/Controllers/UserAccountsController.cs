@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using AutoWrapper.Wrappers;
 using FleetManagement.Authentication.Policies;
 using FleetManagement.Entities.DriverAccounts;
 using FleetManagement.Entities.DriverAccounts.DTO;
 using FleetManagement.Entities.DriverAccounts.Models;
+using FleetManagement.Entities.DriverAccounts.Params;
 using FleetManagement.Entities.ManagerAccounts;
 using FleetManagement.Entities.ManagerAccounts.DTO;
 using FleetManagement.Entities.ManagerAccounts.Models;
@@ -60,6 +62,25 @@ namespace FleetManagement.Controllers
         {
             return driverAccountProvider.GetAll()
                 .Select(driver => mapper.Map<DriverAccount, DriverAccountDto>(driver));
+        }
+
+        [HttpPost]
+        public async Task<ApiResponse> AddNewDriver([FromQuery] NewDriverAccountParams newDriverParams)
+        {
+            var newDriverId = driverAccountProvider.AddNewAndGetId(newDriverParams);
+            
+            if (newDriverId != -1)
+            {
+                var newDriver = driverAccountProvider.GetById(newDriverId);
+
+                var toReturn = (newDriver != null)
+                    ? mapper.Map<DriverAccount, DriverAccountDto>(newDriver)
+                    : null;
+
+                return new ApiResponse(toReturn);
+            }
+
+            return new ApiResponse("Błąd w trakcie dodawania nowego kierowcy!", null, 400);
         }
     }
 }

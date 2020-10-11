@@ -3,8 +3,7 @@ using FleetManagement.Entities.UserAccounts.Models;
 
 namespace FleetManagement.Entities.UserAccounts
 {
-    public interface IUserAccountProvider : IBaseOperations<UserAccount>
+    public interface IUserAccountProvider : IBaseOperations<UserAccount>, IUserAccountsOperations<UserAccount>
     {
-        UserAccount GetUserByEmail(string email);
     }
 }

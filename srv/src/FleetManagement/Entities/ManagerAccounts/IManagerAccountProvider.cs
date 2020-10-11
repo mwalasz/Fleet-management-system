@@ -3,7 +3,7 @@ using FleetManagement.Entities.ManagerAccounts.Models;
 
 namespace FleetManagement.Entities.ManagerAccounts
 {
-    public interface IManagerAccountProvider : IBaseOperations<ManagerAccount>
+    public interface IManagerAccountProvider : IBaseOperations<ManagerAccount>, IUserAccountsOperations<ManagerAccount>
     {
         
     }

@@ -17,10 +17,10 @@ namespace FleetManagement.Db.Repositories
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        public UserAccount GetUserByEmail(string email)
+        public UserAccount GetByMail(string email)
         {
-            return GetAll().
-                FirstOrDefault(x => x.Email.Equals(email)) ?? null;
+            return GetAll()
+                .FirstOrDefault(x => x.Email.Equals(email)) ?? null;
         }
     }
 }
