@@ -47,6 +47,7 @@ namespace FleetManagement.Db.Repositories
                     LastName = newDriver.LastName,
                     PhoneNumber = newDriver.PhoneNumber,
                     Role = Roles.Driver,
+                    IsActive = true,
                 });
 
                 var newUser = userAccountProvider.GetByMail(newDriver.Email);

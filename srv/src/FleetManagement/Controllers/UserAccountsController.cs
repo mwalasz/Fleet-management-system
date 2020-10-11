@@ -44,10 +44,19 @@ namespace FleetManagement.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<UserAccountDto> GetAllUserAccounts()
+        public IEnumerable<UserAccountDto> GetAllUserAccounts(bool onlyActiveUsers = false)
         {
-            return userAccountProvider.GetAll()
-                .Select(user => mapper.Map<UserAccount, UserAccountDto>(user));
+            if (onlyActiveUsers)
+            {
+                return userAccountProvider.GetAll()
+                    .Where(user => user.IsActive)
+                    .Select(user => mapper.Map<UserAccount, UserAccountDto>(user));
+            }
+            else
+            {
+                return userAccountProvider.GetAll()
+                    .Select(user => mapper.Map<UserAccount, UserAccountDto>(user));
+            }
         }
 
         [HttpGet]
@@ -81,6 +90,29 @@ namespace FleetManagement.Controllers
             }
 
             return new ApiResponse("Błąd w trakcie dodawania nowego kierowcy!", null, 400);
+        }
+
+        /// <summary>
+        /// Zmienia dostępność konta użytkownika. Domyślnie dezaktywuje konto.
+        /// </summary>
+        /// <param name="ids">Lista kont do dezaktywacji.</param>
+        /// <param name="isActive">Czy konta mają być aktywne, czy nie.</param>
+        [HttpPut]
+        public async Task<ApiResponse> ChangeUserAccountAvailability(IEnumerable<int> ids, bool isActive = false)
+        {
+            var users = userAccountProvider.GetAll().
+                Where(user => ids.Contains(user.Id));
+
+            if (users.Count().Equals(0))
+                return new ApiResponse("Nie znaleziono podanych użytkowników.", 204);
+
+            foreach (var user in users)
+            {
+                user.IsActive = isActive;
+                userAccountProvider.Update(user);
+            }
+
+            return new ApiResponse("Pomyślnie zaktualizowano dostępność podanych użytkowników.", 200);
         }
     }
 }
