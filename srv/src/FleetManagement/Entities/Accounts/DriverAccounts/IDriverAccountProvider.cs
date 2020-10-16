@@ -1,8 +1,7 @@
 ﻿using FleetManagement.Db.BaseOperations;
-using FleetManagement.Entities.DriverAccounts.Models;
-using FleetManagement.Entities.DriverAccounts.Params;
+using FleetManagement.Entities.Accounts.DriverAccounts.Models;
 
-namespace FleetManagement.Entities.DriverAccounts
+namespace FleetManagement.Entities.Accounts.DriverAccounts
 {
     public interface IDriverAccountProvider : IBaseOperations<DriverAccount>, IUserAccountsOperations<DriverAccount>
     {

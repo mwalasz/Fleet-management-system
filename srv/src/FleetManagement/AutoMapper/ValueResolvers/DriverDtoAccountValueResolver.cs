@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using FleetManagement.Entities.DriverAccounts.DTO;
-using FleetManagement.Entities.DriverAccounts.Models;
-using FleetManagement.Entities.UserAccounts;
-using FleetManagement.Entities.UserAccounts.DTO;
-using FleetManagement.Entities.UserAccounts.Models;
+using FleetManagement.Entities.Accounts.DriverAccounts.DTO;
+using FleetManagement.Entities.Accounts.DriverAccounts.Models;
+using FleetManagement.Entities.Accounts.UserAccounts;
+using FleetManagement.Entities.Accounts.UserAccounts.DTO;
+using FleetManagement.Entities.Accounts.UserAccounts.Models;
 
 namespace FleetManagement.AutoMapper.ValueResolvers
 {

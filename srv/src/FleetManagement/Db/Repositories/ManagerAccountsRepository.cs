@@ -1,11 +1,11 @@
 ﻿using FleetManagement.Authentication.Hashes;
 using FleetManagement.Authentication.Policies;
 using FleetManagement.Db.BaseOperations;
-using FleetManagement.Entities.ManagerAccounts;
-using FleetManagement.Entities.ManagerAccounts.Models;
-using FleetManagement.Entities.ManagerAccounts.Params;
-using FleetManagement.Entities.UserAccounts;
-using FleetManagement.Entities.UserAccounts.Models;
+using FleetManagement.Entities.Accounts.ManagerAccounts;
+using FleetManagement.Entities.Accounts.ManagerAccounts.Models;
+using FleetManagement.Entities.Accounts.ManagerAccounts.Params;
+using FleetManagement.Entities.Accounts.UserAccounts;
+using FleetManagement.Entities.Accounts.UserAccounts.Models;
 using NHibernate;
 using System.Linq;
 

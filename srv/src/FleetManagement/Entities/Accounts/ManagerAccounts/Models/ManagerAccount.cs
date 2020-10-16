@@ -1,6 +1,6 @@
 ﻿using FluentNHibernate.Mapping;
 
-namespace FleetManagement.Entities.ManagerAccounts.Models
+namespace FleetManagement.Entities.Accounts.ManagerAccounts.Models
 {
     public class ManagerAccount : EntityBase
     {

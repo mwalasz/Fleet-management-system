@@ -1,4 +1,4 @@
-﻿using FleetManagement.Entities.UserAccounts;
+﻿using FleetManagement.Entities.Accounts.UserAccounts;
 
 namespace FleetManagement.Db.BaseOperations
 {

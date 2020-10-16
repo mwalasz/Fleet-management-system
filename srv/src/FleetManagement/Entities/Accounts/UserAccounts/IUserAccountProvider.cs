@@ -1,7 +1,7 @@
 ﻿using FleetManagement.Db.BaseOperations;
-using FleetManagement.Entities.UserAccounts.Models;
+using FleetManagement.Entities.Accounts.UserAccounts.Models;
 
-namespace FleetManagement.Entities.UserAccounts
+namespace FleetManagement.Entities.Accounts.UserAccounts
 {
     public interface IUserAccountProvider : IBaseOperations<UserAccount>, IUserAccountsOperations<UserAccount>
     {

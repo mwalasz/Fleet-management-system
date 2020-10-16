@@ -1,4 +1,4 @@
-﻿using FleetManagement.Entities.UserAccounts.Models;
+﻿using FleetManagement.Entities.Accounts.UserAccounts.Models;
 using FleetManagement.Exceptions;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Collections.Generic;

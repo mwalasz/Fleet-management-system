@@ -1,8 +1,8 @@
 ﻿using FleetManagement.Authentication.Hashes;
 using FleetManagement.Authentication.Policies;
 using FleetManagement.Db.BaseOperations;
-using FleetManagement.Entities.UserAccounts;
-using FleetManagement.Entities.UserAccounts.Models;
+using FleetManagement.Entities.Accounts.UserAccounts;
+using FleetManagement.Entities.Accounts.UserAccounts.Models;
 using NHibernate;
 using System.Linq;
 

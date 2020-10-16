@@ -1,4 +1,4 @@
-﻿using FleetManagement.Entities.UserAccounts.Models;
+﻿using FleetManagement.Entities.Accounts.UserAccounts.Models;
 
 namespace FleetManagement.Authentication
 {

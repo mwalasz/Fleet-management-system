@@ -1,4 +1,4 @@
-﻿namespace FleetManagement.Entities.UserAccounts.DTO
+﻿namespace FleetManagement.Entities.Accounts.UserAccounts.DTO
 {
     public class UserAccountDto
     {

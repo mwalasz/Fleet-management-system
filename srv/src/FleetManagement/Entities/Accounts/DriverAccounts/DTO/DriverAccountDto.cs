@@ -1,6 +1,6 @@
-﻿using FleetManagement.Entities.UserAccounts.DTO;
+﻿using FleetManagement.Entities.Accounts.UserAccounts.DTO;
 
-namespace FleetManagement.Entities.DriverAccounts.DTO
+namespace FleetManagement.Entities.Accounts.DriverAccounts.DTO
 {
     public class DriverAccountDto
     {

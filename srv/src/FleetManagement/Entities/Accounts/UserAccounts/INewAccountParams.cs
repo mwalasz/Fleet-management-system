@@ -1,8 +1,6 @@
-﻿using FleetManagement.Entities.UserAccounts;
-
-namespace FleetManagement.Entities.ManagerAccounts.Params
+﻿namespace FleetManagement.Entities.Accounts.UserAccounts
 {
-    public class NewManagerAccountParams : INewAccountParams
+    public interface INewAccountParams
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

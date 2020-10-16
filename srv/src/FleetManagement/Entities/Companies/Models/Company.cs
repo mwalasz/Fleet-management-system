@@ -1,4 +1,4 @@
-﻿using FleetManagement.Entities.DriverAccounts.Models;
+﻿using FleetManagement.Entities.Accounts.DriverAccounts.Models;
 using FleetManagement.Entities.Vehicles.Models;
 using FluentNHibernate.Mapping;
 using System.Collections.Generic;
