@@ -1,6 +1,6 @@
 ﻿using FluentNHibernate.Mapping;
 
-namespace FleetManagement.Entities.Vehicles.Models
+namespace FleetManagement.Entities.Powertrains.Models
 {
     public class Powertrain : EntityBase
     {

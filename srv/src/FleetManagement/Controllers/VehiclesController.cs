@@ -1,5 +1,7 @@
 ﻿using FleetManagement.Entities.Maintenances;
 using FleetManagement.Entities.Maintenances.Models;
+using FleetManagement.Entities.Powertrains;
+using FleetManagement.Entities.Powertrains.Models;
 using FleetManagement.Entities.Refuelings;
 using FleetManagement.Entities.Refuelings.Models;
 using FleetManagement.Entities.Trips;

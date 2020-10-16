@@ -1,5 +1,6 @@
 ﻿using FleetManagement.Entities.Maintenances.Models;
 using FleetManagement.Entities.Refuelings.Models;
+using FleetManagement.Entities.Trips.Models;
 using FluentNHibernate.Mapping;
 using System;
 using System.Collections;
@@ -68,6 +69,11 @@ namespace FleetManagement.Entities.Vehicles.Models
         /// Tankowania.
         /// </summary>
         public virtual IList<Refueling> Refuelings { get; set; }
+        
+        /// <summary>
+        /// Wyjazdy.
+        /// </summary>
+        public virtual IList<Trip> Trips { get; set; }
 
         //TODO: dodać wymaganą kategorię prawa jazdy
     }
@@ -102,6 +108,9 @@ namespace FleetManagement.Entities.Vehicles.Models
                 .Cascade.All()
                 .Not.LazyLoad();
             HasMany(x => x.Refuelings)
+                .Cascade.All()
+                .Not.LazyLoad();
+            HasMany(x => x.Trips)
                 .Cascade.All()
                 .Not.LazyLoad();
         }

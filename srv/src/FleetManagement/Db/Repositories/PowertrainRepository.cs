@@ -1,6 +1,6 @@
 ﻿using FleetManagement.Db.BaseOperations;
-using FleetManagement.Entities.Vehicles;
-using FleetManagement.Entities.Vehicles.Models;
+using FleetManagement.Entities.Powertrains;
+using FleetManagement.Entities.Powertrains.Models;
 using NHibernate;
 
 namespace FleetManagement.Db.Repositories
