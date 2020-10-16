@@ -12,6 +12,8 @@ using FleetManagement.Entities.ManagerAccounts;
 using FleetManagement.Entities.ManagerAccounts.Models;
 using FleetManagement.Entities.Refuelings;
 using FleetManagement.Entities.Refuelings.Models;
+using FleetManagement.Entities.Trips;
+using FleetManagement.Entities.Trips.Models;
 using FleetManagement.Entities.UserAccounts;
 using FleetManagement.Entities.UserAccounts.Models;
 using FleetManagement.Entities.Vehicles;
@@ -40,6 +42,7 @@ namespace FleetManagement.Controllers
         private readonly IDbSeeder<IRefuelingProvider, Refueling> refuelingsSeeder;
         private readonly IDbSeeder<IMaintenanceProvider, Maintenance> maintenancesSeeder;
         private readonly IDbSeeder<ICompanyProvider, Company> companiesSeeder;
+        private readonly IDbSeeder<ITripProvider, Trip> tripsSeeder;
 
         private readonly List<UserAccount> userAccounts = new List<UserAccount>();
         private readonly List<ManagerAccount> managerAccounts = new List<ManagerAccount>();
@@ -49,6 +52,7 @@ namespace FleetManagement.Controllers
         private readonly List<Refueling> refuelings = new List<Refueling>();
         private readonly List<Maintenance> maintenances = new List<Maintenance>();
         private readonly List<Company> companies = new List<Company>();
+        private readonly List<Trip> trips = new List<Trip>();
 
         public DataBaseController(IHashService hashService,
             IDbSeeder<IUserAccountProvider, UserAccount> usersSeeder,
@@ -58,7 +62,8 @@ namespace FleetManagement.Controllers
             IDbSeeder<IPowertrainProvider, Powertrain> powertrainsSeeder,
             IDbSeeder<IRefuelingProvider, Refueling> refuelingsSeeder,
             IDbSeeder<IMaintenanceProvider, Maintenance> maintenancesSeeder,
-            IDbSeeder<ICompanyProvider, Company> companiesSeeder)
+            IDbSeeder<ICompanyProvider, Company> companiesSeeder,
+            IDbSeeder<ITripProvider, Trip> tripsSeeder)
         {
             this.hashService = hashService;
             this.userAccountsSeeder = usersSeeder;
@@ -69,43 +74,38 @@ namespace FleetManagement.Controllers
             this.refuelingsSeeder = refuelingsSeeder;
             this.maintenancesSeeder = maintenancesSeeder;
             this.companiesSeeder = companiesSeeder;
+            this.tripsSeeder = tripsSeeder;
         }
 
         [HttpGet]
-        public async Task<ApiResponse> Seed()
+        public void Seed()
         {
-            try
-            {
-                userAccounts.AddRange(CreateUserAccounts());
-                userAccountsSeeder.Seed(userAccounts);
+            userAccounts.AddRange(CreateUserAccounts());
+            userAccountsSeeder.Seed(userAccounts);
             
-                managerAccounts.AddRange(CreateManagerAccounts());
-                managerAccountsSeeder.Seed(managerAccounts);
+            managerAccounts.AddRange(CreateManagerAccounts());
+            managerAccountsSeeder.Seed(managerAccounts);
 
-                driverAccounts.AddRange(CreateDriverAccounts());
-                driversSeeder.Seed(driverAccounts);
+            driverAccounts.AddRange(CreateDriverAccounts());
+            driversSeeder.Seed(driverAccounts);
 
-                vehicles.AddRange(CreateVehicles());
-                vehiclesSeeder.Seed(vehicles);
+            vehicles.AddRange(CreateVehicles());
+            vehiclesSeeder.Seed(vehicles);
 
-                powertrains.AddRange(CreatePowertrains());
-                powertrainsSeeder.Seed(powertrains);
+            powertrains.AddRange(CreatePowertrains());
+            powertrainsSeeder.Seed(powertrains);
 
-                refuelings.AddRange(CreateRefuelings());
-                refuelingsSeeder.Seed(refuelings);
+            refuelings.AddRange(CreateRefuelings());
+            refuelingsSeeder.Seed(refuelings);
 
-                maintenances.AddRange(CreateMaintenances());
-                maintenancesSeeder.Seed(maintenances);
+            maintenances.AddRange(CreateMaintenances());
+            maintenancesSeeder.Seed(maintenances);
 
-                companies.AddRange(CreateCompanies());
-                companiesSeeder.Seed(companies);
-            }
-            catch (Exception e)
-            {
-                return new ApiResponse($"Błąd w trakcie dodawania elementów do bazy danych: {e.InnerException.Message}");
-            }
+            companies.AddRange(CreateCompanies());
+            companiesSeeder.Seed(companies);
 
-            return new ApiResponse($"Pomyślnie dodano elementy do BD.");
+            trips.AddRange(CreateTrips());
+            tripsSeeder.Seed(trips);
         }
 
         private IEnumerable<UserAccount> CreateUserAccounts()
@@ -196,7 +196,11 @@ namespace FleetManagement.Controllers
                     VIN = "WVWZZZ9NZ12345",
                     YearOfProduction = 2003,
                     TechnicalInspectionDate = new DateTime(2021, 2, 10),
-                    PowertrainId = 1
+                    PowertrainId = 1,
+                    CurbWeight = 1100,
+                    InsuranceExpirationDate = new DateTime(2021, 5, 15),
+                    RepairsAndServices = new List<Maintenance>(),
+                    Refuelings = new List<Refueling>(),
                 },
                 new Vehicle()
                 {
@@ -207,7 +211,11 @@ namespace FleetManagement.Controllers
                     VIN = "someVINnumber",
                     YearOfProduction = 2019,
                     TechnicalInspectionDate = new DateTime(2025, 1, 1),
-                    PowertrainId = 1
+                    PowertrainId = 1,
+                    CurbWeight = 1600,
+                    InsuranceExpirationDate = new DateTime(2022, 1, 1),
+                    RepairsAndServices = new List<Maintenance>(),
+                    Refuelings = new List<Refueling>(),
                 }
             };
         }
@@ -274,5 +282,21 @@ namespace FleetManagement.Controllers
             };
         }
 
+        private IEnumerable<Trip> CreateTrips()
+        {
+            return new List<Trip>()
+            {
+                new Trip()
+                {
+                    Id = 1,
+                    DriverAccountId = 1,
+                    StartPlace = "Katowice",
+                    DestinationPlace = "Gliwice",
+                    Distance = 30.3,
+                    AverageSpeed = 63.2,
+                    TravelTime = 25.6,
+				}
+            };
+        }
     }
 }

@@ -2,6 +2,8 @@
 using FleetManagement.Entities.Maintenances.Models;
 using FleetManagement.Entities.Refuelings;
 using FleetManagement.Entities.Refuelings.Models;
+using FleetManagement.Entities.Trips;
+using FleetManagement.Entities.Trips.Models;
 using FleetManagement.Entities.Vehicles;
 using FleetManagement.Entities.Vehicles.Models;
 using FleetManagement.Utils;
@@ -24,16 +26,19 @@ namespace FleetManagement.Controllers
         private readonly IPowertrainProvider powertrainProvider;
         private readonly IRefuelingProvider refuelingProvider;
         private readonly IMaintenanceProvider maintenanceProvider;
+        private readonly ITripProvider tripProvider;
 
         public VehiclesController(IVehicleProvider vehicleProvider, 
             IPowertrainProvider powertrainProvider,
             IRefuelingProvider refuelingProvider,
-            IMaintenanceProvider maintenanceProvider)
+            IMaintenanceProvider maintenanceProvider,
+            ITripProvider tripProvider)
         {
             this.vehicleProvider = vehicleProvider;
             this.powertrainProvider = powertrainProvider;
             this.refuelingProvider = refuelingProvider;
             this.maintenanceProvider = maintenanceProvider;
+            this.tripProvider = tripProvider;
         }
 
         [HttpGet]
@@ -58,6 +63,12 @@ namespace FleetManagement.Controllers
         public IEnumerable<Maintenance> GetAllMaintenances()
         {
             return maintenanceProvider.GetAll();
+        }
+
+        [HttpGet]
+        public IEnumerable<Trip> GetAllTrips()
+        {
+            return tripProvider.GetAll();
         }
     }
 }

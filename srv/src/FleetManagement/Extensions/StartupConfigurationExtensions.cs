@@ -14,6 +14,8 @@ using FleetManagement.Entities.ManagerAccounts;
 using FleetManagement.Entities.ManagerAccounts.Models;
 using FleetManagement.Entities.Refuelings;
 using FleetManagement.Entities.Refuelings.Models;
+using FleetManagement.Entities.Trips;
+using FleetManagement.Entities.Trips.Models;
 using FleetManagement.Entities.UserAccounts;
 using FleetManagement.Entities.UserAccounts.Models;
 using FleetManagement.Entities.Vehicles;
@@ -64,7 +66,8 @@ namespace FleetManagement.Extensions
                        .AddTransient<IPowertrainProvider, PowertrainRepository>()
                        .AddTransient<IRefuelingProvider, RefuelingRepository>()
                        .AddTransient<IMaintenanceProvider, MaintenanceRepository>()
-                       .AddTransient<ICompanyProvider, CompanyRepository>();
+                       .AddTransient<ICompanyProvider, CompanyRepository>()
+                       .AddTransient<ITripProvider, TripRepository>();
 
         /// <summary>
         /// Dodaje usługi do wypełniania bazy danych.
@@ -79,7 +82,8 @@ namespace FleetManagement.Extensions
                        .AddTransient<IDbSeeder<IPowertrainProvider, Powertrain>, DbSeeder<IPowertrainProvider, Powertrain>>()
                        .AddTransient<IDbSeeder<IRefuelingProvider, Refueling>, DbSeeder<IRefuelingProvider, Refueling>>()
                        .AddTransient<IDbSeeder<IMaintenanceProvider, Maintenance>, DbSeeder<IMaintenanceProvider, Maintenance>>()
-                       .AddTransient<IDbSeeder<ICompanyProvider, Company>, DbSeeder<ICompanyProvider, Company>>();
+                       .AddTransient<IDbSeeder<ICompanyProvider, Company>, DbSeeder<ICompanyProvider, Company>>()
+                       .AddTransient<IDbSeeder<ITripProvider, Trip>, DbSeeder<ITripProvider, Trip>>();
 
         /// <summary>
         /// Dodaje usługi haszowania oraz autentykacji użytkownika
