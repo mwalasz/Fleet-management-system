@@ -2,9 +2,8 @@
 
 namespace FleetManagement.Entities.ManagerAccounts.Models
 {
-    public class ManagerAccount
+    public class ManagerAccount : EntityBase
     {
-        public virtual int Id { get; set; }
         public virtual int UserAccountId { get; set; }
     }
 

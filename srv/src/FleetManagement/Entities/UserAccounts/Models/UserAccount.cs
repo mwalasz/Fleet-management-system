@@ -1,11 +1,9 @@
-﻿using FleetManagement.Db.BaseOperations;
-using FluentNHibernate.Mapping;
+﻿using FluentNHibernate.Mapping;
 
 namespace FleetManagement.Entities.UserAccounts.Models
 {
-    public class UserAccount
+    public class UserAccount : EntityBase
     {
-        public virtual int Id { get; set; }
         public virtual bool IsActive { get; set; }
         public virtual string FirstName { get; set; }
         public virtual string LastName { get; set; }

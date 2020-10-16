@@ -3,10 +3,8 @@ using System;
 
 namespace FleetManagement.Entities.Vehicles.Models
 {
-    public class Vehicle
+    public class Vehicle : EntityBase
     {
-        public virtual int Id { get; set; }
-
         /// <summary>
         /// Marka.
         /// </summary>

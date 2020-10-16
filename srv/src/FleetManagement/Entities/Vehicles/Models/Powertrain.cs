@@ -2,10 +2,8 @@
 
 namespace FleetManagement.Entities.Vehicles.Models
 {
-    public class Powertrain
+    public class Powertrain : EntityBase
     {
-        public virtual int Id { get; set; }
-
         /// <summary>
         /// Pojemność silnika.
         /// </summary>

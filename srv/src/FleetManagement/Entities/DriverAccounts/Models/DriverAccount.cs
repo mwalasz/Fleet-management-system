@@ -1,11 +1,9 @@
-﻿using FleetManagement.Db.BaseOperations;
-using FluentNHibernate.Mapping;
+﻿using FluentNHibernate.Mapping;
 
 namespace FleetManagement.Entities.DriverAccounts.Models
 {
-    public class DriverAccount
+    public class DriverAccount : EntityBase
     {
-        public virtual int Id { get; set; }
         public virtual int UserAccountId { get; set; }
         public virtual string DrivingLicenseNumber { get; set; }
         public virtual string Vehicles { get; set; } //TODO: zmiana typu

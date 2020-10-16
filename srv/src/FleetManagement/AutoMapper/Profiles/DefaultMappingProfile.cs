@@ -20,6 +20,10 @@ namespace FleetManagement.AutoMapper.Profiles
 
             CreateMap<DriverAccount, DriverAccountDto>()
                 .ForMember(dto => dto.Account, mce => mce.MapFrom<DriverDtoAccountValueResolver>());
+
+            //CreateMap<DriverAccount, DriverAccountDto>()
+            //    .ForMember(dto => dto.Account, mce => mce.MapFrom<DriverDtoAccountValueResolver>());
+
         }
     }
 }
