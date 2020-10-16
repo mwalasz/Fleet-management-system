@@ -2,6 +2,8 @@
 using FleetManagement.Authentication.Hashes;
 using FleetManagement.Authentication.Policies;
 using FleetManagement.Db.Seeds;
+using FleetManagement.Entities.Companies;
+using FleetManagement.Entities.Companies.Models;
 using FleetManagement.Entities.DriverAccounts;
 using FleetManagement.Entities.DriverAccounts.Models;
 using FleetManagement.Entities.Maintenances;
@@ -37,6 +39,7 @@ namespace FleetManagement.Controllers
         private readonly IDbSeeder<IPowertrainProvider, Powertrain> powertrainsSeeder;
         private readonly IDbSeeder<IRefuelingProvider, Refueling> refuelingsSeeder;
         private readonly IDbSeeder<IMaintenanceProvider, Maintenance> maintenancesSeeder;
+        private readonly IDbSeeder<ICompanyProvider, Company> companiesSeeder;
 
         private readonly List<UserAccount> userAccounts = new List<UserAccount>();
         private readonly List<ManagerAccount> managerAccounts = new List<ManagerAccount>();
@@ -45,6 +48,7 @@ namespace FleetManagement.Controllers
         private readonly List<Powertrain> powertrains = new List<Powertrain>();
         private readonly List<Refueling> refuelings = new List<Refueling>();
         private readonly List<Maintenance> maintenances = new List<Maintenance>();
+        private readonly List<Company> companies = new List<Company>();
 
         public DataBaseController(IHashService hashService,
             IDbSeeder<IUserAccountProvider, UserAccount> usersSeeder,
@@ -53,7 +57,8 @@ namespace FleetManagement.Controllers
             IDbSeeder<IVehicleProvider, Vehicle> vehiclesSeeder,
             IDbSeeder<IPowertrainProvider, Powertrain> powertrainsSeeder,
             IDbSeeder<IRefuelingProvider, Refueling> refuelingsSeeder,
-            IDbSeeder<IMaintenanceProvider, Maintenance> maintenancesSeeder)
+            IDbSeeder<IMaintenanceProvider, Maintenance> maintenancesSeeder,
+            IDbSeeder<ICompanyProvider, Company> companiesSeeder)
         {
             this.hashService = hashService;
             this.userAccountsSeeder = usersSeeder;
@@ -63,6 +68,7 @@ namespace FleetManagement.Controllers
             this.powertrainsSeeder = powertrainsSeeder;
             this.refuelingsSeeder = refuelingsSeeder;
             this.maintenancesSeeder = maintenancesSeeder;
+            this.companiesSeeder = companiesSeeder;
         }
 
         [HttpGet]
@@ -90,6 +96,9 @@ namespace FleetManagement.Controllers
 
                 maintenances.AddRange(CreateMaintenances());
                 maintenancesSeeder.Seed(maintenances);
+
+                companies.AddRange(CreateCompanies());
+                companiesSeeder.Seed(companies);
             }
             catch (Exception e)
             {
@@ -248,5 +257,22 @@ namespace FleetManagement.Controllers
 				}
             };
         }
+
+        private IEnumerable<Company> CreateCompanies()
+        {
+            return new List<Company>()
+            {
+                new Company()
+                {
+                    Id = 1,
+                    Name = "Koszmarh",
+                    Description = "Kochają studentów.",
+                    Vehicles = new List<Vehicle>(),
+                    ManagerAccountId = 1,
+                    Drivers = new List<DriverAccount>()
+				}
+            };
+        }
+
     }
 }
