@@ -8,6 +8,8 @@ using FleetManagement.Entities.ManagerAccounts;
 using FleetManagement.Entities.ManagerAccounts.Models;
 using FleetManagement.Entities.UserAccounts;
 using FleetManagement.Entities.UserAccounts.Models;
+using FleetManagement.Entities.Vehicles;
+using FleetManagement.Entities.Vehicles.Models;
 using FleetManagement.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,20 +28,24 @@ namespace FleetManagement.Controllers
         private readonly IDbSeeder<IUserAccountProvider, UserAccount> userAccountsSeeder;
         private readonly IDbSeeder<IManagerAccountProvider, ManagerAccount> managerAccountsSeeder;
         private readonly IDbSeeder<IDriverAccountProvider, DriverAccount> driversSeeder;
-
+        private readonly IDbSeeder<IVehicleProvider, Vehicle> vehiclesSeeder;
+        
         private readonly List<UserAccount> userAccounts = new List<UserAccount>();
         private readonly List<ManagerAccount> managerAccounts = new List<ManagerAccount>();
         private readonly List<DriverAccount> driverAccounts = new List<DriverAccount>();
+        private readonly List<Vehicle> vehicles = new List<Vehicle>();
 
         public DataBaseController(IHashService hashService,
             IDbSeeder<IUserAccountProvider, UserAccount> usersSeeder,
             IDbSeeder<IManagerAccountProvider, ManagerAccount> managersSeeder,
-            IDbSeeder<IDriverAccountProvider, DriverAccount> driversSeeder)
+            IDbSeeder<IDriverAccountProvider, DriverAccount> driversSeeder,
+            IDbSeeder<IVehicleProvider, Vehicle> vehiclesSeeder)
         {
             this.hashService = hashService;
             this.userAccountsSeeder = usersSeeder;
             this.managerAccountsSeeder = managersSeeder;
             this.driversSeeder = driversSeeder;
+            this.vehiclesSeeder = vehiclesSeeder;
         }
 
         [HttpGet]
@@ -55,6 +61,9 @@ namespace FleetManagement.Controllers
 
                 driverAccounts.AddRange(CreateDriverAccounts());
                 driversSeeder.Seed(driverAccounts);
+
+                vehicles.AddRange(CreateVehicles());
+                vehiclesSeeder.Seed(vehicles);
             }
             catch (Exception e)
             {
@@ -135,6 +144,18 @@ namespace FleetManagement.Controllers
                     UserAccountId = 2,
                     DrivingLicenseNumber = "jebacpis",
                     Vehicles = "VW Polo",
+                }
+            };
+        }
+
+        private IEnumerable<Vehicle> CreateVehicles()
+        {
+            return new List<Vehicle>()
+            {
+                new Vehicle()
+                {
+                    Brand = "Volkswagen",
+                    Model = "Polo"
                 }
             };
         }
