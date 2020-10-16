@@ -6,6 +6,8 @@ using FleetManagement.Entities.DriverAccounts;
 using FleetManagement.Entities.DriverAccounts.Models;
 using FleetManagement.Entities.ManagerAccounts;
 using FleetManagement.Entities.ManagerAccounts.Models;
+using FleetManagement.Entities.Refuelings;
+using FleetManagement.Entities.Refuelings.Models;
 using FleetManagement.Entities.UserAccounts;
 using FleetManagement.Entities.UserAccounts.Models;
 using FleetManagement.Entities.Vehicles;
@@ -30,19 +32,22 @@ namespace FleetManagement.Controllers
         private readonly IDbSeeder<IDriverAccountProvider, DriverAccount> driversSeeder;
         private readonly IDbSeeder<IVehicleProvider, Vehicle> vehiclesSeeder;
         private readonly IDbSeeder<IPowertrainProvider, Powertrain> powertrainsSeeder;
+        private readonly IDbSeeder<IRefuelingProvider, Refueling> refuelingsSeeder;
 
         private readonly List<UserAccount> userAccounts = new List<UserAccount>();
         private readonly List<ManagerAccount> managerAccounts = new List<ManagerAccount>();
         private readonly List<DriverAccount> driverAccounts = new List<DriverAccount>();
         private readonly List<Vehicle> vehicles = new List<Vehicle>();
         private readonly List<Powertrain> powertrains = new List<Powertrain>();
+        private readonly List<Refueling> refuelings = new List<Refueling>();
 
         public DataBaseController(IHashService hashService,
             IDbSeeder<IUserAccountProvider, UserAccount> usersSeeder,
             IDbSeeder<IManagerAccountProvider, ManagerAccount> managersSeeder,
             IDbSeeder<IDriverAccountProvider, DriverAccount> driversSeeder,
             IDbSeeder<IVehicleProvider, Vehicle> vehiclesSeeder,
-            IDbSeeder<IPowertrainProvider, Powertrain> powertrainsSeeder)
+            IDbSeeder<IPowertrainProvider, Powertrain> powertrainsSeeder,
+            IDbSeeder<IRefuelingProvider, Refueling> refuelingsSeeder)
         {
             this.hashService = hashService;
             this.userAccountsSeeder = usersSeeder;
@@ -50,6 +55,7 @@ namespace FleetManagement.Controllers
             this.driversSeeder = driversSeeder;
             this.vehiclesSeeder = vehiclesSeeder;
             this.powertrainsSeeder = powertrainsSeeder;
+            this.refuelingsSeeder = refuelingsSeeder;
         }
 
         [HttpGet]
@@ -71,6 +77,9 @@ namespace FleetManagement.Controllers
 
                 powertrains.AddRange(CreatePowertrains());
                 powertrainsSeeder.Seed(powertrains);
+
+                refuelings.AddRange(CreateRefuelings());
+                refuelingsSeeder.Seed(refuelings);
             }
             catch (Exception e)
             {
@@ -195,6 +204,19 @@ namespace FleetManagement.Controllers
                     EngineCapacity = 1898,
                     EngineType = "Diesel",
                     DriveType = "FWD"
+                }
+            };
+        }
+        private IEnumerable<Refueling> CreateRefuelings()
+        {
+            return new List<Refueling>()
+            {
+                new Refueling()
+                {
+                    Id = 1,
+                    Cost = 5.54,
+                    Liters = 1,
+                    CostPerLiter = 5.54
                 }
             };
         }
