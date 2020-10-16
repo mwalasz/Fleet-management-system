@@ -20,9 +20,11 @@ namespace FleetManagement.AutoMapper.ValueResolvers
 
         public UserAccountDto Resolve(DriverAccount source, DriverAccountDto destination, UserAccountDto destMember, ResolutionContext context)
         {
-            var account = userAccountProvider.GetById(source.UserAccountId);
+            var account = userAccountProvider.GetById(source.UserAccountId) ?? null;
 
-            return mapper.Map<UserAccount, UserAccountDto>(account);
+            return account != null
+                ? mapper.Map<UserAccount, UserAccountDto>(account)
+                : null;
         }
     }
 }

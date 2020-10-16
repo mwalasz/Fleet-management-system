@@ -1,4 +1,5 @@
-﻿using FleetManagement.Entities.Maintenances;
+﻿using AutoMapper;
+using FleetManagement.Entities.Maintenances;
 using FleetManagement.Entities.Maintenances.Models;
 using FleetManagement.Entities.Powertrains;
 using FleetManagement.Entities.Powertrains.Models;
@@ -11,11 +12,8 @@ using FleetManagement.Entities.Vehicles.Models;
 using FleetManagement.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FleetManagement.Controllers
 {
@@ -24,18 +22,21 @@ namespace FleetManagement.Controllers
     [AllowAnonymous]
     public class VehiclesController : ControllerBase
     {
+        private readonly IMapper mapper;
         private readonly IVehicleProvider vehicleProvider;
         private readonly IPowertrainProvider powertrainProvider;
         private readonly IRefuelingProvider refuelingProvider;
         private readonly IMaintenanceProvider maintenanceProvider;
         private readonly ITripProvider tripProvider;
 
-        public VehiclesController(IVehicleProvider vehicleProvider, 
+        public VehiclesController(IMapper mapper,
+            IVehicleProvider vehicleProvider, 
             IPowertrainProvider powertrainProvider,
             IRefuelingProvider refuelingProvider,
             IMaintenanceProvider maintenanceProvider,
             ITripProvider tripProvider)
         {
+            this.mapper = mapper;
             this.vehicleProvider = vehicleProvider;
             this.powertrainProvider = powertrainProvider;
             this.refuelingProvider = refuelingProvider;
@@ -50,27 +51,31 @@ namespace FleetManagement.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Powertrain> GetAllPowertrains()
+        public IEnumerable<PowertrainDto> GetAllPowertrains()
         {
-            return powertrainProvider.GetAll();
+            return powertrainProvider.GetAll()
+                .Select(x => mapper.Map<Powertrain, PowertrainDto>(x));
         }
 
         [HttpGet]
-        public IEnumerable<Refueling> GetAllRefuelings()
+        public IEnumerable<RefuelingDto> GetAllRefuelings()
         {
-            return refuelingProvider.GetAll();
+            return refuelingProvider.GetAll()
+                .Select(x => mapper.Map<Refueling, RefuelingDto>(x));
         }
 
         [HttpGet]
-        public IEnumerable<Maintenance> GetAllMaintenances()
+        public IEnumerable<MaintenanceDto> GetAllMaintenances()
         {
-            return maintenanceProvider.GetAll();
+            return maintenanceProvider.GetAll()
+                .Select(x => mapper.Map<Maintenance, MaintenanceDto>(x));
         }
 
         [HttpGet]
-        public IEnumerable<Trip> GetAllTrips()
+        public IEnumerable<TripDto> GetAllTrips()
         {
-            return tripProvider.GetAll();
+            return tripProvider.GetAll()
+                .Select(x => mapper.Map<Trip, TripDto>(x));
         }
     }
 }
