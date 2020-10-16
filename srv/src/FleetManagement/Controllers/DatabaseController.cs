@@ -4,6 +4,8 @@ using FleetManagement.Authentication.Policies;
 using FleetManagement.Db.Seeds;
 using FleetManagement.Entities.DriverAccounts;
 using FleetManagement.Entities.DriverAccounts.Models;
+using FleetManagement.Entities.Maintenances;
+using FleetManagement.Entities.Maintenances.Models;
 using FleetManagement.Entities.ManagerAccounts;
 using FleetManagement.Entities.ManagerAccounts.Models;
 using FleetManagement.Entities.Refuelings;
@@ -27,12 +29,14 @@ namespace FleetManagement.Controllers
     public class DataBaseController : ControllerBase
     {
         private readonly IHashService hashService;
+
         private readonly IDbSeeder<IUserAccountProvider, UserAccount> userAccountsSeeder;
         private readonly IDbSeeder<IManagerAccountProvider, ManagerAccount> managerAccountsSeeder;
         private readonly IDbSeeder<IDriverAccountProvider, DriverAccount> driversSeeder;
         private readonly IDbSeeder<IVehicleProvider, Vehicle> vehiclesSeeder;
         private readonly IDbSeeder<IPowertrainProvider, Powertrain> powertrainsSeeder;
         private readonly IDbSeeder<IRefuelingProvider, Refueling> refuelingsSeeder;
+        private readonly IDbSeeder<IMaintenanceProvider, Maintenance> maintenancesSeeder;
 
         private readonly List<UserAccount> userAccounts = new List<UserAccount>();
         private readonly List<ManagerAccount> managerAccounts = new List<ManagerAccount>();
@@ -40,6 +44,7 @@ namespace FleetManagement.Controllers
         private readonly List<Vehicle> vehicles = new List<Vehicle>();
         private readonly List<Powertrain> powertrains = new List<Powertrain>();
         private readonly List<Refueling> refuelings = new List<Refueling>();
+        private readonly List<Maintenance> maintenances = new List<Maintenance>();
 
         public DataBaseController(IHashService hashService,
             IDbSeeder<IUserAccountProvider, UserAccount> usersSeeder,
@@ -47,7 +52,8 @@ namespace FleetManagement.Controllers
             IDbSeeder<IDriverAccountProvider, DriverAccount> driversSeeder,
             IDbSeeder<IVehicleProvider, Vehicle> vehiclesSeeder,
             IDbSeeder<IPowertrainProvider, Powertrain> powertrainsSeeder,
-            IDbSeeder<IRefuelingProvider, Refueling> refuelingsSeeder)
+            IDbSeeder<IRefuelingProvider, Refueling> refuelingsSeeder,
+            IDbSeeder<IMaintenanceProvider, Maintenance> maintenancesSeeder)
         {
             this.hashService = hashService;
             this.userAccountsSeeder = usersSeeder;
@@ -56,6 +62,7 @@ namespace FleetManagement.Controllers
             this.vehiclesSeeder = vehiclesSeeder;
             this.powertrainsSeeder = powertrainsSeeder;
             this.refuelingsSeeder = refuelingsSeeder;
+            this.maintenancesSeeder = maintenancesSeeder;
         }
 
         [HttpGet]
@@ -80,6 +87,9 @@ namespace FleetManagement.Controllers
 
                 refuelings.AddRange(CreateRefuelings());
                 refuelingsSeeder.Seed(refuelings);
+
+                maintenances.AddRange(CreateMaintenances());
+                maintenancesSeeder.Seed(maintenances);
             }
             catch (Exception e)
             {
@@ -207,6 +217,7 @@ namespace FleetManagement.Controllers
                 }
             };
         }
+
         private IEnumerable<Refueling> CreateRefuelings()
         {
             return new List<Refueling>()
@@ -218,6 +229,23 @@ namespace FleetManagement.Controllers
                     Liters = 1,
                     CostPerLiter = 5.54
                 }
+            };
+        }
+
+        private IEnumerable<Maintenance> CreateMaintenances()
+        {
+            return new List<Maintenance>()
+            {
+                new Maintenance()
+                {
+                    Id = 1,
+                    Cost = 199.99,
+                    Date = new DateTime(2019, 5, 12),
+                    OdometerMileage = 12341,
+                    UsedParts = "pompa paliwowa",
+                    Description = "to chyba pompa",
+                    MaintenanceProviderDescription = "jurek & kiler repairs"
+				}
             };
         }
     }
