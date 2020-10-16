@@ -54,7 +54,8 @@ namespace FleetManagement.Extensions
             => services.AddTransient<IUserAccountProvider, UserAccountsRepository>()
                        .AddTransient<IManagerAccountProvider, ManagerAccountsRepository>()
                        .AddTransient<IDriverAccountProvider, DriverAccountsRepository>()
-                       .AddTransient<IVehicleProvider, VehiclesRepository>();
+                       .AddTransient<IVehicleProvider, VehiclesRepository>()
+                       .AddTransient<IPowertrainProvider, PowertrainRepository>();
 
         /// <summary>
         /// Dodaje usługi do wypełniania bazy danych.
@@ -65,7 +66,8 @@ namespace FleetManagement.Extensions
             => services.AddTransient<IDbSeeder<IUserAccountProvider, UserAccount>, DbSeeder<IUserAccountProvider, UserAccount>>()
                        .AddTransient<IDbSeeder<IManagerAccountProvider, ManagerAccount>, DbSeeder<IManagerAccountProvider, ManagerAccount>>()
                        .AddTransient<IDbSeeder<IDriverAccountProvider, DriverAccount>, DbSeeder<IDriverAccountProvider, DriverAccount>>()
-                       .AddTransient<IDbSeeder<IVehicleProvider, Vehicle>, DbSeeder<IVehicleProvider, Vehicle>>();
+                       .AddTransient<IDbSeeder<IVehicleProvider, Vehicle>, DbSeeder<IVehicleProvider, Vehicle>>()
+                       .AddTransient<IDbSeeder<IPowertrainProvider, Powertrain>, DbSeeder<IPowertrainProvider, Powertrain>>();
 
         /// <summary>
         /// Dodaje usługi haszowania oraz autentykacji użytkownika

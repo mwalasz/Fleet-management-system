@@ -29,23 +29,27 @@ namespace FleetManagement.Controllers
         private readonly IDbSeeder<IManagerAccountProvider, ManagerAccount> managerAccountsSeeder;
         private readonly IDbSeeder<IDriverAccountProvider, DriverAccount> driversSeeder;
         private readonly IDbSeeder<IVehicleProvider, Vehicle> vehiclesSeeder;
-        
+        private readonly IDbSeeder<IPowertrainProvider, Powertrain> powertrainsSeeder;
+
         private readonly List<UserAccount> userAccounts = new List<UserAccount>();
         private readonly List<ManagerAccount> managerAccounts = new List<ManagerAccount>();
         private readonly List<DriverAccount> driverAccounts = new List<DriverAccount>();
         private readonly List<Vehicle> vehicles = new List<Vehicle>();
+        private readonly List<Powertrain> powertrains = new List<Powertrain>();
 
         public DataBaseController(IHashService hashService,
             IDbSeeder<IUserAccountProvider, UserAccount> usersSeeder,
             IDbSeeder<IManagerAccountProvider, ManagerAccount> managersSeeder,
             IDbSeeder<IDriverAccountProvider, DriverAccount> driversSeeder,
-            IDbSeeder<IVehicleProvider, Vehicle> vehiclesSeeder)
+            IDbSeeder<IVehicleProvider, Vehicle> vehiclesSeeder,
+            IDbSeeder<IPowertrainProvider, Powertrain> powertrainsSeeder)
         {
             this.hashService = hashService;
             this.userAccountsSeeder = usersSeeder;
             this.managerAccountsSeeder = managersSeeder;
             this.driversSeeder = driversSeeder;
             this.vehiclesSeeder = vehiclesSeeder;
+            this.powertrainsSeeder = powertrainsSeeder;
         }
 
         [HttpGet]
@@ -64,6 +68,9 @@ namespace FleetManagement.Controllers
 
                 vehicles.AddRange(CreateVehicles());
                 vehiclesSeeder.Seed(vehicles);
+
+                powertrains.AddRange(CreatePowertrains());
+                powertrainsSeeder.Seed(powertrains);
             }
             catch (Exception e)
             {
@@ -155,7 +162,39 @@ namespace FleetManagement.Controllers
                 new Vehicle()
                 {
                     Brand = "Volkswagen",
-                    Model = "Polo"
+                    Model = "Polo",
+                    KmMileage = 180000,
+                    LicensePlate = "S0 12345",
+                    VIN = "WVWZZZ9NZ12345",
+                    YearOfProduction = 2003,
+                    TechnicalInspectionDate = new DateTime(2021, 2, 10),
+                    PowertrainId = 1
+                },
+                new Vehicle()
+                {
+                    Brand = "Volkswagen",
+                    Model = "Passat",
+                    KmMileage = 5000,
+                    LicensePlate = "W0 54321",
+                    VIN = "someVINnumber",
+                    YearOfProduction = 2019,
+                    TechnicalInspectionDate = new DateTime(2025, 1, 1),
+                    PowertrainId = 1
+                }
+            };
+        }
+
+        private IEnumerable<Powertrain> CreatePowertrains()
+        {
+            return new List<Powertrain>()
+            {
+                new Powertrain()
+                {
+                    Id = 1,
+                    NumberOfCylinders = 4,
+                    EngineCapacity = 1898,
+                    EngineType = "Diesel",
+                    DriveType = "FWD"
                 }
             };
         }

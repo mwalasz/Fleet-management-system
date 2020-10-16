@@ -17,16 +17,24 @@ namespace FleetManagement.Controllers
     public class VehiclesController : ControllerBase
     {
         private readonly IVehicleProvider vehicleProvider;
+        private readonly IPowertrainProvider powertrainProvider;
 
-        public VehiclesController(IVehicleProvider vehicleProvider)
+        public VehiclesController(IVehicleProvider vehicleProvider, IPowertrainProvider powertrainProvider)
         {
             this.vehicleProvider = vehicleProvider;
+            this.powertrainProvider = powertrainProvider;
         }
 
         [HttpGet]
         public IEnumerable<Vehicle> GetAllVehicles()
         {
             return vehicleProvider.GetAll();
+        }
+
+        [HttpGet]
+        public IEnumerable<Powertrain> GetAllPowertrains()
+        {
+            return powertrainProvider.GetAll();
         }
     }
 }
