@@ -234,6 +234,8 @@ namespace FleetManagement.Controllers
                     Id = 1,
                     NumberOfCylinders = 4,
                     EngineCapacity = 1898,
+                    Horsepower = 101,
+                    Torque = 270,
                     EngineType = "Diesel",
                     DriveType = "FWD"
                 },
@@ -242,6 +244,8 @@ namespace FleetManagement.Controllers
                     Id = 1,
                     NumberOfCylinders = 4,
                     EngineCapacity = 2000,
+                    Horsepower = 190,
+                    Torque = 350,
                     EngineType = "Diesel",
                     DriveType = "AWD"
                 }

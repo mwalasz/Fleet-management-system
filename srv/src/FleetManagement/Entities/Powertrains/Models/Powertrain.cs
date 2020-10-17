@@ -13,6 +13,16 @@ namespace FleetManagement.Entities.Powertrains.Models
         /// Ilość cylindrów.
         /// </summary>
         public virtual short NumberOfCylinders { get; set; }
+        
+        /// <summary>
+        /// Moc w koniach mechanicznych.
+        /// </summary>
+        public virtual short Horsepower { get; set; }
+
+        /// <summary>
+        /// Moment obrotowy.
+        /// </summary>
+        public virtual short Torque { get; set; }
 
         /// <summary>
         /// Rodzaj silnika - hybryda/diesel/benzyna.
@@ -31,6 +41,8 @@ namespace FleetManagement.Entities.Powertrains.Models
         {
             Id(x => x.Id);
             Map(x => x.EngineCapacity);
+            Map(x => x.Horsepower);
+            Map(x => x.Torque);
             Map(x => x.NumberOfCylinders);
             Map(x => x.EngineType);
             Map(x => x.DriveType);
