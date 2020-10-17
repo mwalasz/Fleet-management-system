@@ -1,4 +1,5 @@
 ﻿using FluentNHibernate.Mapping;
+using System;
 
 namespace FleetManagement.Entities.Trips.Models
 {
@@ -10,9 +11,19 @@ namespace FleetManagement.Entities.Trips.Models
         public virtual string StartPlace { get; set; }
 
         /// <summary>
+        /// Czas rozpoczęcia podróży.
+        /// </summary>
+        public virtual DateTime StartTime { get; set; }
+
+        /// <summary>
         /// Miejsce zakończenia podróży.
         /// </summary>
         public virtual string DestinationPlace { get; set; }
+
+        /// <summary>
+        /// Czas zakończenia podróży.
+        /// </summary>
+        public virtual DateTime DestinationArrivalTime { get; set; }
 
         /// <summary>
         /// Przejechany dystans.
@@ -42,8 +53,10 @@ namespace FleetManagement.Entities.Trips.Models
             Id(x => x.Id);
             Map(x => x.StartPlace)
                 .Not.Nullable();
+            Map(x => x.StartTime);
             Map(x => x.DestinationPlace)
                 .Not.Nullable();
+            Map(x => x.DestinationArrivalTime);
             Map(x => x.Distance)
                 .Not.Nullable();
             Map(x => x.TravelTime);

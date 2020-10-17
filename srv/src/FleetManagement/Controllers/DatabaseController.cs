@@ -247,6 +247,8 @@ namespace FleetManagement.Controllers
                 new Refueling()
                 {
                     Id = 1,
+                    Time = new DateTime(2012, 12, 12, 12, 12, 12),
+                    PlaceDescription = "BP Katowice Rozdzieńskiego",
                     Cost = 5.54,
                     Liters = 1,
                     CostPerLiter = 5.54
@@ -296,7 +298,9 @@ namespace FleetManagement.Controllers
                     Id = 1,
                     DriverAccountId = 1,
                     StartPlace = "Katowice",
+                    StartTime = new DateTime(2012, 12, 12, 12, 12, 12),
                     DestinationPlace = "Gliwice",
+                    DestinationArrivalTime = new DateTime(2012, 12, 12, 12, 28, 12),
                     Distance = 30.3,
                     AverageSpeed = 63.2,
                     TravelTime = 25.6,

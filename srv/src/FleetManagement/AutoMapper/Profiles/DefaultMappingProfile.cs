@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FleetManagement.AutoMapper.ValueResolvers;
+using FleetManagement.AutoMapper.ValueResolvers.Drivers;
 using FleetManagement.AutoMapper.ValueResolvers.VehicleDtos;
 using FleetManagement.Entities.Accounts.DriverAccounts.DTO;
 using FleetManagement.Entities.Accounts.DriverAccounts.Models;
@@ -26,6 +27,8 @@ namespace FleetManagement.AutoMapper.Profiles
 
             CreateMap<DriverAccount, DriverAccountDto>()
                 .ForMember(dto => dto.Account, mce => mce.MapFrom<DriverDtoAccountValueResolver>());
+            CreateMap<DriverAccount, DriverTripInfoDto>()
+                .ForMember(dto => dto.Account, mce => mce.MapFrom<DriverTripInfoDtoAccountValueResolver>());
 
             CreateMap<Powertrain, PowertrainDto>();
             
