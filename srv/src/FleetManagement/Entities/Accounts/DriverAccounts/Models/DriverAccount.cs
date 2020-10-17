@@ -1,12 +1,22 @@
-﻿using FluentNHibernate.Mapping;
+﻿using FleetManagement.Entities.Vehicles.Models;
+using FluentNHibernate.Mapping;
+using System.Collections.Generic;
 
 namespace FleetManagement.Entities.Accounts.DriverAccounts.Models
 {
     public class DriverAccount : EntityBase
     {
         public virtual int UserAccountId { get; set; }
+        
+        /// <summary>
+        /// Numer prawa jazdy.
+        /// </summary>
         public virtual string DrivingLicenseNumber { get; set; }
-        public virtual string Vehicles { get; set; } //TODO: zmiana typu
+
+        /// <summary>
+        /// Przydzielone pojazdy.
+        /// </summary>
+        public virtual IList<Vehicle> Vehicles { get; set; }
     }
 
     public class DriverAccountMap : ClassMap<DriverAccount>
@@ -18,8 +28,9 @@ namespace FleetManagement.Entities.Accounts.DriverAccounts.Models
                 .Not.Nullable();
             Map(x => x.DrivingLicenseNumber)
                 .Not.Nullable();
-            Map(x => x.Vehicles)
-                .Nullable();
+            HasMany(x => x.Vehicles)
+                .Cascade.All()
+                .Not.LazyLoad();
         }
     }
 }

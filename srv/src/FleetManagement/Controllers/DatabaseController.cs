@@ -89,9 +89,6 @@ namespace FleetManagement.Controllers
             managerAccounts.AddRange(CreateManagerAccounts());
             managerAccountsSeeder.Seed(managerAccounts);
 
-            driverAccounts.AddRange(CreateDriverAccounts());
-            driversSeeder.Seed(driverAccounts);
-
             powertrains.AddRange(CreatePowertrains());
             powertrainsSeeder.Seed(powertrains);
 
@@ -109,6 +106,9 @@ namespace FleetManagement.Controllers
 
             vehicles.AddRange(CreateVehicles());
             vehiclesSeeder.Seed(vehicles);
+
+            driverAccounts.AddRange(CreateDriverAccounts());
+            driversSeeder.Seed(driverAccounts);
         }
 
         private IEnumerable<UserAccount> CreateUserAccounts()
@@ -181,7 +181,7 @@ namespace FleetManagement.Controllers
                 {
                     UserAccountId = 2,
                     DrivingLicenseNumber = "jebacpis",
-                    Vehicles = "VW Polo",
+                    Vehicles = vehicles.ToList(),
                 }
             };
         }

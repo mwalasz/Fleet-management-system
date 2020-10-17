@@ -26,7 +26,8 @@ namespace FleetManagement.AutoMapper.Profiles
                 .ForMember(dto => dto.Account, mce => mce.MapFrom<ManagerDtoAccountValueResolver>());
 
             CreateMap<DriverAccount, DriverAccountDto>()
-                .ForMember(dto => dto.Account, mce => mce.MapFrom<DriverDtoAccountValueResolver>());
+                .ForMember(dto => dto.Account, mce => mce.MapFrom<DriverDtoAccountValueResolver>())
+                .ForMember(dto => dto.Vehicles, mce => mce.MapFrom<DriverDtoVehiclesValueResolver>());
             CreateMap<DriverAccount, DriverTripInfoDto>()
                 .ForMember(dto => dto.Account, mce => mce.MapFrom<DriverTripInfoDtoAccountValueResolver>());
 
@@ -44,6 +45,7 @@ namespace FleetManagement.AutoMapper.Profiles
                 .ForMember(dto => dto.RepairsAndServices, mce => mce.MapFrom<VehicleDtoRepairsValueResolver>())
                 .ForMember(dto => dto.Refuelings, mce => mce.MapFrom<VehicleDtoRefuelingsValueResolver>())
                 .ForMember(dto => dto.Powertrain, mce => mce.MapFrom<VehicleDtoPowertrainValueResolver>());
+            CreateMap<Vehicle, VehicleBasicInfoDto>();
         }
     }
 }
