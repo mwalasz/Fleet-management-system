@@ -18,8 +18,8 @@ namespace FleetManagement.AutoMapper.ValueResolvers.VehicleDtos
 
         public PowertrainDto Resolve(Vehicle source, VehicleDto destination, PowertrainDto destMember, ResolutionContext context)
         {
-            var powertrain = powertrainProvider.GetById(source?.PowertrainId) ?? null;
-            
+            var powertrain = powertrainProvider.GetById(source.Powertrain.Id) ?? null;
+
             return powertrain != null 
                 ? mapper.Map<Powertrain, PowertrainDto>(powertrain)
                 : null;

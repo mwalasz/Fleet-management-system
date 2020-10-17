@@ -1,4 +1,5 @@
 ﻿using FleetManagement.Entities.Maintenances.Models;
+using FleetManagement.Entities.Powertrains.Models;
 using FleetManagement.Entities.Refuelings.Models;
 using FleetManagement.Entities.Trips.Models;
 using FluentNHibernate.Mapping;
@@ -58,7 +59,7 @@ namespace FleetManagement.Entities.Vehicles.Models
         /// <summary>
         /// Napęd.
         /// </summary>
-        public virtual int PowertrainId { get; set; }
+        public virtual Powertrain Powertrain { get; set; }
         
         /// <summary>
         /// Naprawy.
@@ -102,8 +103,7 @@ namespace FleetManagement.Entities.Vehicles.Models
                 .Not.Nullable();
             Map(x => x.InsuranceExpirationDate)
                 .Not.Nullable();
-            Map(x => x.PowertrainId)
-                .Not.Nullable();
+            References(x => x.Powertrain);
             HasMany(x => x.RepairsAndServices)
                 .Cascade.All()
                 .Not.LazyLoad();

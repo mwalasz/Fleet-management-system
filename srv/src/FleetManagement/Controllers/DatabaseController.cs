@@ -89,9 +89,6 @@ namespace FleetManagement.Controllers
             managerAccounts.AddRange(CreateManagerAccounts());
             managerAccountsSeeder.Seed(managerAccounts);
 
-            powertrains.AddRange(CreatePowertrains());
-            powertrainsSeeder.Seed(powertrains);
-
             refuelings.AddRange(CreateRefuelings());
             refuelingsSeeder.Seed(refuelings);
 
@@ -103,6 +100,9 @@ namespace FleetManagement.Controllers
 
             trips.AddRange(CreateTrips());
             tripsSeeder.Seed(trips);
+
+            powertrains.AddRange(CreatePowertrains());
+            powertrainsSeeder.Seed(powertrains);
 
             vehicles.AddRange(CreateVehicles());
             vehiclesSeeder.Seed(vehicles);
@@ -199,7 +199,7 @@ namespace FleetManagement.Controllers
                     VIN = "WVWZZZ9NZ12345",
                     YearOfProduction = 2003,
                     TechnicalInspectionDate = new DateTime(2021, 2, 10),
-                    PowertrainId = 1,
+                    Powertrain = powertrains[0],
                     CurbWeight = 1100,
                     InsuranceExpirationDate = new DateTime(2021, 5, 15),
                     RepairsAndServices = new List<Maintenance>(),
@@ -215,7 +215,7 @@ namespace FleetManagement.Controllers
                     VIN = "someVINnumber",
                     YearOfProduction = 2019,
                     TechnicalInspectionDate = new DateTime(2025, 1, 1),
-                    PowertrainId = 1,
+                    Powertrain = powertrains[1],
                     CurbWeight = 1600,
                     InsuranceExpirationDate = new DateTime(2022, 1, 1),
                     RepairsAndServices = maintenances.ToList(),
@@ -236,6 +236,14 @@ namespace FleetManagement.Controllers
                     EngineCapacity = 1898,
                     EngineType = "Diesel",
                     DriveType = "FWD"
+                },
+                new Powertrain()
+                {
+                    Id = 1,
+                    NumberOfCylinders = 4,
+                    EngineCapacity = 2000,
+                    EngineType = "Diesel",
+                    DriveType = "AWD"
                 }
             };
         }
