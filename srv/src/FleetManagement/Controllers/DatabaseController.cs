@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FleetManagement.Controllers
@@ -91,9 +92,6 @@ namespace FleetManagement.Controllers
             driverAccounts.AddRange(CreateDriverAccounts());
             driversSeeder.Seed(driverAccounts);
 
-            vehicles.AddRange(CreateVehicles());
-            vehiclesSeeder.Seed(vehicles);
-
             powertrains.AddRange(CreatePowertrains());
             powertrainsSeeder.Seed(powertrains);
 
@@ -108,6 +106,9 @@ namespace FleetManagement.Controllers
 
             trips.AddRange(CreateTrips());
             tripsSeeder.Seed(trips);
+
+            vehicles.AddRange(CreateVehicles());
+            vehiclesSeeder.Seed(vehicles);
         }
 
         private IEnumerable<UserAccount> CreateUserAccounts()
@@ -217,9 +218,9 @@ namespace FleetManagement.Controllers
                     PowertrainId = 1,
                     CurbWeight = 1600,
                     InsuranceExpirationDate = new DateTime(2022, 1, 1),
-                    RepairsAndServices = new List<Maintenance>(),
-                    Refuelings = new List<Refueling>(),
-                    Trips = new List<Trip>()
+                    RepairsAndServices = maintenances.ToList(),
+                    Refuelings = refuelings.ToList(),
+                    Trips = trips.ToList()
                 }
             };
         }
