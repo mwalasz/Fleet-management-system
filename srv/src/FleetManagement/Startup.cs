@@ -64,7 +64,9 @@ namespace FleetManagement
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            bool development = env.IsDevelopment();
+
+            if (development)
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -74,24 +76,31 @@ namespace FleetManagement
                 app.UseHsts();
             }
 
+            app.UseApiResponseAndExceptionWrapper(
+                new AutoWrapperOptions
+                {
+                    ShowStatusCode = true,
+                    IsDebug = development,
+                    IsApiOnly = false,
+                }
+            );;
+
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseRouting();
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "FleetManagement");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "JobTracker 1.0.0");
                 c.RoutePrefix = string.Empty;
             });
-
-            app.UseApiResponseAndExceptionWrapper();
-
-            app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
+            app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
             });
         }
