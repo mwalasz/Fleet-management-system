@@ -64,6 +64,11 @@ namespace FleetManagement
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(builder => builder
+               .AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader());
+
             bool development = env.IsDevelopment();
 
             if (development)
