@@ -12,20 +12,20 @@ using FleetManagement.Entities.Accounts.ManagerAccounts.Params;
 using FleetManagement.Entities.Accounts.UserAccounts;
 using FleetManagement.Entities.Accounts.UserAccounts.DTO;
 using FleetManagement.Entities.Accounts.UserAccounts.Models;
-using FleetManagement.Utils;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FleetManagement.Utils;
 
 namespace FleetManagement.Controllers
 {
     [ApiController]
     [DefaultRoute]
-    [Authorize(Policy = Policy.AdminsAcces)]
+    [Microsoft.AspNetCore.Authorization.Authorize(Roles = Roles.Admin)]
     public class UserAccountsController : ControllerBase
     {
         private readonly IUserAccountProvider userAccountProvider;

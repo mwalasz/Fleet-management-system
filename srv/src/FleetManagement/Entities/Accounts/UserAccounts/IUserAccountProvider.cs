@@ -1,4 +1,5 @@
-﻿using FleetManagement.Db.BaseOperations;
+﻿using FleetManagement.Authentication.Models;
+using FleetManagement.Db.BaseOperations;
 using FleetManagement.Entities.Accounts.UserAccounts.Models;
 
 namespace FleetManagement.Entities.Accounts.UserAccounts

@@ -1,11 +1,13 @@
 ﻿using AutoWrapper.Wrappers;
 using FleetManagement.Authentication;
+using FleetManagement.Authentication.Models;
 using FleetManagement.Extensions;
 using FleetManagement.ResponseWrapper;
 using FleetManagement.Utils;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 
 namespace FleetManagement.Controllers
@@ -23,25 +25,30 @@ namespace FleetManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<ApiResponse> LogIn([FromQuery] string mail, string password)
+        public async Task<IActionResult> LogIn([FromBody] AuthenticateRequest args)
         {
-            var user = authService.ReturnValidUser(mail, password);
+            var user = authService.Authenticate(args);
 
             if (user == null)
-                return Responses.AboutUserEvents(ResponseType.User.NotFound);
+                return NotFound("No user found!");
 
-            await HttpContext.SignInAsync(user);
-            return Responses.AboutUserEvents(ResponseType.User.SignedIn);
+            return Ok(user);
         }
 
         [HttpPost]
-        public async Task<ApiResponse> LogOut()
+        public async Task<IActionResult> VerifyToken([FromBody] TokenValidationParams args)
         {
-            if (!HttpContext.IsUserLoggedIn())
-                return Responses.AboutUserEvents(ResponseType.User.NotLogged);
+            var user = authService.ValidateToken(args.Token);
 
-            await HttpContext.SignOutAsync();
-            return Responses.AboutUserEvents(ResponseType.User.SignedOut);
+            if (user == null)
+                return Ok("Not valid token");
+
+            return Ok(user);
+        }
+
+        public class TokenValidationParams
+        {
+            public string Token { get; set; }
         }
     }
 }

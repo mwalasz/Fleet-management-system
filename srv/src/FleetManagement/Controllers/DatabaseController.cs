@@ -146,7 +146,7 @@ namespace FleetManagement.Controllers
                     Email = "waldek@poczta.pl",
                     PasswordHash = hashService.GenerateHash("waldek"),
                     PhoneNumber = "987654321",
-                    Role = "test",
+                    Role = Roles.Driver,
                 },
                 new UserAccount()
                 {
