@@ -1,5 +1,6 @@
 ﻿using FleetManagement.Authentication.Hashes;
 using FleetManagement.Authentication.Models;
+using FleetManagement.Authentication.Models.Results;
 using FleetManagement.Authentication.Utils;
 using FleetManagement.Entities.Accounts.UserAccounts;
 using FleetManagement.Entities.Accounts.UserAccounts.Models;
@@ -29,18 +30,16 @@ namespace FleetManagement.Authentication
             this.options = options.Value;
         }
 
-        public AuthenticateResponse Authenticate(AuthenticateRequest model)
+        public AuthenticationResult Authenticate(AuthenticationParams request)
         {
             var user = userAccountProvider.GetAll()
-                .SingleOrDefault(x => x.Email == model.Email && hashService.CompareHashes(model.Password, x.PasswordHash));
+                .SingleOrDefault(x => x.Email == request.Email && hashService.CompareHashes(request.Password, x.PasswordHash));
 
             if (user == null) return null;
 
             var token = GenerateToken(user);
 
-            //PRZYPISYWANIE TOKENA DO USERA????
-
-            return new AuthenticateResponse(user, token);
+            return new AuthenticationResult { UserAccount = user, Token = token };
         }
 
         public string GenerateToken(UserAccount user)
@@ -72,17 +71,15 @@ namespace FleetManagement.Authentication
                 ClaimsPrincipal principal;
                 try
                 {
-                    // This line throws if invalid
                     principal = validator.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
 
-                    // If we got here then the token is valid
                     if (principal.HasClaim(c => c.Type == ClaimTypes.Email))
                     {
                         var userMail = principal.Claims.Where(c => c.Type == ClaimTypes.Email).First().Value;
                         return userAccountProvider.GetByMail(userMail);
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return null;
                 }

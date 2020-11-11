@@ -2,7 +2,7 @@
 
 namespace FleetManagement.Authentication.Models
 {
-    public class AuthenticateRequest
+    public class AuthenticationParams
     {
         [Required]
         public string Email { get; set; }

@@ -135,7 +135,7 @@ namespace FleetManagement.Controllers
                     Email = "mietek@poczta.pl",
                     PasswordHash = hashService.GenerateHash("mietek"),
                     PhoneNumber = "987654321",
-                    Role = "test",
+                    Role = Roles.Driver,
                 },
                 new UserAccount()
                 {
@@ -146,7 +146,7 @@ namespace FleetManagement.Controllers
                     Email = "waldek@poczta.pl",
                     PasswordHash = hashService.GenerateHash("waldek"),
                     PhoneNumber = "987654321",
-                    Role = Roles.Driver,
+                    Role = Roles.Manager,
                 },
                 new UserAccount()
                 {
@@ -157,7 +157,7 @@ namespace FleetManagement.Controllers
                     Email = "stasiek@poczta.pl",
                     PasswordHash = hashService.GenerateHash("stasiek"),
                     PhoneNumber = "987654321",
-                    Role = "test",
+                    Role = Roles.Driver,
                 }
             };   
         }
@@ -181,6 +181,12 @@ namespace FleetManagement.Controllers
                 {
                     UserAccountId = 2,
                     DrivingLicenseNumber = "jebacpis",
+                    Vehicles = vehicles.ToList(),
+                },
+                new DriverAccount()
+                {
+                    UserAccountId = 4,
+                    DrivingLicenseNumber = "***** ***",
                     Vehicles = vehicles.ToList(),
                 }
             };

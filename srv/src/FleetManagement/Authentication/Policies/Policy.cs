@@ -13,4 +13,10 @@
         public const string Manager = "manager";
         public const string Driver = "driver";
     }
+
+    public static class CustomRoles
+    {
+        public const string AdminAndManager = Roles.Admin + ", " + Roles.Manager;
+    }
+
 }

@@ -25,7 +25,7 @@ namespace FleetManagement.Controllers
 {
     [ApiController]
     [DefaultRoute]
-    [Microsoft.AspNetCore.Authorization.Authorize(Roles = Roles.Admin)]
+    [Authorize(Roles = Roles.Admin)]
     public class UserAccountsController : ControllerBase
     {
         private readonly IUserAccountProvider userAccountProvider;
@@ -67,6 +67,7 @@ namespace FleetManagement.Controllers
                 .Select(manager => mapper.Map<ManagerAccount, ManagerAccountDto>(manager));
         }
 
+        [Authorize(Roles = CustomRoles.AdminAndManager)]
         [HttpGet]
         public IEnumerable<DriverAccountDto> GetAllDriversAccounts()
         {
@@ -74,6 +75,7 @@ namespace FleetManagement.Controllers
                 .Select(driver => mapper.Map<DriverAccount, DriverAccountDto>(driver));
         }
 
+        [Authorize(Roles = CustomRoles.AdminAndManager)]
         [HttpPost]
         public async Task<ApiResponse> AddNewDriver([FromQuery] NewDriverAccountParams newDriverParams)
         {

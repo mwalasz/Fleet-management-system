@@ -77,22 +77,11 @@ namespace FleetManagement
                 x.RequireHttpsMetadata = false;
                 x.SaveToken = true;
                 x.TokenValidationParameters = Token.GetValidationParams(jwtSettings);
-                //x.TokenValidationParameters = new TokenValidationParameters
-                //{
-                //    ValidateIssuerSigningKey = true,
-                //    IssuerSigningKey = new SymmetricSecurityKey(key),
-                //    ValidateIssuer = true,
-                //    ValidateLifetime = true,
-                //    ValidateAudience = true,
-                //    ValidIssuer = jwtSettings.Issuer,
-                //    ValidAudience = jwtSettings.Audience,
-                //};
             });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            // global cors policy
             app.UseCors(x => x
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
@@ -134,8 +123,6 @@ namespace FleetManagement
             });
 
             app.UseAuthorization();
-
-            //app.UseMiddleware<JwtMiddleware>();
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();

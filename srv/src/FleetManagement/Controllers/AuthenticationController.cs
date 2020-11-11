@@ -1,14 +1,13 @@
-﻿using AutoWrapper.Wrappers;
+﻿using AutoMapper;
 using FleetManagement.Authentication;
 using FleetManagement.Authentication.Models;
-using FleetManagement.Extensions;
-using FleetManagement.ResponseWrapper;
+using FleetManagement.Authentication.Models.Results;
+using FleetManagement.Authentication.Tokens;
+using FleetManagement.Entities.Accounts.UserAccounts.DTO;
+using FleetManagement.Entities.Accounts.UserAccounts.Models;
 using FleetManagement.Utils;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata.Ecma335;
-using System.Threading.Tasks;
 
 namespace FleetManagement.Controllers
 {
@@ -18,37 +17,35 @@ namespace FleetManagement.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthService authService;
+        private readonly IMapper mapper;
 
-        public AuthenticationController(IAuthService authService)
+        public AuthenticationController(IAuthService authService, 
+            IMapper mapper)
         {
             this.authService = authService;
+            this.mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<IActionResult> LogIn([FromBody] AuthenticateRequest args)
+        public IActionResult LogIn([FromBody] AuthenticationParams args)
         {
-            var user = authService.Authenticate(args);
+            var result = authService.Authenticate(args);
 
-            if (user == null)
-                return NotFound("No user found!");
+            if (result == null)
+                return NotFound("User not found!");
 
-            return Ok(user);
+            return Ok(mapper.Map<AuthenticationResult, AuthenticationResultDto>(result));
         }
 
         [HttpPost]
-        public async Task<IActionResult> VerifyToken([FromBody] TokenValidationParams args)
+        public IActionResult VerifyToken([FromBody] TokenValidationParams args)
         {
             var user = authService.ValidateToken(args.Token);
 
             if (user == null)
-                return Ok("Not valid token");
+                return Ok("Token is not valid.");
 
-            return Ok(user);
-        }
-
-        public class TokenValidationParams
-        {
-            public string Token { get; set; }
+            return Ok(mapper.Map<UserAccount, UserAccountDto>(user));
         }
     }
 }
