@@ -6,71 +6,69 @@ import Input from "../components/input";
 import Title from "../components/title";
 import Button from "../components/button";
 import styled from "styled-components";
+import logo from "../images/logo.png";
 
-function Login(props) {
-    const { isLoggingIn, loginError, isAuthenticated, dispatch } = props;
-    const [state, setState] = useState({
-        mail: "",
-        password: ""
-    })
+const Login = (props) => {
+  const { isLoggingIn, loginError, isAuthenticated, dispatch } = props;
+  const [state, setState] = useState({
+    mail: "",
+    password: "",
+  });
 
-    const handleSubmit = () => {
-        const { mail, password } = state;
-        console.log(state);
-        dispatch(loginUser(mail, password));
-    };
+  const handleSubmit = () => {
+    const { mail, password } = state;
+    console.log(state);
+    dispatch(loginUser(mail, password));
+  };
 
-    if (isAuthenticated) {
-        return <Redirect to="/panel" />;
-    } else {
-        return (
-            <Wrapper>
-                <FormWrapper>
-                    {/* <LogoImage src={LOGO}/> */}
-                    <Form>
-                        <Title margin="0 0 20px">Logowanie</Title>
-                        <Row>
-                            <Input 
-                                label="Mail" 
-                                type="email" 
-                                name="email" 
-                                value={state.mail} 
-                                onChange={(e) => setState({ ...state, mail :e.target.value })}/>
-                        </Row>
-                        <Row>
-                            <Input 
-                                label="Hasło" 
-                                type="password" 
-                                name="password" 
-                                value={state.password} 
-                                onChange={(e) => setState({...state, password: e.target.value })}/>
-                        </Row>
-                        {
-                            loginError &&
-                            <p>Error</p>
-                        }
-                        {
-                            isLoggingIn &&
-                            <p>Loading ...</p>
-                        }
-                        <Button big onClick={handleSubmit}>Zaloguj się</Button>
-                    </Form>
-                    <div/>
-                </FormWrapper>
-            </Wrapper>
-        )
-    }
-};
-
-Login.propTypes = {
+  if (isAuthenticated) {
+    return <Redirect to="/panel" />;
+  } else {
+    return (
+      <Wrapper>
+        <FormWrapper>
+          <LogoImage src={logo} />
+          <Form>
+            <Title margin="0 0 20px">Logowanie</Title>
+            <Row>
+              <Input
+                label="Mail"
+                type="email"
+                name="email"
+                value={state.mail}
+                onChange={(e) => setState({ ...state, mail: e.target.value })}
+              />
+            </Row>
+            <Row>
+              <Input
+                label="Hasło"
+                type="password"
+                name="password"
+                value={state.password}
+                onChange={(e) =>
+                  setState({ ...state, password: e.target.value })
+                }
+              />
+            </Row>
+            {loginError && <p>Error</p>}
+            {isLoggingIn && <p>Loading ...</p>}
+            <Button big onClick={handleSubmit}>
+              Zaloguj się
+            </Button>
+          </Form>
+          <div />
+        </FormWrapper>
+      </Wrapper>
+    );
+  }
 };
 
 function mapStateToProps(state) {
-    return {
-        isLoggingIn: state.isLoggingIn,
-        loginError: state.loginError,
-        isAuthenticated: state.isAuthenticated
-    };
+  return {
+    isLoggingIn: state.isLoggingIn,
+    loginError: state.loginError,
+    isAuthenticated: state.isAuthenticated,
+  };
 }
 export default connect(mapStateToProps)(Login);
 
@@ -87,8 +85,8 @@ const Row = styled.div`
 const ImageWrapper = styled.div`
   width: 65%;
   height: 100%;
-  
-  img{
+
+  img {
     width: 100%;
     height: 100%;
     object-fit: cover;

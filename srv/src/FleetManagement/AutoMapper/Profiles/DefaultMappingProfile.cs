@@ -24,7 +24,12 @@ namespace FleetManagement.AutoMapper.Profiles
             CreateMap<UserAccount, UserAccountDto>();
 
             CreateMap<AuthenticationResult, AuthenticationResultDto>()
-                .ForMember(dto => dto.UserAccount, mce => mce.MapFrom(q => q.UserAccount));
+                .ForMember(dto => dto.FirstName, mce => mce.MapFrom(q => q.UserAccount.FirstName))
+                .ForMember(dto => dto.LastName, mce => mce.MapFrom(q => q.UserAccount.LastName))
+                .ForMember(dto => dto.Email, mce => mce.MapFrom(q => q.UserAccount.Email))
+                .ForMember(dto => dto.PhoneNumber, mce => mce.MapFrom(q => q.UserAccount.PhoneNumber))
+                .ForMember(dto => dto.Role, mce => mce.MapFrom(q => q.UserAccount.Role));
+                //.ForMember(dto => dto.Token, mce => mce.MapFrom(q => q.Token));
 
 
             CreateMap<ManagerAccount, ManagerAccountDto>()

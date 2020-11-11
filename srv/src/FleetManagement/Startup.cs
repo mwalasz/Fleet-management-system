@@ -1,6 +1,6 @@
 using AutoMapper;
 using AutoWrapper;
-using FleetManagement.Authentication.Utils;
+using FleetManagement.Authentication.Tokens;
 using FleetManagement.AutoMapper.Profiles;
 using FleetManagement.Extensions;
 using FleetManagement.Settings;

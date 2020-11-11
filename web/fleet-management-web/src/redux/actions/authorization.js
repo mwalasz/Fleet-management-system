@@ -17,48 +17,48 @@ export const VERIFY_ERROR = "VERIFY_ERROR";
 export const loginUser = (mail, password) => (dispatch) => {
   dispatch(requestLogin());
   axios
-    .post(`${API_URL}/Authentication/LogIn`, {
+    .post(`${API_URL}/authentication/login`, {
       email: mail,
       password: password,
     })
     .then((res) => {
       const user = res.data.result;
-      setCookie("token", user.token, 1);
+      setCookie("auth_token", user.token, 1);
       dispatch(receiveLogin(user));
     })
     .catch((error) => {
+      console.log(error);
       dispatch(loginError());
     });
 };
 
 export const logoutUser = () => (dispatch) => {
   dispatch(requestLogout());
-  removeCookie("token");
+  removeCookie("auth_token");
   dispatch(receiveLogout());
 };
 
 export const verifyAuth = () => (dispatch) => {
-  // dispatch(verifyUser());
-  // const token = getCookie("token");
-  // console.log("token");
-  // console.log(token);
-  //   axios
-  //     .get(`${API_URL}/Authentication/VerifyToken?token=${token}`)
-  //     .then((res) => {
-  //       const result = res.data.result;
-  //       console.log("res");
-  //       console.log(result);
-  //       if (result.isValid === false) {
-  //         dispatch(verifyError());
-  //         return;
-  //       }
-  //       dispatch(verifySuccess(result.user));
-  //     })
-  //     .catch((err) => {
-  //       console.log("err");
-  //       console.log(err);
-  //       dispatch(verifyError());
-  //     });
+  dispatch(verifyUser());
+  const token = getCookie("auth_token");
+  console.log("tauth_tokenoken");
+  console.log(token);
+  axios
+    .post(`${API_URL}/authentication/verify_token`, {
+      token: token,
+    })
+    .then((res) => {
+      const result = res.data.result;
+      if (result === null) {
+        dispatch(verifyError());
+        return;
+      }
+      dispatch(verifySuccess(result));
+    })
+    .catch((error) => {
+      console.log(error);
+      dispatch(verifyError());
+    });
 };
 
 const requestLogin = () => {

@@ -1,7 +1,7 @@
 ﻿using FleetManagement.Authentication.Hashes;
 using FleetManagement.Authentication.Models;
 using FleetManagement.Authentication.Models.Results;
-using FleetManagement.Authentication.Utils;
+using FleetManagement.Authentication.Tokens;
 using FleetManagement.Entities.Accounts.UserAccounts;
 using FleetManagement.Entities.Accounts.UserAccounts.Models;
 using FleetManagement.Settings;

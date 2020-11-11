@@ -1,26 +1,41 @@
-import React from 'react';
-import { Route } from 'react-router-dom';
-import { connect } from 'react-redux';
-import Manager from "./manager/manager"
-import Driver from "./driver/driver"
+import React from "react";
+import { Route } from "react-router-dom";
+import { connect } from "react-redux";
+import ManagerView from "./manager/managerView";
+import DriverView from "./driver/driverView";
+import AdminView from "./admin/adminView";
 
-function Panel({ user }) {
-    let comp = (user.role === "driver") 
-            ? Driver
-            : Manager;
+const Panel = ({ user }) => {
+  var component = null;
 
-    return (
-        <>
-            <Route path="/panel" component={comp} />
-        </>
-    );
-}
+  console.log(user);
+  switch (user.role) {
+    case "admin":
+      component = AdminView;
+      break;
+    case "manager":
+      component = ManagerView;
+      break;
+    case "driver":
+      component = DriverView;
+      break;
+
+    default:
+      break;
+  }
+
+  return (
+    <>
+      <Route path="/panel" component={component} />
+    </>
+  );
+};
 
 Panel.propTypes = {};
 
 function mapStateToProps(state) {
-    return {
-        user: state.user,
-    };
+  return {
+    user: state.user,
+  };
 }
 export default connect(mapStateToProps)(Panel);
