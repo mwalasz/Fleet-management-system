@@ -27,7 +27,7 @@ namespace FleetManagement.Controllers
         }
 
         [HttpPost]
-        public IActionResult LogIn([FromBody] AuthenticationParams args)
+        public IActionResult Login([FromBody] AuthenticationParams args)
         {
             var result = authService.Authenticate(args);
 
