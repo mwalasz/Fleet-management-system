@@ -44,7 +44,8 @@ namespace FleetManagement.Extensions
         /// <returns></returns>
         public static IServiceCollection AddAllSettings(this IServiceCollection services, IConfiguration configuration)
             => services.Configure<DataBaseSettings>(configuration.GetSection(nameof(DataBaseSettings)))
-                       .Configure<HashSettings>(configuration.GetSection(nameof(HashSettings)));
+                       .Configure<HashSettings>(configuration.GetSection(nameof(HashSettings)))
+                       .Configure<JwtSettings>(configuration.GetSection(nameof(JwtSettings)));
 
         /// <summary>
         /// Dodaje sesję połączenia z bazą danych

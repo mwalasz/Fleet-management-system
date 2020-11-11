@@ -12,20 +12,20 @@ using FleetManagement.Entities.Accounts.ManagerAccounts.Params;
 using FleetManagement.Entities.Accounts.UserAccounts;
 using FleetManagement.Entities.Accounts.UserAccounts.DTO;
 using FleetManagement.Entities.Accounts.UserAccounts.Models;
-using FleetManagement.Utils;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FleetManagement.Utils;
 
 namespace FleetManagement.Controllers
 {
     [ApiController]
     [DefaultRoute]
-    [Authorize(Policy = Policy.AdminsAcces)]
+    [Authorize(Roles = Roles.Admin)]
     public class UserAccountsController : ControllerBase
     {
         private readonly IUserAccountProvider userAccountProvider;
@@ -67,6 +67,7 @@ namespace FleetManagement.Controllers
                 .Select(manager => mapper.Map<ManagerAccount, ManagerAccountDto>(manager));
         }
 
+        [Authorize(Roles = CustomRoles.AdminAndManager)]
         [HttpGet]
         public IEnumerable<DriverAccountDto> GetAllDriversAccounts()
         {
@@ -74,6 +75,7 @@ namespace FleetManagement.Controllers
                 .Select(driver => mapper.Map<DriverAccount, DriverAccountDto>(driver));
         }
 
+        [Authorize(Roles = CustomRoles.AdminAndManager)]
         [HttpPost]
         public async Task<ApiResponse> AddNewDriver([FromQuery] NewDriverAccountParams newDriverParams)
         {

@@ -1,14 +1,21 @@
 using AutoMapper;
 using AutoWrapper;
+using FleetManagement.Authentication.Utils;
 using FleetManagement.AutoMapper.Profiles;
 using FleetManagement.Extensions;
+using FleetManagement.Settings;
+using FleetManagement.Utils;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Text;
 
 namespace FleetManagement
 {
@@ -26,8 +33,15 @@ namespace FleetManagement
             //Dodanie zarz¹dzania routingiem.
             services.AddRouting();
 
+            //Dodanie obs³ugi CORS.
+            services.AddCors();
+
             //Dodanie obs³ugi kontrolerów.
-            services.AddControllers();
+            //services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
+            });
 
             services.AddAutoMapper(cfg =>
             {
@@ -55,19 +69,30 @@ namespace FleetManagement
                 );
             });
 
-            //Dodanie autentykacji - logowanie.
-            services.AddCookieAuthentication();
 
             //Dodanie autoryzacji - mo¿liwoœci u¿ytkownika.
-            services.AddPolicyAuthorization();
+            var jwtSettings = Configuration.GetSection("JwtSettings").Get<JwtSettings>();
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = Token.GetValidationParams(jwtSettings);
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCors(builder => builder
-               .AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader());
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
+            app.UseAuthentication();
 
             bool development = env.IsDevelopment();
 
@@ -102,7 +127,6 @@ namespace FleetManagement
                 c.RoutePrefix = string.Empty;
             });
 
-            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => {

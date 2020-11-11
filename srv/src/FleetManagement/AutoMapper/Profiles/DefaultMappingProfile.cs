@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FleetManagement.Authentication.Models.Results;
 using FleetManagement.AutoMapper.ValueResolvers;
 using FleetManagement.AutoMapper.ValueResolvers.Drivers;
 using FleetManagement.AutoMapper.ValueResolvers.VehicleDtos;
@@ -21,6 +22,10 @@ namespace FleetManagement.AutoMapper.Profiles
         public DefaultMappingProfile()
         {
             CreateMap<UserAccount, UserAccountDto>();
+
+            CreateMap<AuthenticationResult, AuthenticationResultDto>()
+                .ForMember(dto => dto.UserAccount, mce => mce.MapFrom(q => q.UserAccount));
+
 
             CreateMap<ManagerAccount, ManagerAccountDto>()
                 .ForMember(dto => dto.Account, mce => mce.MapFrom<ManagerDtoAccountValueResolver>());

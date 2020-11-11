@@ -3,6 +3,8 @@ using FleetManagement.Authentication.Policies;
 using FleetManagement.Db.BaseOperations;
 using FleetManagement.Entities.Accounts.UserAccounts;
 using FleetManagement.Entities.Accounts.UserAccounts.Models;
+using FleetManagement.Settings;
+using Microsoft.Extensions.Options;
 using NHibernate;
 using System.Linq;
 
@@ -13,7 +15,7 @@ namespace FleetManagement.Db.Repositories
         private readonly IHashService hashService;
 
         public UserAccountsRepository(IHashService hashService,
-            ISessionFactory sessionFactory) : base(sessionFactory)
+            ISessionFactory sessionFactory, IOptions<JwtSettings> options) : base(sessionFactory)
         {
             this.hashService = hashService;
         }

@@ -1,15 +1,15 @@
-﻿using FleetManagement.Entities.Accounts.UserAccounts.Models;
+﻿using FleetManagement.Authentication.Models;
+using FleetManagement.Authentication.Models.Results;
+using FleetManagement.Entities.Accounts.UserAccounts.Models;
 
 namespace FleetManagement.Authentication
 {
     public interface IAuthService
     {
-        /// <summary>
-        /// Zwraca istniejącego użytkownika po podaniu prawidłowego hasła.
-        /// </summary>
-        /// <param name="mail">mail identyfikujący użytkownika</param>
-        /// <param name="password">hasło</param>
-        /// <returns></returns>
-        UserAccount ReturnValidUser(string mail, string password);
+        public AuthenticationResult Authenticate(AuthenticationParams model);
+
+        public string GenerateToken(UserAccount user);
+
+        public UserAccount ValidateToken(string token);
     }
 }

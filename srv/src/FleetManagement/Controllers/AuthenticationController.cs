@@ -1,12 +1,13 @@
-﻿using AutoWrapper.Wrappers;
+﻿using AutoMapper;
 using FleetManagement.Authentication;
-using FleetManagement.Extensions;
-using FleetManagement.ResponseWrapper;
+using FleetManagement.Authentication.Models;
+using FleetManagement.Authentication.Models.Results;
+using FleetManagement.Authentication.Tokens;
+using FleetManagement.Entities.Accounts.UserAccounts.DTO;
+using FleetManagement.Entities.Accounts.UserAccounts.Models;
 using FleetManagement.Utils;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace FleetManagement.Controllers
 {
@@ -16,32 +17,35 @@ namespace FleetManagement.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthService authService;
+        private readonly IMapper mapper;
 
-        public AuthenticationController(IAuthService authService)
+        public AuthenticationController(IAuthService authService, 
+            IMapper mapper)
         {
             this.authService = authService;
+            this.mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<ApiResponse> LogIn([FromQuery] string mail, string password)
+        public IActionResult Login([FromBody] AuthenticationParams args)
         {
-            var user = authService.ReturnValidUser(mail, password);
+            var result = authService.Authenticate(args);
+
+            if (result == null)
+                return NotFound("User not found!");
+
+            return Ok(mapper.Map<AuthenticationResult, AuthenticationResultDto>(result));
+        }
+
+        [HttpPost]
+        public IActionResult VerifyToken([FromBody] TokenValidationParams args)
+        {
+            var user = authService.ValidateToken(args.Token);
 
             if (user == null)
-                return Responses.AboutUserEvents(ResponseType.User.NotFound);
+                return Ok("Token is not valid.");
 
-            await HttpContext.SignInAsync(user);
-            return Responses.AboutUserEvents(ResponseType.User.SignedIn);
-        }
-
-        [HttpPost]
-        public async Task<ApiResponse> LogOut()
-        {
-            if (!HttpContext.IsUserLoggedIn())
-                return Responses.AboutUserEvents(ResponseType.User.NotLogged);
-
-            await HttpContext.SignOutAsync();
-            return Responses.AboutUserEvents(ResponseType.User.SignedOut);
+            return Ok(mapper.Map<UserAccount, UserAccountDto>(user));
         }
     }
 }
