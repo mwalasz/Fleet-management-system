@@ -8,7 +8,7 @@ import {
     VERIFY_USER,
     VERIFY_SUCCESS, 
     VERIFY_ERROR
-} from "../actions/authorization";
+} from "../actions/authorization_actions";
 
 const initialState = {
     isLoggingIn: false,

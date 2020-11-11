@@ -14,6 +14,8 @@ export const VERIFY_USER = "VERIFY_USER";
 export const VERIFY_SUCCESS = "VERIFY_SUCCESS";
 export const VERIFY_ERROR = "VERIFY_ERROR";
 
+const tokenName = "auth_token";
+
 export const loginUser = (mail, password) => (dispatch) => {
   dispatch(requestLogin());
   axios
@@ -23,25 +25,25 @@ export const loginUser = (mail, password) => (dispatch) => {
     })
     .then((res) => {
       const user = res.data.result;
-      setCookie("auth_token", user.token, 1);
+      setCookie(tokenName, user.token, 1);
       dispatch(receiveLogin(user));
     })
     .catch((error) => {
-      console.log(error);
+      console.log(`Error while user's attempt to log in: ${error}`);
       dispatch(loginError());
     });
 };
 
 export const logoutUser = () => (dispatch) => {
   dispatch(requestLogout());
-  removeCookie("auth_token");
+  removeCookie(tokenName);
   dispatch(receiveLogout());
 };
 
 export const verifyAuth = () => (dispatch) => {
   dispatch(verifyUser());
-  const token = getCookie("auth_token");
-  console.log("tauth_tokenoken");
+  const token = getCookie(tokenName);
+  console.log(tokenName);
   console.log(token);
   axios
     .post(`${API_URL}/authentication/verify_token`, {
@@ -49,14 +51,14 @@ export const verifyAuth = () => (dispatch) => {
     })
     .then((res) => {
       const result = res.data.result;
-      if (result === null) {
+      if (result === "Token is not valid.") {
         dispatch(verifyError());
         return;
       }
       dispatch(verifySuccess(result));
     })
     .catch((error) => {
-      console.log(error);
+      console.log(`Error while token verifying: ${error}`);
       dispatch(verifyError());
     });
 };

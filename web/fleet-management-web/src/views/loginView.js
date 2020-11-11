@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import { loginUser } from "../redux/actions/authorization";
-import Input from "../components/input";
+import { loginUser } from "../redux/actions/authorization_actions";
+import Input from "../components/Input";
 import Title from "../components/title";
-import Button from "../components/button";
+import Button from "@material-ui/core/Button";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import styled from "styled-components";
 import logo from "../images/logo.png";
 
-const Login = (props) => {
+const LoginView = (props) => {
   const { isLoggingIn, loginError, isAuthenticated, dispatch } = props;
   const [state, setState] = useState({
     mail: "",
@@ -26,12 +27,17 @@ const Login = (props) => {
   } else {
     return (
       <Wrapper>
+        <LoadingBar>
+          {isLoggingIn && <LinearProgress color="primary" />}
+        </LoadingBar>
         <FormWrapper>
+          <Title margin="0 0 20px">SYSTEM ZARZĄDZANIA POJAZDAMI</Title>
           <LogoImage src={logo} />
           <Form>
-            <Title margin="0 0 20px">Logowanie</Title>
             <Row>
               <Input
+                error={state.mail.length != 0 && isMailWrong(state.mail)}
+                errorText="Podaj prawidłowy adres mailowy!"
                 label="Mail"
                 type="email"
                 name="email"
@@ -50,48 +56,56 @@ const Login = (props) => {
                 }
               />
             </Row>
-            {loginError && <p>Error</p>}
-            {isLoggingIn && <p>Loading ...</p>}
-            <Button big onClick={handleSubmit}>
-              Zaloguj się
-            </Button>
+            <Row>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={handleSubmit}
+                fullWidth="350px"
+                disabled={state.mail.length == 0 || state.password.length == 0}
+              >
+                Zaloguj się
+              </Button>
+            </Row>
+            <Row>
+              {loginError ? "Wystąpił błąd, proszę spróbować ponownie." : "  "}
+            </Row>
           </Form>
-          <div />
         </FormWrapper>
       </Wrapper>
     );
   }
 };
 
-function mapStateToProps(state) {
+const isMailWrong = (email) => {
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return !re.test(email);
+};
+
+const mapStateToProps = (state) => {
   return {
     isLoggingIn: state.isLoggingIn,
     loginError: state.loginError,
     isAuthenticated: state.isAuthenticated,
   };
-}
-export default connect(mapStateToProps)(Login);
+};
+export default connect(mapStateToProps)(LoginView);
+
+const LoadingBar = styled.div`
+  width: 100vw;
+  position: absolute;
+`;
 
 const LogoImage = styled.img`
-  height: 80px;
+  height: 300px;
+  width: 300px;
   display: block;
   margin: 0 auto;
 `;
 
 const Row = styled.div`
   margin-bottom: 20px;
-`;
-
-const ImageWrapper = styled.div`
-  width: 65%;
-  height: 100%;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.5;
-  }
+  justify-content: center;
 `;
 
 const Form = styled.div`
@@ -104,11 +118,12 @@ const FormWrapper = styled.div`
   align-items: center;
   justify-content: space-around;
   width: 100%;
-  height: 100%;
+  height: 90%;
   background: white;
 `;
 
 const Wrapper = styled.div`
+  margin-top: 10;
   height: 100vh;
   width: 100vw;
   position: fixed;

@@ -1,7 +1,7 @@
 import { applyMiddleware, compose, createStore } from "redux";
 import thunkMiddleware from "redux-thunk";
 
-import { verifyAuth } from "./actions/authorization";
+import { verifyAuth } from "./actions/authorization_actions";
 import rootReducer from "./reducers/index";
 
 function configureStore(persistedState) {

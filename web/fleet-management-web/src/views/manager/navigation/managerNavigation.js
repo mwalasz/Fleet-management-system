@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import { logoutUser } from "../../../redux/actions/authorization";
+import { logoutUser } from "../../../redux/actions/authorization_actions";
 // import LOGO from '../../../../images/logo.png'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCar, faUser, faInfoCircle } from "@fortawesome/free-solid-svg-icons";

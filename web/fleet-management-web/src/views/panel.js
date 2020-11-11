@@ -8,7 +8,6 @@ import AdminView from "./admin/adminView";
 const Panel = ({ user }) => {
   var component = null;
 
-  console.log(user);
   switch (user.role) {
     case "admin":
       component = AdminView;
@@ -21,6 +20,7 @@ const Panel = ({ user }) => {
       break;
 
     default:
+      console.log(user);
       break;
   }
 
