@@ -10,7 +10,9 @@ using FleetManagement.Entities.Accounts.ManagerAccounts;
 using FleetManagement.Entities.Accounts.ManagerAccounts.Models;
 using FleetManagement.Entities.Accounts.UserAccounts;
 using FleetManagement.Entities.Accounts.UserAccounts.Models;
-using FleetManagement.Entities.BrandModel;
+using FleetManagement.Entities.BrandModels;
+using FleetManagement.Entities.BrandModels.Models;
+using FleetManagement.Entities.Brands;
 using FleetManagement.Entities.Brands.Models;
 using FleetManagement.Entities.Companies;
 using FleetManagement.Entities.Companies.Models;
@@ -73,7 +75,8 @@ namespace FleetManagement.Extensions
                        .AddTransient<IMaintenanceProvider, MaintenanceRepository>()
                        .AddTransient<ICompanyProvider, CompanyRepository>()
                        .AddTransient<ITripProvider, TripRepository>()
-                       .AddTransient<IBrandProvider, BrandsRepository>();
+                       .AddTransient<IBrandProvider, BrandsRepository>()
+                       .AddTransient<IBrandModelProvider, BrandModelsRepository>();
 
         /// <summary>
         /// Dodaje usługi do wypełniania bazy danych.
@@ -90,7 +93,8 @@ namespace FleetManagement.Extensions
                        .AddTransient<IDbSeeder<IMaintenanceProvider, Maintenance>, DbSeeder<IMaintenanceProvider, Maintenance>>()
                        .AddTransient<IDbSeeder<ICompanyProvider, Company>, DbSeeder<ICompanyProvider, Company>>()
                        .AddTransient<IDbSeeder<ITripProvider, Trip>, DbSeeder<ITripProvider, Trip>>()
-                       .AddTransient<IDbSeeder<IBrandProvider, Brand>, DbSeeder<IBrandProvider, Brand>>();
+                       .AddTransient<IDbSeeder<IBrandProvider, Brand>, DbSeeder<IBrandProvider, Brand>>()
+                       .AddTransient<IDbSeeder<IBrandModelProvider, BrandModel>, DbSeeder<IBrandModelProvider, BrandModel>>();
 
         /// <summary>
         /// Dodaje usługi haszowania oraz autentykacji użytkownika

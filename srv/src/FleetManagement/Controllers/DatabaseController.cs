@@ -8,7 +8,9 @@ using FleetManagement.Entities.Accounts.ManagerAccounts;
 using FleetManagement.Entities.Accounts.ManagerAccounts.Models;
 using FleetManagement.Entities.Accounts.UserAccounts;
 using FleetManagement.Entities.Accounts.UserAccounts.Models;
-using FleetManagement.Entities.BrandModel;
+using FleetManagement.Entities.BrandModels;
+using FleetManagement.Entities.BrandModels.Models;
+using FleetManagement.Entities.Brands;
 using FleetManagement.Entities.Brands.Models;
 using FleetManagement.Entities.Companies;
 using FleetManagement.Entities.Companies.Models;
@@ -48,6 +50,7 @@ namespace FleetManagement.Controllers
         private readonly IDbSeeder<ICompanyProvider, Company> companiesSeeder;
         private readonly IDbSeeder<ITripProvider, Trip> tripsSeeder;
         private readonly IDbSeeder<IBrandProvider, Brand> brandsSeeder;
+        private readonly IDbSeeder<IBrandModelProvider, BrandModel> brandModelsSeeder;
 
         private readonly List<UserAccount> userAccounts = new List<UserAccount>();
         private readonly List<ManagerAccount> managerAccounts = new List<ManagerAccount>();
@@ -59,6 +62,7 @@ namespace FleetManagement.Controllers
         private readonly List<Company> companies = new List<Company>();
         private readonly List<Trip> trips = new List<Trip>();
         private readonly List<Brand> brands = new List<Brand>();
+        private readonly List<BrandModel> brandModels = new List<BrandModel>();
 
         public DataBaseController(IHashService hashService,
             IDbSeeder<IUserAccountProvider, UserAccount> usersSeeder,
@@ -70,7 +74,8 @@ namespace FleetManagement.Controllers
             IDbSeeder<IMaintenanceProvider, Maintenance> maintenancesSeeder,
             IDbSeeder<ICompanyProvider, Company> companiesSeeder,
             IDbSeeder<ITripProvider, Trip> tripsSeeder,
-            IDbSeeder<IBrandProvider, Brand> brandsSeeder)
+            IDbSeeder<IBrandProvider, Brand> brandsSeeder,
+            IDbSeeder<IBrandModelProvider, BrandModel> brandModelsSeeder)
         {
             this.hashService = hashService;
             this.userAccountsSeeder = usersSeeder;
@@ -83,6 +88,7 @@ namespace FleetManagement.Controllers
             this.companiesSeeder = companiesSeeder;
             this.tripsSeeder = tripsSeeder;
             this.brandsSeeder = brandsSeeder;
+            this.brandModelsSeeder = brandModelsSeeder;
         }
 
         [HttpGet]
@@ -108,6 +114,9 @@ namespace FleetManagement.Controllers
 
             powertrains.AddRange(CreatePowertrains());
             powertrainsSeeder.Seed(powertrains);
+
+            brandModels.AddRange(CreateBrandModels());
+            brandModelsSeeder.Seed(brandModels);
 
             brands.AddRange(CreateBrands());
             brandsSeeder.Seed(brands);
@@ -207,7 +216,7 @@ namespace FleetManagement.Controllers
                 new Vehicle()
                 {
                     Brand = brands[0],
-                    Model = "Polo",
+                    Model = brandModels[0],
                     KmMileage = 180000,
                     LicensePlate = "S0 12345",
                     VIN = "WVWZZZ9NZ12345",
@@ -223,7 +232,7 @@ namespace FleetManagement.Controllers
                 new Vehicle()
                 {
                     Brand = brands[0],
-                    Model = "Passat",
+                    Model = brandModels[1],
                     KmMileage = 5000,
                     LicensePlate = "W0 54321",
                     VIN = "someVINnumber",
@@ -341,7 +350,8 @@ namespace FleetManagement.Controllers
                 new Brand()
                 {
                     Id = 1,
-                    Name = "Volkswagen"
+                    Name = "Volkswagen",
+                    Models = CreateBrandModels().ToList()
                 },
                 new Brand()
                 {
@@ -355,5 +365,24 @@ namespace FleetManagement.Controllers
                 }
             };
         }
+
+
+        private IEnumerable<BrandModel> CreateBrandModels()
+        {
+            return new List<BrandModel>()
+            {
+                new BrandModel()
+                {
+                    Id = 1,
+                    Name = "Polo"
+				},
+                new BrandModel()
+                {
+                    Id = 2,
+                    Name = "Passat"
+				}
+            };
+        }
+
     }
 }

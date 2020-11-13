@@ -1,4 +1,5 @@
-﻿using FleetManagement.Entities.Brands.Models;
+﻿using FleetManagement.Entities.BrandModels.Models;
+using FleetManagement.Entities.Brands.Models;
 using FleetManagement.Entities.Maintenances.Models;
 using FleetManagement.Entities.Powertrains.Models;
 using FleetManagement.Entities.Refuelings.Models;
@@ -21,7 +22,7 @@ namespace FleetManagement.Entities.Vehicles.Models
         /// <summary>
         /// Model.
         /// </summary>
-        public virtual string Model { get; set; }
+        public virtual BrandModel Model { get; set; }
         
         /// <summary>
         /// Tablica rejestracyjna.
@@ -88,7 +89,7 @@ namespace FleetManagement.Entities.Vehicles.Models
             Id(x => x.Id);
             References(x => x.Brand)
                 .Not.Nullable();
-            Map(x => x.Model)
+            References(x => x.Model)
                 .Not.Nullable();
             Map(x => x.LicensePlate)
                 .Unique()

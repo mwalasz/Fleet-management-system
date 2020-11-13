@@ -1,5 +1,5 @@
 ﻿using FleetManagement.Db.BaseOperations;
-using FleetManagement.Entities.BrandModel;
+using FleetManagement.Entities.Brands;
 using FleetManagement.Entities.Brands.Models;
 using NHibernate;
 

@@ -1,6 +1,6 @@
 ﻿using FluentNHibernate.Mapping;
 
-namespace FleetManagement.Entities.BrandModel.Models
+namespace FleetManagement.Entities.BrandModels.Models
 {
     public class BrandModel : EntityBase
     {
