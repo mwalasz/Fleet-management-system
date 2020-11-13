@@ -4,7 +4,12 @@ import { NavLink } from "react-router-dom";
 import { logoutUser } from "../../../redux/actions/authorization_actions";
 // import LOGO from '../../../../images/logo.png'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCar, faUser, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCar,
+  faUser,
+  faInfoCircle,
+  faSignOutAlt,
+} from "@fortawesome/free-solid-svg-icons";
 
 const DriverNavigation = ({ dispatch }) => {
   return (
@@ -24,8 +29,7 @@ const DriverNavigation = ({ dispatch }) => {
         </NavLinksWrapper>
       </div>
       <StyledLogout onClick={() => dispatch(logoutUser())}>
-        {/* <FontAwesomeIcon icon={faSignOutAlt}/> Wyloguj się */}
-        <p>{"Wyloguj się"}</p>
+        <FontAwesomeIcon icon={faSignOutAlt} /> Wyloguj się
       </StyledLogout>
     </Wrapper>
   );
@@ -40,9 +44,9 @@ const StyledLogout = styled.button`
   padding: 8px;
   padding-left: 20px;
   border-radius: 5px;
-  color: "blue";
-  font-size: 10px;
-  font-weight: 300;
+  color: ${({ theme }) => theme.thirdColor};
+  font-size: ${({ theme }) => theme.font.M};
+  font-weight: ${({ theme }) => theme.font.Regular};
   position: relative;
   margin-bottom: 10px;
   transition: all 0.3s;
@@ -61,16 +65,17 @@ const StyledNavLink = styled(NavLink)`
   display: block;
   width: 90%;
   margin: 0 auto;
-  padding: 8px;
+  padding: 10px;
   padding-left: 20px;
   border-radius: 5px;
-  color: "blue";
-  font-size: 10px;
-  font-weight: 300;
+  color: ${({ theme }) => theme.thirdColor};
+  font-size: ${({ theme }) => theme.font.M};
+  font-weight: ${({ theme }) => theme.font.Regular};
   position: relative;
   margin-bottom: 10px;
   transition: all 0.3s;
   cursor: pointer;
+  text-decoration: none;
 
   svg {
     min-width: 25px;
@@ -78,7 +83,7 @@ const StyledNavLink = styled(NavLink)`
   }
   a {
     font-size: 13px;
-    background: "yellow";
+    background: ${({ theme }) => theme.primaryColor};
     color: white;
     display: block;
     height: 22px;
@@ -96,24 +101,21 @@ const StyledNavLink = styled(NavLink)`
     }
   }
   &:hover {
-    color: "red";
+    color: ${({ theme }) => theme.secondColor};
   }
 
   &.active {
-    /* background: ${({ theme }) => theme.primaryBackground};
-    color:${({ theme }) => theme.primaryColor}; */
+    background: ${({ theme }) => theme.primaryBackground};
+    color: ${({ theme }) => theme.primaryColor};
   }
 `;
 
-const NavLinksWrapper = styled.div`
-  height: 100%;
-`;
+const NavLinksWrapper = styled.div``;
 
 const Logo = styled.div`
   margin-top: 40px;
   padding: 0 20px;
   margin-bottom: 40px;
-
   img {
     max-height: 50px;
     width: 100%;
@@ -123,10 +125,11 @@ const Logo = styled.div`
 `;
 
 const Wrapper = styled.div`
-  background: white;
+  background: ${({ theme }) => theme.primaryBackground};
   height: 100%;
   min-width: 300px;
   max-width: 300px;
+  height: 100vh;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
