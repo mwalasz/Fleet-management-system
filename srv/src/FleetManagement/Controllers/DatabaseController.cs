@@ -8,6 +8,8 @@ using FleetManagement.Entities.Accounts.ManagerAccounts;
 using FleetManagement.Entities.Accounts.ManagerAccounts.Models;
 using FleetManagement.Entities.Accounts.UserAccounts;
 using FleetManagement.Entities.Accounts.UserAccounts.Models;
+using FleetManagement.Entities.BrandModel;
+using FleetManagement.Entities.Brands.Models;
 using FleetManagement.Entities.Companies;
 using FleetManagement.Entities.Companies.Models;
 using FleetManagement.Entities.Maintenances;
@@ -26,7 +28,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace FleetManagement.Controllers
 {
@@ -46,6 +47,7 @@ namespace FleetManagement.Controllers
         private readonly IDbSeeder<IMaintenanceProvider, Maintenance> maintenancesSeeder;
         private readonly IDbSeeder<ICompanyProvider, Company> companiesSeeder;
         private readonly IDbSeeder<ITripProvider, Trip> tripsSeeder;
+        private readonly IDbSeeder<IBrandProvider, Brand> brandsSeeder;
 
         private readonly List<UserAccount> userAccounts = new List<UserAccount>();
         private readonly List<ManagerAccount> managerAccounts = new List<ManagerAccount>();
@@ -56,6 +58,7 @@ namespace FleetManagement.Controllers
         private readonly List<Maintenance> maintenances = new List<Maintenance>();
         private readonly List<Company> companies = new List<Company>();
         private readonly List<Trip> trips = new List<Trip>();
+        private readonly List<Brand> brands = new List<Brand>();
 
         public DataBaseController(IHashService hashService,
             IDbSeeder<IUserAccountProvider, UserAccount> usersSeeder,
@@ -66,7 +69,8 @@ namespace FleetManagement.Controllers
             IDbSeeder<IRefuelingProvider, Refueling> refuelingsSeeder,
             IDbSeeder<IMaintenanceProvider, Maintenance> maintenancesSeeder,
             IDbSeeder<ICompanyProvider, Company> companiesSeeder,
-            IDbSeeder<ITripProvider, Trip> tripsSeeder)
+            IDbSeeder<ITripProvider, Trip> tripsSeeder,
+            IDbSeeder<IBrandProvider, Brand> brandsSeeder)
         {
             this.hashService = hashService;
             this.userAccountsSeeder = usersSeeder;
@@ -78,6 +82,7 @@ namespace FleetManagement.Controllers
             this.maintenancesSeeder = maintenancesSeeder;
             this.companiesSeeder = companiesSeeder;
             this.tripsSeeder = tripsSeeder;
+            this.brandsSeeder = brandsSeeder;
         }
 
         [HttpGet]
@@ -103,6 +108,9 @@ namespace FleetManagement.Controllers
 
             powertrains.AddRange(CreatePowertrains());
             powertrainsSeeder.Seed(powertrains);
+
+            brands.AddRange(CreateBrands());
+            brandsSeeder.Seed(brands);
 
             vehicles.AddRange(CreateVehicles());
             vehiclesSeeder.Seed(vehicles);
@@ -198,7 +206,7 @@ namespace FleetManagement.Controllers
             {
                 new Vehicle()
                 {
-                    Brand = "Volkswagen",
+                    Brand = brands[0],
                     Model = "Polo",
                     KmMileage = 180000,
                     LicensePlate = "S0 12345",
@@ -214,7 +222,7 @@ namespace FleetManagement.Controllers
                 },
                 new Vehicle()
                 {
-                    Brand = "Volkswagen",
+                    Brand = brands[0],
                     Model = "Passat",
                     KmMileage = 5000,
                     LicensePlate = "W0 54321",
@@ -247,7 +255,7 @@ namespace FleetManagement.Controllers
                 },
                 new Powertrain()
                 {
-                    Id = 1,
+                    Id = 2,
                     NumberOfCylinders = 4,
                     EngineCapacity = 2000,
                     Horsepower = 190,
@@ -323,6 +331,28 @@ namespace FleetManagement.Controllers
                     AverageSpeed = 63.2,
                     TravelTime = 25.6,
 				}
+            };
+        }
+
+        private IEnumerable<Brand> CreateBrands()
+        {
+            return new List<Brand>()
+            {
+                new Brand()
+                {
+                    Id = 1,
+                    Name = "Volkswagen"
+                },
+                new Brand()
+                {
+                    Id = 2,
+                    Name = "Renault"
+                },
+                new Brand()
+                {
+                    Id = 3,
+                    Name = "KIA"
+                }
             };
         }
     }

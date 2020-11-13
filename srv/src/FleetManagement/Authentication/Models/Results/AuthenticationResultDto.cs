@@ -1,6 +1,4 @@
-﻿using FleetManagement.Entities.Accounts.UserAccounts.DTO;
-
-namespace FleetManagement.Authentication.Models.Results
+﻿namespace FleetManagement.Authentication.Models.Results
 {
     public class AuthenticationResultDto
     {

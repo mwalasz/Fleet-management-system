@@ -1,4 +1,5 @@
-﻿using FleetManagement.Entities.Maintenances.Models;
+﻿using FleetManagement.Entities.Brands.Models;
+using FleetManagement.Entities.Maintenances.Models;
 using FleetManagement.Entities.Powertrains.Models;
 using FleetManagement.Entities.Refuelings.Models;
 using FleetManagement.Entities.Trips.Models;
@@ -14,8 +15,9 @@ namespace FleetManagement.Entities.Vehicles.Models
         /// <summary>
         /// Marka.
         /// </summary>
-        public virtual string Brand { get; set; }
-        
+        //public virtual string Brand { get; set; }
+        public virtual Brand Brand { get; set; }
+
         /// <summary>
         /// Model.
         /// </summary>
@@ -84,7 +86,7 @@ namespace FleetManagement.Entities.Vehicles.Models
         public VehicleMap()
         {
             Id(x => x.Id);
-            Map(x => x.Brand)
+            References(x => x.Brand)
                 .Not.Nullable();
             Map(x => x.Model)
                 .Not.Nullable();
