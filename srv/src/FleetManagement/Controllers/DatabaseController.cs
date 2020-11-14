@@ -167,7 +167,7 @@ namespace FleetManagement.Controllers
                     FirstName = "Mietek",
                     LastName = "Mietczynski",
                     Email = "mietek@poczta.pl",
-                    PasswordHash = hashService.GenerateHash("mietek"),
+                    PasswordHash = hashService.GenerateHash("admin"),
                     PhoneNumber = "987654321",
                     Role = Roles.Driver,
                 },
@@ -178,7 +178,7 @@ namespace FleetManagement.Controllers
                     FirstName = "Waldek",
                     LastName = "Waldkowski",
                     Email = "waldek@poczta.pl",
-                    PasswordHash = hashService.GenerateHash("waldek"),
+                    PasswordHash = hashService.GenerateHash("admin"),
                     PhoneNumber = "987654321",
                     Role = Roles.Manager,
                 },
@@ -189,7 +189,18 @@ namespace FleetManagement.Controllers
                     FirstName = "Stasiek",
                     LastName = "Stasiowski",
                     Email = "stasiek@poczta.pl",
-                    PasswordHash = hashService.GenerateHash("stasiek"),
+                    PasswordHash = hashService.GenerateHash("admin"),
+                    PhoneNumber = "987654321",
+                    Role = Roles.Driver,
+                },
+                new UserAccount()
+                {
+                    Id = 5,
+                    IsActive = true,
+                    FirstName = "Robert",
+                    LastName = "Kubica",
+                    Email = "kubica@poczta.pl",
+                    PasswordHash = hashService.GenerateHash("admin"),
                     PhoneNumber = "987654321",
                     Role = Roles.Driver,
                 }
@@ -213,13 +224,22 @@ namespace FleetManagement.Controllers
             {
                 new DriverAccount()
                 {
+                    Id = 1,
                     UserAccountId = 2,
                     DrivingLicenseNumber = "jebacpis",
                     Vehicles = vehicles.ToList(),
                 },
                 new DriverAccount()
                 {
+                    Id = 2,
                     UserAccountId = 4,
+                    DrivingLicenseNumber = "***** ***",
+                    Vehicles = vehicles.ToList(),
+                },
+                new DriverAccount()
+                {
+                    Id = 3,
+                    UserAccountId = 5,
                     DrivingLicenseNumber = "***** ***",
                     Vehicles = vehicles.ToList(),
                 }
@@ -353,9 +373,36 @@ namespace FleetManagement.Controllers
                     StartTime = new DateTime(2012, 12, 12, 12, 12, 12),
                     DestinationPlace = "Gliwice",
                     DestinationArrivalTime = new DateTime(2012, 12, 12, 12, 28, 12),
-                    Distance = 30.3,
+                    Distance = 30900,
                     AverageSpeed = 63.2,
-                    TravelTime = 25.6,
+                    MaximumSpeed = 90.1,
+                    TravelTime = 986,
+				},
+                new Trip()
+                {
+                    Id = 1,
+                    DriverAccountId = 2,
+                    StartPlace = "asdfgdas",
+                    StartTime = new DateTime(2014, 12, 12, 12, 12, 12),
+                    DestinationPlace = "pliouk",
+                    DestinationArrivalTime = new DateTime(2018, 12, 12, 12, 28, 12),
+                    Distance = 130300,
+                    AverageSpeed = 89.2,
+                    MaximumSpeed = 250.9,
+                    TravelTime = 1697,
+				},
+                new Trip()
+                {
+                    Id = 1,
+                    DriverAccountId = 2,
+                    StartPlace = "bxcvxcv",
+                    StartTime = new DateTime(2010, 12, 12, 12, 12, 12),
+                    DestinationPlace = "tuyutyytu",
+                    DestinationArrivalTime = new DateTime(2011, 12, 12, 12, 28, 12),
+                    Distance = 12350,
+                    AverageSpeed = 63.2,
+                    MaximumSpeed = 120.4,
+                    TravelTime = 1536,
 				}
             };
         }

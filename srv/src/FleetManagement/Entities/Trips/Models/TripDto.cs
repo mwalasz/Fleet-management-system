@@ -12,6 +12,7 @@ namespace FleetManagement.Entities.Trips.Models
         public double Distance { get; set; }
         public double TravelTime { get; set; }
         public double AverageSpeed { get; set; }
+        public double MaximumSpeed { get; set; }
         public DriverTripInfoDto DriverAccount { get; set; }
     }
 }

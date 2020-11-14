@@ -26,19 +26,24 @@ namespace FleetManagement.Entities.Trips.Models
         public virtual DateTime DestinationArrivalTime { get; set; }
 
         /// <summary>
-        /// Przejechany dystans.
+        /// Przejechany dystans [m].
         /// </summary>
         public virtual double Distance { get; set; }
 
         /// <summary>
-        /// Czas podróży.
+        /// Czas podróży [s].
         /// </summary>
         public virtual double TravelTime { get; set; }
 
         /// <summary>
-        /// Średnia prędkość.
+        /// Średnia prędkość [km/h].
         /// </summary>
-        public virtual double AverageSpeed{ get; set; }
+        public virtual double AverageSpeed { get; set; }
+
+        /// <summary>
+        /// Średnia prędkość [km/h].
+        /// </summary>
+        public virtual double MaximumSpeed { get; set; }
 
         /// <summary>
         /// Kierowca.
@@ -61,6 +66,7 @@ namespace FleetManagement.Entities.Trips.Models
                 .Not.Nullable();
             Map(x => x.TravelTime);
             Map(x => x.AverageSpeed);
+            Map(x => x.MaximumSpeed);
             Map(x => x.DriverAccountId)
                 .Not.Nullable();
         }
