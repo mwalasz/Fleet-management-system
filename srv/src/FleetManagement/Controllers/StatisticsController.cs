@@ -1,11 +1,8 @@
-﻿using FleetManagement.Utils;
+﻿using FleetManagement.Entities.Accounts.DriverAccounts;
+using FleetManagement.Statistics;
+using FleetManagement.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FleetManagement.Controllers
 {
@@ -13,17 +10,29 @@ namespace FleetManagement.Controllers
     [ApiController]
     [DefaultRoute]
     [AllowAnonymous] // TODO: zmienić
-    public class StatisticsControllerController : ControllerBase
+    public class StatisticsController : ControllerBase
     {
-        public StatisticsControllerController()
-        {
+        private readonly IDriverAccountProvider driverAccountProvider;
+        private readonly IStatisticsService statistics;
 
+        public StatisticsController(IDriverAccountProvider driverAccountProvider, IStatisticsService statistics)
+        {
+            this.driverAccountProvider = driverAccountProvider;
+            this.statistics = statistics;
         }
 
-        [HttpGet]
-        public void GetDriverStatistics([FromQuery] string mail)
-        {
 
+        [HttpGet]
+        public IActionResult GetDriverStatistics([FromQuery] string mail)
+        {
+            var driver = driverAccountProvider.GetByMail(mail);
+
+            if (driver == null)
+                return NotFound("User is not a driver or wrong email!");
+
+            var stats = statistics.CalculateDriverStatistics(driver);
+
+            return Ok(stats);
         }
     }
 }

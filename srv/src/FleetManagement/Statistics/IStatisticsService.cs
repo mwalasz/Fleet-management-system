@@ -1,9 +1,10 @@
 ﻿using FleetManagement.Entities.Accounts.DriverAccounts.Models;
+using FleetManagement.Statistics.Models;
 
 namespace FleetManagement.Statistics
 {
     public interface IStatisticsService
     {
-        public void CalculateDriverStatistics(DriverAccount driverAccount);
+        public DriverStatistics CalculateDriverStatistics(DriverAccount driverAccount);
     }
 }
