@@ -15,11 +15,11 @@ namespace FleetManagement.Db.Repositories
     [ApiController]
     [DefaultRoute]
     [AllowAnonymous]
-    public class CompanyController : ControllerBase
+    public class CompaniesController : ControllerBase
     {
         private readonly ICompanyProvider companyProvider;
 
-        public CompanyController(ICompanyProvider companyProvider)
+        public CompaniesController(ICompanyProvider companyProvider)
         {
             this.companyProvider = companyProvider;
         }

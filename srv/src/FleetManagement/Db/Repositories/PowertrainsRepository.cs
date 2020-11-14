@@ -5,11 +5,11 @@ using NHibernate;
 
 namespace FleetManagement.Db.Repositories
 {
-    public class PowertrainRepository : DbBasicOperations<Powertrain>, IPowertrainProvider
+    public class PowertrainsRepository : DbBasicOperations<Powertrain>, IPowertrainProvider
     {
         private readonly ISessionFactory sessionFactory;
 
-        public PowertrainRepository(ISessionFactory sessionFactory) : base(sessionFactory)
+        public PowertrainsRepository(ISessionFactory sessionFactory) : base(sessionFactory)
         {
             this.sessionFactory = sessionFactory;
         }

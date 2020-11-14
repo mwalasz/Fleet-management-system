@@ -73,7 +73,7 @@ namespace FleetManagement.Extensions
                        .AddTransient<IPowertrainProvider, PowertrainRepository>()
                        .AddTransient<IRefuelingProvider, RefuelingRepository>()
                        .AddTransient<IMaintenanceProvider, MaintenanceRepository>()
-                       .AddTransient<ICompanyProvider, CompanyRepository>()
+                       .AddTransient<ICompanyProvider, CompaniesRepository>()
                        .AddTransient<ITripProvider, TripRepository>()
                        .AddTransient<IBrandProvider, BrandsRepository>()
                        .AddTransient<IBrandModelProvider, BrandModelsRepository>();
