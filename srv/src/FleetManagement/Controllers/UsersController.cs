@@ -138,18 +138,11 @@ namespace FleetManagement.Controllers
         }
 
         [HttpPut]
-        public async Task<ApiResponse> UpdatePassword(string mail, string password)
+        public IActionResult UpdatePassword(string mail, string password)
         {
-            try
-            {
-                userAccountProvider.UpdateCredentials(mail, password);
-
-                return new ApiResponse("Pomyślnie zaktualizowano hasło użytkownika.", 200);
-            }
-            catch (Exception e)
-            {
-                return new ApiResponse($"Nie udało się zaktualizować hasła z powodu: {e.Message}", 204);
-            }
+            return userAccountProvider.UpdateCredentials(mail, password)
+                ? Ok("Pomyślnie zaktualizowano hasło użytkownika.")
+                : Ok("Nie udało się zaktualizować hasła.");
         }
     }
 }
