@@ -26,14 +26,14 @@ namespace FleetManagement.Controllers
     [ApiController]
     [DefaultRoute]
     [Authorize(Roles = Roles.Admin)]
-    public class UserAccountsController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly IUserAccountProvider userAccountProvider;
         private readonly IManagerAccountProvider managerAccountProvider;
         private readonly IDriverAccountProvider driverAccountProvider;
         private readonly IMapper mapper;
 
-        public UserAccountsController(IUserAccountProvider userAccountProvider,
+        public UsersController(IUserAccountProvider userAccountProvider,
             IManagerAccountProvider managerAccountProvider,
             IDriverAccountProvider driverAccountProvider,
             IMapper mapper)
@@ -45,7 +45,7 @@ namespace FleetManagement.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<UserAccountDto> GetAllUserAccounts(bool onlyActiveUsers = false)
+        public IEnumerable<UserAccountDto> GetAll(bool onlyActiveUsers = false)
         {
             if (onlyActiveUsers)
             {
@@ -61,7 +61,7 @@ namespace FleetManagement.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<ManagerAccountDto> GetAllManagersAccounts()
+        public IEnumerable<ManagerAccountDto> GetAllManagers()
         {
             return managerAccountProvider.GetAll()
                 .Select(manager => mapper.Map<ManagerAccount, ManagerAccountDto>(manager));
@@ -69,7 +69,7 @@ namespace FleetManagement.Controllers
 
         [Authorize(Roles = CustomRoles.AdminAndManager)]
         [HttpGet]
-        public IEnumerable<DriverAccountDto> GetAllDriversAccounts()
+        public IEnumerable<DriverAccountDto> GetAllDrivers()
         {
             return driverAccountProvider.GetAll()
                 .Select(driver => mapper.Map<DriverAccount, DriverAccountDto>(driver));
@@ -120,7 +120,7 @@ namespace FleetManagement.Controllers
         /// <param name="ids">Lista kont do dezaktywacji.</param>
         /// <param name="isActive">Czy konta mają być aktywne, czy nie.</param>
         [HttpPut]
-        public async Task<ApiResponse> ChangeUserAvailability(IEnumerable<int> ids, bool isActive = false)
+        public async Task<ApiResponse> ChangeAvailability(IEnumerable<int> ids, bool isActive = false)
         {
             var users = userAccountProvider.GetAll().
                 Where(user => ids.Contains(user.Id));
@@ -138,7 +138,7 @@ namespace FleetManagement.Controllers
         }
 
         [HttpPut]
-        public async Task<ApiResponse> UpdateUserPassword(string mail, string password)
+        public async Task<ApiResponse> UpdatePassword(string mail, string password)
         {
             try
             {

@@ -49,7 +49,7 @@ namespace FleetManagement.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<VehicleDto> GetAllVehicles()
+        public IEnumerable<VehicleDto> GetAll()
         {
             var vehicles = vehicleProvider.GetAll();
             return vehicles

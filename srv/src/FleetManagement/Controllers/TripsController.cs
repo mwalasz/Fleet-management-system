@@ -26,7 +26,8 @@ namespace FleetManagement.Controllers
         [HttpGet]
         public IEnumerable<TripDto> GetAll()
         {
-            return tripProvider.GetAll().Select(x => mapper.Map<Trip, TripDto>(x));
+            return tripProvider.GetAll()
+                .Select(x => mapper.Map<Trip, TripDto>(x));
         }
     }
 }

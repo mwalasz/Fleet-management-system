@@ -25,7 +25,7 @@ namespace FleetManagement.Db.Repositories
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Company>> GetAllCompanies()
+        public async Task<IEnumerable<Company>> GetAll()
         {
             return await companyProvider.GetAllAsync();
         }
