@@ -354,9 +354,13 @@ namespace FleetManagement.Controllers
                     Id = 1,
                     Name = "Koszmarh",
                     Description = "Kochają studentów.",
+                    Address = "Koszmarhowo 13, Kraków 89-989",
+                    Mail = "koszmarh@poczta.pl",
+                    NIP = "123-46-79",
+                    PhoneNumber = "123456789",
                     Vehicles = new List<Vehicle>(),
                     ManagerAccountId = 1,
-                    Drivers = new List<DriverAccount>() { driverAccounts[1] }
+                    Drivers = new List<DriverAccount>() { driverAccounts[1], driverAccounts[2] }
 				}
             };
         }

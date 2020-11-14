@@ -20,6 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FleetManagement.Utils;
+using FleetManagement.Entities.Companies.Models;
 
 namespace FleetManagement.Controllers
 {
@@ -146,9 +147,13 @@ namespace FleetManagement.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetDriverCompany(string userMail)
+        public IActionResult GetDriverCompany(string mail)
         {
-            return Ok(driverAccountProvider.GetDriverCompany(userMail));
+            var company = driverAccountProvider.GetDriverCompany(mail);
+
+            if (company != null)
+                return Ok(mapper.Map<Company, CompanyDto>(company));
+            else return Ok(company);
         }
     }
 }

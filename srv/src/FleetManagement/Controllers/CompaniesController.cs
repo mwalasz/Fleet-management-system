@@ -1,10 +1,9 @@
-﻿using FleetManagement.Entities.Accounts.DriverAccounts;
-using FleetManagement.Entities.Accounts.UserAccounts;
+﻿using AutoMapper;
 using FleetManagement.Entities.Companies;
+using FleetManagement.Entities.Companies.Models;
 using FleetManagement.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NHibernate.Util;
 using System.Linq;
 
 namespace FleetManagement.Db.Repositories
@@ -15,18 +14,19 @@ namespace FleetManagement.Db.Repositories
     public class CompaniesController : ControllerBase
     {
         private readonly ICompanyProvider companyProvider;
-        private readonly IDriverAccountProvider driverAccountProvider;
+        private readonly IMapper mapper;
 
-        public CompaniesController(ICompanyProvider companyProvider, IDriverAccountProvider driverAccountProvider)
+        public CompaniesController(ICompanyProvider companyProvider, IMapper mapper)
         {
             this.companyProvider = companyProvider;
-            this.driverAccountProvider = driverAccountProvider;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(companyProvider.GetAll());
+            var companies = companyProvider.GetAll();
+            return Ok(companies.Select(c => mapper.Map<Company, CompanyDto>(c)));
         }
     }
 }

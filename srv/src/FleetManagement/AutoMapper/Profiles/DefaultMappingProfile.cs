@@ -10,6 +10,7 @@ using FleetManagement.Entities.Accounts.ManagerAccounts.DTO;
 using FleetManagement.Entities.Accounts.ManagerAccounts.Models;
 using FleetManagement.Entities.Accounts.UserAccounts.DTO;
 using FleetManagement.Entities.Accounts.UserAccounts.Models;
+using FleetManagement.Entities.Companies.Models;
 using FleetManagement.Entities.Maintenances.Models;
 using FleetManagement.Entities.Powertrains.Models;
 using FleetManagement.Entities.Refuelings.Models;
@@ -62,6 +63,9 @@ namespace FleetManagement.AutoMapper.Profiles
             CreateMap<Vehicle, VehicleBasicInfoDto>()
                 .ForMember(dto => dto.Brand, mce => mce.MapFrom<VehicleBasicInfoDtoBrandValueResolver>())
                 .ForMember(dto => dto.Model, mce => mce.MapFrom<VehicleBasicInfoDtoBrandModelValueResolver>());
+
+            CreateMap<Company, CompanyDto>()
+                .ForMember(dto => dto.ManagerAccount, mce => mce.MapFrom<CompanyDtoManagerAccountValueResolver>());
         }
     }
 }
