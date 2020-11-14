@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using FleetManagement.Entities.Trips;
 using FleetManagement.Entities.Trips.Models;
+using FleetManagement.Entities.Trips.Params.NewTrip;
 using FleetManagement.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,6 +30,12 @@ namespace FleetManagement.Controllers
         {
             return tripProvider.GetAll()
                 .Select(x => mapper.Map<Trip, TripDto>(x));
+        }
+
+        [HttpPost]
+        public IActionResult AddTrip([FromBody] NewTripParams newTrip)
+        {
+            return Ok();
         }
     }
 }
