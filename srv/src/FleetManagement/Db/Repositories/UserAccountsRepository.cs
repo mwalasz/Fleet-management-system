@@ -61,15 +61,26 @@ namespace FleetManagement.Db.Repositories
         /// </summary>
         /// <param name="mail">Mail identyfikujący użytkownika.</param>
         /// <param name="password">Nowe hasło.</param>
-        public void UpdateCredentials(string mail, string password)
+        public bool UpdateCredentials(string mail, string password)
         {
-            var user = GetByMail(mail);
-
-            if (user != null)
+            try
             {
-                user.PasswordHash = hashService.GenerateHash(password);
+                var user = GetByMail(mail);
+
+                if (user != null)
+                {
+                    user.PasswordHash = hashService.GenerateHash(password);
                 
-                Update(user);
+                    Update(user);
+
+                    return true;
+                }
+
+                return false;
+            }
+            catch (System.Exception)
+            {
+                return false;
             }
         }
     }

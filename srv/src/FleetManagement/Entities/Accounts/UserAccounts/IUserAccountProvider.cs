@@ -6,6 +6,6 @@ namespace FleetManagement.Entities.Accounts.UserAccounts
 {
     public interface IUserAccountProvider : IBaseOperations<UserAccount>, IUserAccountsOperations<UserAccount>
     {
-        public void UpdateCredentials(string mail, string password);
+        public bool UpdateCredentials(string mail, string password);
     }
 }
