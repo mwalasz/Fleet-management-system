@@ -31,6 +31,7 @@ using FleetManagement.Entities.Trips.Models;
 using FleetManagement.Entities.Vehicles;
 using FleetManagement.Entities.Vehicles.Models;
 using FleetManagement.Settings;
+using FleetManagement.Statistics;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Configuration;
@@ -82,7 +83,8 @@ namespace FleetManagement.Extensions
                        .AddTransient<IBrandProvider, BrandsRepository>()
                        .AddTransient<IBrandModelProvider, BrandModelsRepository>()
                        .AddTransient<IEngineTypeProvider, EngineTypesRepository>()
-                       .AddTransient<IDriveTypeProvider, DriveTypesRepository>();
+                       .AddTransient<IDriveTypeProvider, DriveTypesRepository>()
+                       .AddSingleton<IStatisticsService, StatisticsService>();
 
         /// <summary>
         /// Dodaje usługi do wypełniania bazy danych.
