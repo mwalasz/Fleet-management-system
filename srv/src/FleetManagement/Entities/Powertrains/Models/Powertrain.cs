@@ -1,4 +1,6 @@
-﻿using FluentNHibernate.Mapping;
+﻿using FleetManagement.Entities.EngineTypes.Models;
+using FluentNHibernate.Mapping;
+using System.Security.Cryptography.Xml;
 
 namespace FleetManagement.Entities.Powertrains.Models
 {
@@ -27,7 +29,7 @@ namespace FleetManagement.Entities.Powertrains.Models
         /// <summary>
         /// Rodzaj silnika - hybryda/diesel/benzyna.
         /// </summary>
-        public virtual string EngineType { get; set; }
+        public virtual EngineType EngineType { get; set; }
 
         /// <summary>
         /// Rodzaj napędu - FWD/RWD/4x4.
@@ -44,7 +46,7 @@ namespace FleetManagement.Entities.Powertrains.Models
             Map(x => x.Horsepower);
             Map(x => x.Torque);
             Map(x => x.NumberOfCylinders);
-            Map(x => x.EngineType);
+            References(x => x.EngineType);
             Map(x => x.DriveType);
         }
     }

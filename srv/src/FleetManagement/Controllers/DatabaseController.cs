@@ -1,5 +1,4 @@
-﻿using AutoWrapper.Wrappers;
-using FleetManagement.Authentication.Hashes;
+﻿using FleetManagement.Authentication.Hashes;
 using FleetManagement.Authentication.Policies;
 using FleetManagement.Db.Seeds;
 using FleetManagement.Entities.Accounts.DriverAccounts;
@@ -14,6 +13,8 @@ using FleetManagement.Entities.Brands;
 using FleetManagement.Entities.Brands.Models;
 using FleetManagement.Entities.Companies;
 using FleetManagement.Entities.Companies.Models;
+using FleetManagement.Entities.EngineTypes;
+using FleetManagement.Entities.EngineTypes.Models;
 using FleetManagement.Entities.Maintenances;
 using FleetManagement.Entities.Maintenances.Models;
 using FleetManagement.Entities.Powertrains;
@@ -51,6 +52,7 @@ namespace FleetManagement.Controllers
         private readonly IDbSeeder<ITripProvider, Trip> tripsSeeder;
         private readonly IDbSeeder<IBrandProvider, Brand> brandsSeeder;
         private readonly IDbSeeder<IBrandModelProvider, BrandModel> brandModelsSeeder;
+        private readonly IDbSeeder<IEngineTypeProvider, EngineType> engineTypesSeeder;
 
         private readonly List<UserAccount> userAccounts = new List<UserAccount>();
         private readonly List<ManagerAccount> managerAccounts = new List<ManagerAccount>();
@@ -63,6 +65,7 @@ namespace FleetManagement.Controllers
         private readonly List<Trip> trips = new List<Trip>();
         private readonly List<Brand> brands = new List<Brand>();
         private readonly List<BrandModel> brandModels = new List<BrandModel>();
+        private readonly List<EngineType> engineTypes = new List<EngineType>();
 
         public DataBaseController(IHashService hashService,
             IDbSeeder<IUserAccountProvider, UserAccount> usersSeeder,
@@ -75,7 +78,8 @@ namespace FleetManagement.Controllers
             IDbSeeder<ICompanyProvider, Company> companiesSeeder,
             IDbSeeder<ITripProvider, Trip> tripsSeeder,
             IDbSeeder<IBrandProvider, Brand> brandsSeeder,
-            IDbSeeder<IBrandModelProvider, BrandModel> brandModelsSeeder)
+            IDbSeeder<IBrandModelProvider, BrandModel> brandModelsSeeder,
+            IDbSeeder<IEngineTypeProvider, EngineType> engineTypesSeeder)
         {
             this.hashService = hashService;
             this.userAccountsSeeder = usersSeeder;
@@ -89,6 +93,7 @@ namespace FleetManagement.Controllers
             this.tripsSeeder = tripsSeeder;
             this.brandsSeeder = brandsSeeder;
             this.brandModelsSeeder = brandModelsSeeder;
+            this.engineTypesSeeder = engineTypesSeeder;
         }
 
         [HttpGet]
@@ -111,6 +116,9 @@ namespace FleetManagement.Controllers
 
             trips.AddRange(CreateTrips());
             tripsSeeder.Seed(trips);
+
+            engineTypes.AddRange(CreateEngineTypes());
+            engineTypesSeeder.Seed(engineTypes);
 
             powertrains.AddRange(CreatePowertrains());
             powertrainsSeeder.Seed(powertrains);
@@ -259,7 +267,7 @@ namespace FleetManagement.Controllers
                     EngineCapacity = 1898,
                     Horsepower = 101,
                     Torque = 270,
-                    EngineType = "Diesel",
+                    EngineType = engineTypes[0],
                     DriveType = "FWD"
                 },
                 new Powertrain()
@@ -269,7 +277,7 @@ namespace FleetManagement.Controllers
                     EngineCapacity = 2000,
                     Horsepower = 190,
                     Torque = 350,
-                    EngineType = "Diesel",
+                    EngineType = engineTypes[2],
                     DriveType = "AWD"
                 }
             };
@@ -366,7 +374,6 @@ namespace FleetManagement.Controllers
             };
         }
 
-
         private IEnumerable<BrandModel> CreateBrandModels()
         {
             return new List<BrandModel>()
@@ -381,6 +388,29 @@ namespace FleetManagement.Controllers
                     Id = 2,
                     Name = "Passat"
 				}
+            };
+        }
+
+
+        private IEnumerable<EngineType> CreateEngineTypes()
+        {
+            return new List<EngineType>()
+            {
+                new EngineType()
+                {
+                    Id = 1,
+                    Name = "Diesel",
+				},
+                new EngineType()
+                {
+                    Id = 2,
+                    Name = "Hybrid",
+				},
+                new EngineType()
+                {
+                    Id = 3,
+                    Name = "Petrol",
+				},
             };
         }
     }

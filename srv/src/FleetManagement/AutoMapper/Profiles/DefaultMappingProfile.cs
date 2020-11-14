@@ -40,7 +40,8 @@ namespace FleetManagement.AutoMapper.Profiles
             CreateMap<DriverAccount, DriverTripInfoDto>()
                 .ForMember(dto => dto.Account, mce => mce.MapFrom<DriverTripInfoDtoAccountValueResolver>());
 
-            CreateMap<Powertrain, PowertrainDto>();
+            CreateMap<Powertrain, PowertrainDto>()
+                .ForMember(dto => dto.EngineType, mce => mce.MapFrom<PowerTrainDtoEngineTypeValueResolver>());
             
             CreateMap<Maintenance, MaintenanceDto>();
 
