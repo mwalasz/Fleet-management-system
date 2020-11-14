@@ -70,11 +70,11 @@ namespace FleetManagement.Extensions
                        .AddTransient<IManagerAccountProvider, ManagerAccountsRepository>()
                        .AddTransient<IDriverAccountProvider, DriverAccountsRepository>()
                        .AddTransient<IVehicleProvider, VehiclesRepository>()
-                       .AddTransient<IPowertrainProvider, PowertrainRepository>()
-                       .AddTransient<IRefuelingProvider, RefuelingRepository>()
-                       .AddTransient<IMaintenanceProvider, MaintenanceRepository>()
+                       .AddTransient<IPowertrainProvider, PowertrainsRepository>()
+                       .AddTransient<IRefuelingProvider, RefuelingsRepository>()
+                       .AddTransient<IMaintenanceProvider, MaintenancesRepository>()
                        .AddTransient<ICompanyProvider, CompaniesRepository>()
-                       .AddTransient<ITripProvider, TripRepository>()
+                       .AddTransient<ITripProvider, TripsRepository>()
                        .AddTransient<IBrandProvider, BrandsRepository>()
                        .AddTransient<IBrandModelProvider, BrandModelsRepository>();
 

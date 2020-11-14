@@ -29,7 +29,6 @@ namespace FleetManagement.AutoMapper.Profiles
                 .ForMember(dto => dto.Email, mce => mce.MapFrom(q => q.UserAccount.Email))
                 .ForMember(dto => dto.PhoneNumber, mce => mce.MapFrom(q => q.UserAccount.PhoneNumber))
                 .ForMember(dto => dto.Role, mce => mce.MapFrom(q => q.UserAccount.Role));
-                //.ForMember(dto => dto.Token, mce => mce.MapFrom(q => q.Token));
 
 
             CreateMap<ManagerAccount, ManagerAccountDto>()
