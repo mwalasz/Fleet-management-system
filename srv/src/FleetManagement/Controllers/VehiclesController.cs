@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
 using FleetManagement.Entities.Accounts.DriverAccounts;
-using FleetManagement.Entities.Maintenances;
 using FleetManagement.Entities.Maintenances.Models;
 using FleetManagement.Entities.Powertrains;
 using FleetManagement.Entities.Powertrains.Models;
-using FleetManagement.Entities.Refuelings;
 using FleetManagement.Entities.Refuelings.Models;
-using FleetManagement.Entities.Trips;
 using FleetManagement.Entities.Trips.Models;
 using FleetManagement.Entities.Vehicles;
 using FleetManagement.Entities.Vehicles.Models;
@@ -26,62 +23,80 @@ namespace FleetManagement.Controllers
         private readonly IMapper mapper;
         private readonly IVehicleProvider vehicleProvider;
         private readonly IPowertrainProvider powertrainProvider;
-        private readonly IRefuelingProvider refuelingProvider;
-        private readonly IMaintenanceProvider maintenanceProvider;
-        private readonly ITripProvider tripProvider;
         private readonly IDriverAccountProvider driverAccountProvider;
 
         public VehiclesController(IMapper mapper,
             IVehicleProvider vehicleProvider, 
             IPowertrainProvider powertrainProvider,
-            IRefuelingProvider refuelingProvider,
-            IMaintenanceProvider maintenanceProvider,
-            ITripProvider tripProvider,
             IDriverAccountProvider driverAccountProvider)
         {
             this.mapper = mapper;
             this.vehicleProvider = vehicleProvider;
             this.powertrainProvider = powertrainProvider;
-            this.refuelingProvider = refuelingProvider;
-            this.maintenanceProvider = maintenanceProvider;
-            this.tripProvider = tripProvider;
             this.driverAccountProvider = driverAccountProvider;
         }
 
         [HttpGet]
         public IEnumerable<VehicleDto> GetAll()
         {
-            var vehicles = vehicleProvider.GetAll();
-            return vehicles
+            return vehicleProvider.GetAll()
                 .Select(x => mapper.Map<Vehicle, VehicleDto>(x));
         }
 
         [HttpGet]
-        public IEnumerable<PowertrainDto> GetAllPowertrains()
+        public IActionResult GetPowertrain([FromQuery] string vin)
         {
-            return powertrainProvider.GetAll()
-                .Select(x => mapper.Map<Powertrain, PowertrainDto>(x));
+            var vehicle = vehicleProvider.GetByVinNumber(vin);
+
+            if (vehicle == null)
+                return NotFound("No vehicle with corresponding VIN number!");
+
+            var powertrain = powertrainProvider.GetById(vehicle?.Powertrain.Id);
+
+            var toReturn = powertrain != null
+                ? mapper.Map<Powertrain, PowertrainDto>(powertrain)
+                : null;
+
+            return Ok(toReturn);
         }
 
         [HttpGet]
-        public IEnumerable<RefuelingDto> GetAllRefuelings()
+        public IActionResult GetAllRefuelings([FromQuery] string vin)
         {
-            return refuelingProvider.GetAll()
-                .Select(x => mapper.Map<Refueling, RefuelingDto>(x));
+            var vehicle = vehicleProvider.GetByVinNumber(vin);
+
+            if (vehicle == null)
+                return NotFound("No vehicle with corresponding VIN number!");
+
+            var refuelings = vehicle.Refuelings.Select(x => mapper.Map<Refueling, RefuelingDto>(x));
+
+            return Ok(refuelings);
         }
 
         [HttpGet]
-        public IEnumerable<MaintenanceDto> GetAllMaintenances()
+        public IActionResult GetAllMaintenances([FromQuery] string vin)
         {
-            return maintenanceProvider.GetAll()
-                .Select(x => mapper.Map<Maintenance, MaintenanceDto>(x));
+            var vehicle = vehicleProvider.GetByVinNumber(vin);
+
+            if (vehicle == null)
+                return NotFound("No vehicle with corresponding VIN number!");
+
+            var repairs = vehicle.RepairsAndServices.Select(x => mapper.Map<Maintenance, MaintenanceDto>(x));
+
+            return Ok(repairs);
         }
 
         [HttpGet]
-        public IEnumerable<TripDto> GetAllTrips()
+        public IActionResult GetAllTrips([FromQuery] string vin)
         {
-            return tripProvider.GetAll()
-                .Select(x => mapper.Map<Trip, TripDto>(x));
+            var vehicle = vehicleProvider.GetByVinNumber(vin);
+
+            if (vehicle == null)
+                return NotFound("No vehicle with corresponding VIN number!");
+
+            var trips = vehicle.Trips.Select(x => mapper.Map<Trip, TripDto>(x));
+
+            return Ok(trips);
         }
 
         [HttpGet]

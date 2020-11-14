@@ -2,6 +2,7 @@
 using FleetManagement.Entities.Vehicles;
 using FleetManagement.Entities.Vehicles.Models;
 using NHibernate;
+using System.Linq;
 
 namespace FleetManagement.Db.Repositories
 {
@@ -12,6 +13,12 @@ namespace FleetManagement.Db.Repositories
         public VehiclesRepository(ISessionFactory sessionFactory) : base(sessionFactory)
         {
             this.sessionFactory = sessionFactory;
+        }
+
+        public Vehicle GetByVinNumber(string vin)
+        {
+            return GetAll()
+                .FirstOrDefault(x => x.VIN.Equals(vin)) ?? null;
         }
     }
 }
