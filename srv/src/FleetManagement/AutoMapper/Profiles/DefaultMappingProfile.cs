@@ -50,11 +50,15 @@ namespace FleetManagement.AutoMapper.Profiles
                 .ForMember(dto => dto.DriverAccount, mce => mce.MapFrom<TripDtoDriverAccountValueResolver>());
 
             CreateMap<Vehicle, VehicleDto>()
+                .ForMember(dto => dto.Brand, mce => mce.MapFrom<VehicleDtoBrandValueResolver>())
+                .ForMember(dto => dto.Model, mce => mce.MapFrom<VehicleDtoBrandModelValueResolver>())
                 .ForMember(dto => dto.Trips, mce => mce.MapFrom<VehicleDtoTripsValueResolver>())
                 .ForMember(dto => dto.RepairsAndServices, mce => mce.MapFrom<VehicleDtoRepairsValueResolver>())
                 .ForMember(dto => dto.Refuelings, mce => mce.MapFrom<VehicleDtoRefuelingsValueResolver>())
                 .ForMember(dto => dto.Powertrain, mce => mce.MapFrom<VehicleDtoPowertrainValueResolver>());
-            CreateMap<Vehicle, VehicleBasicInfoDto>();
+            CreateMap<Vehicle, VehicleBasicInfoDto>()
+                .ForMember(dto => dto.Brand, mce => mce.MapFrom<VehicleBasicInfoDtoBrandValueResolver>())
+                .ForMember(dto => dto.Model, mce => mce.MapFrom<VehicleBasicInfoDtoBrandModelValueResolver>());
         }
     }
 }
