@@ -264,7 +264,7 @@ namespace FleetManagement.Controllers
                     InsuranceExpirationDate = new DateTime(2021, 5, 15),
                     RepairsAndServices = new List<Maintenance>(),
                     Refuelings = new List<Refueling>(),
-                    Trips = new List<Trip>()
+                    Trips = new List<Trip>(),
                 },
                 new Vehicle()
                 {
@@ -280,7 +280,7 @@ namespace FleetManagement.Controllers
                     InsuranceExpirationDate = new DateTime(2022, 1, 1),
                     RepairsAndServices = maintenances.ToList(),
                     Refuelings = refuelings.ToList(),
-                    Trips = trips.ToList()
+                    Trips = trips.ToList(),
                 }
             };
         }
@@ -358,7 +358,7 @@ namespace FleetManagement.Controllers
                     Mail = "koszmarh@poczta.pl",
                     NIP = "123-46-79",
                     PhoneNumber = "123456789",
-                    Vehicles = new List<Vehicle>(),
+                    Vehicles = vehicles.ToList(),
                     ManagerAccountId = 1,
                     Drivers = new List<DriverAccount>() { driverAccounts[1], driverAccounts[2] }
 				}

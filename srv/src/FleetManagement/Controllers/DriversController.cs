@@ -4,6 +4,7 @@ using FleetManagement.Entities.Accounts.DriverAccounts.DTO;
 using FleetManagement.Entities.Accounts.DriverAccounts.Models;
 using FleetManagement.Entities.Accounts.DriverAccounts.Params;
 using FleetManagement.Entities.Companies.Models;
+using FleetManagement.Entities.Vehicles.Models;
 using FleetManagement.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -42,6 +43,26 @@ namespace FleetManagement.Controllers
             if (company != null)
                 return Ok(mapper.Map<Company, CompanyDto>(company));
             else return Ok(company);
+        }
+
+        [HttpGet]
+        public IActionResult GetAssignedVehicles([FromQuery] string mail)
+        {
+            var emptyList = new List<VehicleBasicInfoDto>();
+            var driver = driverAccountProvider.GetByMail(mail);
+
+            if (driver != null)
+            {
+                var vehicles = driver.Vehicles.ToList();
+
+                var toReturn = vehicles.Count != 0
+                    ? vehicles.Select(x => mapper.Map<Vehicle, VehicleBasicInfoDto>(x))
+                    : emptyList;
+
+                return Ok(toReturn);
+            }
+            
+            return NotFound("User is not a driver or wrong email!");
         }
 
         [HttpPost]
