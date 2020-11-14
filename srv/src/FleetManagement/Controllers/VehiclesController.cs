@@ -98,25 +98,5 @@ namespace FleetManagement.Controllers
 
             return Ok(trips);
         }
-
-        [HttpGet]
-        public IActionResult GetAllAssignedToDriver([FromQuery] string email)
-        {
-            var emptyList = new List<VehicleBasicInfoDto>();
-            var driver = driverAccountProvider.GetByMail(email);
-
-            if (driver != null)
-            {
-                var vehicles = driver.Vehicles.ToList();
-
-                var toReturn = vehicles.Count != 0
-                    ? vehicles.Select(x => mapper.Map<Vehicle, VehicleBasicInfoDto>(x))
-                    : emptyList;
-
-                return Ok(toReturn);
-            }
-            
-            return NotFound("User is not a driver or wrong email!");
-        }
     }
 }
