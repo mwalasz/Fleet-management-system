@@ -1,6 +1,6 @@
-﻿using FleetManagement.Entities.EngineTypes.Models;
+﻿using FleetManagement.Entities.DriveTypes.Models;
+using FleetManagement.Entities.EngineTypes.Models;
 using FluentNHibernate.Mapping;
-using System.Security.Cryptography.Xml;
 
 namespace FleetManagement.Entities.Powertrains.Models
 {
@@ -34,7 +34,7 @@ namespace FleetManagement.Entities.Powertrains.Models
         /// <summary>
         /// Rodzaj napędu - FWD/RWD/4x4.
         /// </summary>
-        public virtual string DriveType { get; set; }
+        public virtual DriveType DriveType { get; set; }
     }
 
     public class PowertrainMap : ClassMap<Powertrain>
@@ -47,7 +47,7 @@ namespace FleetManagement.Entities.Powertrains.Models
             Map(x => x.Torque);
             Map(x => x.NumberOfCylinders);
             References(x => x.EngineType);
-            Map(x => x.DriveType);
+            References(x => x.DriveType);
         }
     }
 }

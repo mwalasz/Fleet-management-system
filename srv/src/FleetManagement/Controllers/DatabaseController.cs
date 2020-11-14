@@ -13,6 +13,8 @@ using FleetManagement.Entities.Brands;
 using FleetManagement.Entities.Brands.Models;
 using FleetManagement.Entities.Companies;
 using FleetManagement.Entities.Companies.Models;
+using FleetManagement.Entities.DriveTypes;
+using FleetManagement.Entities.DriveTypes.Models;
 using FleetManagement.Entities.EngineTypes;
 using FleetManagement.Entities.EngineTypes.Models;
 using FleetManagement.Entities.Maintenances;
@@ -53,6 +55,7 @@ namespace FleetManagement.Controllers
         private readonly IDbSeeder<IBrandProvider, Brand> brandsSeeder;
         private readonly IDbSeeder<IBrandModelProvider, BrandModel> brandModelsSeeder;
         private readonly IDbSeeder<IEngineTypeProvider, EngineType> engineTypesSeeder;
+        private readonly IDbSeeder<IDriveTypeProvider, DriveType> driveTypesSeeder;
 
         private readonly List<UserAccount> userAccounts = new List<UserAccount>();
         private readonly List<ManagerAccount> managerAccounts = new List<ManagerAccount>();
@@ -66,6 +69,7 @@ namespace FleetManagement.Controllers
         private readonly List<Brand> brands = new List<Brand>();
         private readonly List<BrandModel> brandModels = new List<BrandModel>();
         private readonly List<EngineType> engineTypes = new List<EngineType>();
+        private readonly List<DriveType> driveTypes = new List<DriveType>();
 
         public DataBaseController(IHashService hashService,
             IDbSeeder<IUserAccountProvider, UserAccount> usersSeeder,
@@ -79,7 +83,8 @@ namespace FleetManagement.Controllers
             IDbSeeder<ITripProvider, Trip> tripsSeeder,
             IDbSeeder<IBrandProvider, Brand> brandsSeeder,
             IDbSeeder<IBrandModelProvider, BrandModel> brandModelsSeeder,
-            IDbSeeder<IEngineTypeProvider, EngineType> engineTypesSeeder)
+            IDbSeeder<IEngineTypeProvider, EngineType> engineTypesSeeder,
+            IDbSeeder<IDriveTypeProvider, DriveType> driveTypesSeeder)
         {
             this.hashService = hashService;
             this.userAccountsSeeder = usersSeeder;
@@ -94,6 +99,7 @@ namespace FleetManagement.Controllers
             this.brandsSeeder = brandsSeeder;
             this.brandModelsSeeder = brandModelsSeeder;
             this.engineTypesSeeder = engineTypesSeeder;
+            this.driveTypesSeeder = driveTypesSeeder;
         }
 
         [HttpGet]
@@ -119,6 +125,9 @@ namespace FleetManagement.Controllers
 
             engineTypes.AddRange(CreateEngineTypes());
             engineTypesSeeder.Seed(engineTypes);
+            
+            driveTypes.AddRange(CreateDriveTypes());
+            driveTypesSeeder.Seed(driveTypes);
 
             powertrains.AddRange(CreatePowertrains());
             powertrainsSeeder.Seed(powertrains);
@@ -268,7 +277,7 @@ namespace FleetManagement.Controllers
                     Horsepower = 101,
                     Torque = 270,
                     EngineType = engineTypes[0],
-                    DriveType = "FWD"
+                    DriveType = driveTypes[1],
                 },
                 new Powertrain()
                 {
@@ -278,7 +287,7 @@ namespace FleetManagement.Controllers
                     Horsepower = 190,
                     Torque = 350,
                     EngineType = engineTypes[2],
-                    DriveType = "AWD"
+                    DriveType = driveTypes[0],
                 }
             };
         }
@@ -391,7 +400,6 @@ namespace FleetManagement.Controllers
             };
         }
 
-
         private IEnumerable<EngineType> CreateEngineTypes()
         {
             return new List<EngineType>()
@@ -411,6 +419,28 @@ namespace FleetManagement.Controllers
                     Id = 3,
                     Name = "Petrol",
 				},
+            };
+        }
+
+        private IEnumerable<DriveType> CreateDriveTypes()
+        {
+            return new List<DriveType>()
+            {
+                new DriveType()
+                {
+                    Id = 1,
+                    Name = "4WD",
+				},
+                new DriveType()
+                {
+                    Id = 1,
+                    Name = "FWD",
+				},
+                new DriveType()
+                {
+                    Id = 1,
+                    Name = "RWD",
+				}
             };
         }
     }

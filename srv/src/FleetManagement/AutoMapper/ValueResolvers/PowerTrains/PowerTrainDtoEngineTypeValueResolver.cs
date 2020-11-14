@@ -2,7 +2,7 @@
 using FleetManagement.Entities.EngineTypes;
 using FleetManagement.Entities.Powertrains.Models;
 
-namespace FleetManagement.AutoMapper.ValueResolvers
+namespace FleetManagement.AutoMapper.ValueResolvers.PowerTrains
 {
     public class PowerTrainDtoEngineTypeValueResolver : IValueResolver<Powertrain, PowertrainDto, string>
     {
