@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FleetManagement.Entities.Accounts.DriverAccounts;
 using FleetManagement.Entities.Maintenances;
 using FleetManagement.Entities.Maintenances.Models;
 using FleetManagement.Entities.Powertrains;
@@ -28,13 +29,15 @@ namespace FleetManagement.Controllers
         private readonly IRefuelingProvider refuelingProvider;
         private readonly IMaintenanceProvider maintenanceProvider;
         private readonly ITripProvider tripProvider;
+        private readonly IDriverAccountProvider driverAccountProvider;
 
         public VehiclesController(IMapper mapper,
             IVehicleProvider vehicleProvider, 
             IPowertrainProvider powertrainProvider,
             IRefuelingProvider refuelingProvider,
             IMaintenanceProvider maintenanceProvider,
-            ITripProvider tripProvider)
+            ITripProvider tripProvider,
+            IDriverAccountProvider driverAccountProvider)
         {
             this.mapper = mapper;
             this.vehicleProvider = vehicleProvider;
@@ -42,6 +45,7 @@ namespace FleetManagement.Controllers
             this.refuelingProvider = refuelingProvider;
             this.maintenanceProvider = maintenanceProvider;
             this.tripProvider = tripProvider;
+            this.driverAccountProvider = driverAccountProvider;
         }
 
         [HttpGet]
@@ -78,6 +82,26 @@ namespace FleetManagement.Controllers
         {
             return tripProvider.GetAll()
                 .Select(x => mapper.Map<Trip, TripDto>(x));
+        }
+
+        [HttpGet]
+        public IActionResult GetAllAssignedToDriver([FromQuery] string email)
+        {
+            var emptyList = new List<VehicleBasicInfoDto>();
+            var driver = driverAccountProvider.GetByMail(email);
+
+            if (driver != null)
+            {
+                var vehicles = driver.Vehicles.ToList();
+
+                var toReturn = vehicles.Count != 0
+                    ? vehicles.Select(x => mapper.Map<Vehicle, VehicleBasicInfoDto>(x))
+                    : emptyList;
+
+                return Ok(toReturn);
+            }
+            
+            return NotFound("User is not a driver or wrong email!");
         }
     }
 }
