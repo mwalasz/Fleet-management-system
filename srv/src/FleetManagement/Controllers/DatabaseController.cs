@@ -117,9 +117,6 @@ namespace FleetManagement.Controllers
             maintenances.AddRange(CreateMaintenances());
             maintenancesSeeder.Seed(maintenances);
 
-            companies.AddRange(CreateCompanies());
-            companiesSeeder.Seed(companies);
-
             trips.AddRange(CreateTrips());
             tripsSeeder.Seed(trips);
 
@@ -143,6 +140,9 @@ namespace FleetManagement.Controllers
 
             driverAccounts.AddRange(CreateDriverAccounts());
             driversSeeder.Seed(driverAccounts);
+            
+            companies.AddRange(CreateCompanies());
+            companiesSeeder.Seed(companies);
         }
 
         private IEnumerable<UserAccount> CreateUserAccounts()
@@ -356,7 +356,7 @@ namespace FleetManagement.Controllers
                     Description = "Kochają studentów.",
                     Vehicles = new List<Vehicle>(),
                     ManagerAccountId = 1,
-                    Drivers = new List<DriverAccount>()
+                    Drivers = new List<DriverAccount>() { driverAccounts[1] }
 				}
             };
         }
