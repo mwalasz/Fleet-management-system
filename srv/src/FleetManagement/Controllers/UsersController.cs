@@ -120,13 +120,13 @@ namespace FleetManagement.Controllers
         /// <param name="ids">Lista kont do dezaktywacji.</param>
         /// <param name="isActive">Czy konta mają być aktywne, czy nie.</param>
         [HttpPut]
-        public async Task<ApiResponse> ChangeAvailability(IEnumerable<int> ids, bool isActive = false)
+        public IActionResult ChangeAvailability(IEnumerable<int> ids, bool isActive = false)
         {
             var users = userAccountProvider.GetAll().
                 Where(user => ids.Contains(user.Id));
 
             if (users.Count().Equals(0))
-                return new ApiResponse("Nie znaleziono podanych użytkowników.", 204);
+                return NotFound("Nie znaleziono podanych użytkowników.");
 
             foreach (var user in users)
             {
@@ -134,7 +134,7 @@ namespace FleetManagement.Controllers
                 userAccountProvider.Update(user);
             }
 
-            return new ApiResponse("Pomyślnie zaktualizowano dostępność podanych użytkowników.", 200);
+            return Ok("Pomyślnie zaktualizowano dostępność podanych użytkowników.");
         }
 
         [HttpPut]
