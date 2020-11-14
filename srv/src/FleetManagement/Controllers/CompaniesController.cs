@@ -1,33 +1,32 @@
-﻿using FleetManagement.Entities.Companies;
-using FleetManagement.Entities.Companies.Models;
+﻿using FleetManagement.Entities.Accounts.DriverAccounts;
+using FleetManagement.Entities.Accounts.UserAccounts;
+using FleetManagement.Entities.Companies;
 using FleetManagement.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
+using NHibernate.Util;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FleetManagement.Db.Repositories
 {
-
     [ApiController]
     [DefaultRoute]
-    [AllowAnonymous]
+    [AllowAnonymous] //TODO: zmienić
     public class CompaniesController : ControllerBase
     {
         private readonly ICompanyProvider companyProvider;
+        private readonly IDriverAccountProvider driverAccountProvider;
 
-        public CompaniesController(ICompanyProvider companyProvider)
+        public CompaniesController(ICompanyProvider companyProvider, IDriverAccountProvider driverAccountProvider)
         {
             this.companyProvider = companyProvider;
+            this.driverAccountProvider = driverAccountProvider;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Company>> GetAll()
+        public IActionResult GetAll()
         {
-            return await companyProvider.GetAllAsync();
+            return Ok(companyProvider.GetAll());
         }
     }
 }

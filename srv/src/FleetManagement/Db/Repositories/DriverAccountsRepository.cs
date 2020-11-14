@@ -6,6 +6,8 @@ using FleetManagement.Entities.Accounts.DriverAccounts.Models;
 using FleetManagement.Entities.Accounts.DriverAccounts.Params;
 using FleetManagement.Entities.Accounts.UserAccounts;
 using FleetManagement.Entities.Accounts.UserAccounts.Models;
+using FleetManagement.Entities.Companies;
+using FleetManagement.Entities.Companies.Models;
 using NHibernate;
 using System.Linq;
 
@@ -14,13 +16,16 @@ namespace FleetManagement.Db.Repositories
     public class DriverAccountsRepository : DbBasicOperations<DriverAccount>, IDriverAccountProvider
     {
         private readonly IUserAccountProvider userAccountProvider;
+        private readonly ICompanyProvider companyProvider;
         private readonly IHashService hashService;
 
         public DriverAccountsRepository(ISessionFactory sessionFactory,
             IUserAccountProvider userAccountProvider,
+            ICompanyProvider companyProvider,
             IHashService hashService) : base(sessionFactory)
         {
             this.userAccountProvider = userAccountProvider;
+            this.companyProvider = companyProvider;
             this.hashService = hashService;
         }
 
@@ -72,6 +77,31 @@ namespace FleetManagement.Db.Repositories
             {
                 return -1;
             }
+        }
+
+        public Company GetDriverCompany(string driverMail)
+        {
+            var driver = GetByMail(driverMail);
+
+            if (driver != null)
+            {
+                var companies = companyProvider.GetAll();
+            
+                foreach (var company in companies)
+                {
+                    var drivers = company.Drivers;
+
+                    if (drivers.Count != 0)
+                    {
+                        var isDriverWorking = drivers.Where(x => x.Id == driver.Id).ToList().Count;
+            
+                        if (isDriverWorking != 0)
+                            return company;
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }

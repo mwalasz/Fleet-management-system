@@ -144,5 +144,11 @@ namespace FleetManagement.Controllers
                 ? Ok("Pomyślnie zaktualizowano hasło użytkownika.")
                 : Ok("Nie udało się zaktualizować hasła.");
         }
+
+        [HttpGet]
+        public IActionResult GetDriverCompany(string userMail)
+        {
+            return Ok(driverAccountProvider.GetDriverCompany(userMail));
+        }
     }
 }
