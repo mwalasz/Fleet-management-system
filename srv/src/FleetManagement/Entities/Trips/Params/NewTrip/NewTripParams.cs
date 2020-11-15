@@ -21,7 +21,5 @@ namespace FleetManagement.Entities.Trips.Params.NewTrip
         public double AverageSpeed { get; set; }
 
         public double MaximumSpeed { get; set; }
-
-        public double MaxSpeed { get; set; }
     }
 }
