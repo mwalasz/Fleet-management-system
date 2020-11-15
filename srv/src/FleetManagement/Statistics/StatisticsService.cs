@@ -31,8 +31,11 @@ namespace FleetManagement.Statistics
                 }
 
                 avgSpeed = distance/duration;
-                
-                return new DriverStatistics(avgSpeed, distance, duration, maxSpeed, trips.Count);
+
+                return new DriverStatistics(avgSpeed, distance, duration, maxSpeed, trips.Count)
+                {
+                    DriverLicenseNumber = driverAccount.DrivingLicenseNumber
+                };
             }
 
             return null;

@@ -36,5 +36,7 @@ namespace FleetManagement.Statistics.Models
         public double TotalDurationInSeconds { get; set; }
         public double TotalDurationInMinutes { get; set; }
         public double TotalDurationInHours { get; set; }
+
+        public string DriverLicenseNumber { get; set; }
     }
 }
