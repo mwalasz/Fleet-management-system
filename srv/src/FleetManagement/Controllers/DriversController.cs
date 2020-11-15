@@ -4,6 +4,7 @@ using FleetManagement.Entities.Accounts.DriverAccounts.DTO;
 using FleetManagement.Entities.Accounts.DriverAccounts.Models;
 using FleetManagement.Entities.Accounts.DriverAccounts.Params;
 using FleetManagement.Entities.Companies.Models;
+using FleetManagement.Entities.Trips;
 using FleetManagement.Entities.Vehicles.Models;
 using FleetManagement.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -21,11 +22,14 @@ namespace FleetManagement.Controllers
     {
         private readonly IMapper mapper;
         private readonly IDriverAccountProvider driverAccountProvider;
+        private readonly ITripProvider tripProvider;
 
-        public DriversController(IMapper mapper, IDriverAccountProvider driverAccountProvider)
+        public DriversController(IMapper mapper, IDriverAccountProvider driverAccountProvider,
+            ITripProvider tripProvider)
         {
             this.mapper = mapper;
             this.driverAccountProvider = driverAccountProvider;
+            this.tripProvider = tripProvider;
         }
 
         [HttpGet]
@@ -66,7 +70,7 @@ namespace FleetManagement.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddNewDriver([FromQuery] NewDriverAccountParams newDriverParams)
+        public IActionResult Add([FromQuery] NewDriverAccountParams newDriverParams)
         {
             var newDriverId = driverAccountProvider.AddNewAndGetId(newDriverParams);
             
@@ -82,6 +86,22 @@ namespace FleetManagement.Controllers
             }
 
             return Ok("Błąd w trakcie dodawania nowego kierowcy!");
+        }
+
+        [HttpGet]
+        public IActionResult GetAllTrips([FromQuery] string mail)
+        {
+            var driver = driverAccountProvider.GetByMail(mail);
+
+            if (driver != null)
+            {
+                var trips = tripProvider.GetAll()
+                    .Where(x => x.DriverAccountId == driver.Id);
+
+                return Ok(trips);
+            }
+
+            return NotFound();
         }
     }
 }

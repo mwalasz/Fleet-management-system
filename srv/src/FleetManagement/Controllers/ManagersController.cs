@@ -34,7 +34,7 @@ namespace FleetManagement.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddNewManager([FromQuery] NewManagerAccountParams newDriverParams)
+        public IActionResult Add([FromQuery] NewManagerAccountParams newDriverParams)
         {
             var newManagerId = managerAccountProvider.AddNewAndGetId(newDriverParams);
 

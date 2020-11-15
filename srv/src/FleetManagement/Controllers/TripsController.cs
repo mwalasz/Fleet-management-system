@@ -33,9 +33,11 @@ namespace FleetManagement.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddTrip([FromBody] NewTripParams newTrip)
+        public IActionResult Add([FromBody] NewTripParams newTrip)
         {
-            return Ok();
+            var successfullAdd = tripProvider.AddNew(newTrip);
+
+            return Ok(successfullAdd ? "" : "Nie udało się dodać nowej trasy.");
         }
     }
 }
