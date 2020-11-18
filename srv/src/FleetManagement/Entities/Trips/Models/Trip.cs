@@ -6,6 +6,11 @@ namespace FleetManagement.Entities.Trips.Models
     public class Trip : EntityBase
     {
         /// <summary>
+        /// Zapisane koordynaty, które zostały odwiedzone w trakcie trasy.
+        /// </summary>
+        public virtual byte[] LocationHistory { get; set; }
+
+        /// <summary>
         /// Miejsce rozpoczęcia podróży.
         /// </summary>
         public virtual string StartPlace { get; set; }
@@ -56,6 +61,7 @@ namespace FleetManagement.Entities.Trips.Models
         public TripMap()
         {
             Id(x => x.Id);
+            Map(x => x.LocationHistory);
             Map(x => x.StartPlace)
                 .Not.Nullable();
             Map(x => x.StartTime);

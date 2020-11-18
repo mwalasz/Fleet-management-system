@@ -3,6 +3,7 @@ using FleetManagement.Authentication.Models.Results;
 using FleetManagement.AutoMapper.ValueResolvers;
 using FleetManagement.AutoMapper.ValueResolvers.Drivers;
 using FleetManagement.AutoMapper.ValueResolvers.PowerTrains;
+using FleetManagement.AutoMapper.ValueResolvers.TripDtos;
 using FleetManagement.AutoMapper.ValueResolvers.VehicleDtos;
 using FleetManagement.Entities.Accounts.DriverAccounts.DTO;
 using FleetManagement.Entities.Accounts.DriverAccounts.Models;
@@ -51,6 +52,7 @@ namespace FleetManagement.AutoMapper.Profiles
             CreateMap<Refueling, RefuelingDto>();
 
             CreateMap<Trip, TripDto>()
+                .ForMember(dto => dto.LocationHistory, mce => mce.MapFrom<TripDtoLocationHistoryValueResolver>())
                 .ForMember(dto => dto.DriverAccount, mce => mce.MapFrom<TripDtoDriverAccountValueResolver>());
 
             CreateMap<Vehicle, VehicleDto>()
