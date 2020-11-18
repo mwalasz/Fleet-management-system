@@ -54,7 +54,8 @@ namespace FleetManagement.Extensions
         public static IServiceCollection AddAllSettings(this IServiceCollection services, IConfiguration configuration)
             => services.Configure<DataBaseSettings>(configuration.GetSection(nameof(DataBaseSettings)))
                        .Configure<HashSettings>(configuration.GetSection(nameof(HashSettings)))
-                       .Configure<JwtSettings>(configuration.GetSection(nameof(JwtSettings)));
+                       .Configure<JwtSettings>(configuration.GetSection(nameof(JwtSettings)))
+                       .Configure<GoogleSettings>(configuration.GetSection(nameof(GoogleSettings)));
 
         /// <summary>
         /// Dodaje sesję połączenia z bazą danych
