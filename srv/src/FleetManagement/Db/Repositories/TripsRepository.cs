@@ -4,6 +4,7 @@ using FleetManagement.Entities.Trips;
 using FleetManagement.Entities.Trips.Models;
 using FleetManagement.Entities.Trips.Params.NewTrip;
 using FleetManagement.Entities.Vehicles;
+using FleetManagement.Extensions;
 using NHibernate;
 
 namespace FleetManagement.Db.Repositories
@@ -32,8 +33,11 @@ namespace FleetManagement.Db.Repositories
             {
                 try
                 {
+                    var locationHistory = newTripParams.LocationHistory.ConvertToBlob();
+
                     var trip = new Trip()
                     {
+                        LocationHistory = locationHistory,
                         AverageSpeed = newTripParams.AverageSpeed,
                         MaximumSpeed = newTripParams.MaximumSpeed,
                         StartTime = newTripParams.StartTime,

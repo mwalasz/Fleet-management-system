@@ -1,5 +1,8 @@
-﻿namespace FleetManagement.Entities.Trips.Params.NewTrip
+﻿using System;
+
+namespace FleetManagement.Entities.Trips.Params.NewTrip
 {
+    [Serializable]
     public class Coordinates
     {
         public double Latitude { get; set; }
