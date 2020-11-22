@@ -1,13 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Content from '../../components/Content';
+import Dashboard from '../../components/Dashboard';
 import DriverNavigation from './navigation/driverNavigation';
 
 const DriverView = ({ dispatch }) => {
     return (
-        <div>
+        <Dashboard>
             <DriverNavigation dispatch={dispatch} />
-            <p>Driver site</p>
-        </div>
+            <Content>
+                <p>Driver site</p>
+            </Content>
+        </Dashboard>
     );
 };
 

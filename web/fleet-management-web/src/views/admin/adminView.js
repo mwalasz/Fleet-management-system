@@ -1,13 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import AdminNavigation from './navigation/adminNavigation';
+import Dashboard from '../../components/Dashboard';
+import Content from '../../components/Content';
 
 const AdminView = ({ dispatch }) => {
     return (
-        <div>
+        <Dashboard>
             <AdminNavigation dispatch={dispatch} />
-            <p>Admin site</p>
-        </div>
+            <Content>
+                <p>Admin site</p>
+            </Content>
+        </Dashboard>
     );
 };
 

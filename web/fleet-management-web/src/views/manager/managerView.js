@@ -1,13 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ManagerNavigation from './navigation/managerNavigation';
+import Dashboard from '../../components/Dashboard';
+import Content from '../../components/Content';
 
 const ManagerView = ({ dispatch }) => {
     return (
-        <div>
+        <Dashboard>
             <ManagerNavigation dispatch={dispatch} />
-            <p>Manager site</p>
-        </div>
+            <Content>
+                <p>Manager site</p>
+            </Content>
+        </Dashboard>
     );
 };
 
