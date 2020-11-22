@@ -1,8 +1,8 @@
 import React from 'react';
-import StyledNavLink from '../../../navigation/components/StyledNavLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCar, faInfo } from '@fortawesome/free-solid-svg-icons';
-import NavigationBar from '../../../navigation/NavigationBar';
+import NavigationBar from '../../../components/navigation/NavigationBar';
+import StyledNavLink from '../../../components/navigation/StyledNavLink';
 
 const DriverNavigation = ({ dispatch }) => {
     return (

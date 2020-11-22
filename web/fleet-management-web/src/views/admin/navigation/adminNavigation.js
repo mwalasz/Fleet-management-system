@@ -1,8 +1,8 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCar, faUsers, faIndustry } from '@fortawesome/free-solid-svg-icons';
-import NavigationBar from '../../../navigation/NavigationBar';
-import StyledNavLink from '../../../navigation/components/StyledNavLink';
+import NavigationBar from '../../../components/navigation/NavigationBar';
+import StyledNavLink from '../../../components/navigation/StyledNavLink';
 
 const AdminNavigation = ({ dispatch }) => {
     return (

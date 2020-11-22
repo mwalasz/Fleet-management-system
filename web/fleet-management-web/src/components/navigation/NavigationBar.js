@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import StyledLogout from './components/StyledLogout';
-import { logoutUser } from '../redux/actions/authorization_actions';
+import StyledLogout from './StyledLogout';
+import { logoutUser } from '../../redux/actions/authorization_actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import { defaultVehicleImagePath } from '../utils/constans';
+import { defaultVehicleImagePath } from '../../utils/constans';
 import { connect } from 'react-redux';
 
 const NavigationBar = ({ dispatch, children, user }) => {
