@@ -6,9 +6,9 @@ import {
     LOGOUT_SUCCESS,
     LOGOUT_ERROR,
     VERIFY_USER,
-    VERIFY_SUCCESS, 
-    VERIFY_ERROR
-} from "../actions/authorization_actions";
+    VERIFY_SUCCESS,
+    VERIFY_ERROR,
+} from '../actions/authorization_actions';
 
 const initialState = {
     isLoggingIn: false,
@@ -17,7 +17,7 @@ const initialState = {
     loginError: false,
     logoutError: false,
     isAuthenticated: false,
-    user: {}
+    user: {},
 };
 
 const authorizationReducer = (state = initialState, action) => {
@@ -26,60 +26,60 @@ const authorizationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoggingIn: true,
-                loginError: false
+                loginError: false,
             };
         case LOGIN_SUCCESS:
             return {
                 ...state,
                 isLoggingIn: false,
                 isAuthenticated: true,
-                user: action.user
+                user: action.user,
             };
         case LOGIN_ERROR:
             return {
                 ...state,
                 isLoggingIn: false,
                 isAuthenticated: false,
-                loginError: true
+                loginError: true,
             };
         case LOGOUT_REQUEST:
             return {
                 ...state,
                 isLoggingOut: true,
-                logoutError: false
+                logoutError: false,
             };
         case LOGOUT_SUCCESS:
             return {
                 ...state,
                 isLoggingOut: false,
                 isAuthenticated: false,
-                user: {}
+                user: {},
             };
         case LOGOUT_ERROR:
             return {
                 ...state,
                 isLoggingOut: false,
-                logoutError: true
+                logoutError: true,
             };
         case VERIFY_USER:
             return {
                 ...state,
-                isVerifying: true
+                isVerifying: true,
             };
         case VERIFY_SUCCESS:
             return {
                 ...state,
-                isVerifying:false,
+                isVerifying: false,
                 isAuthenticated: true,
-                user: action.user
+                user: action.user,
             };
         case VERIFY_ERROR:
             return {
                 ...state,
                 isAuthenticated: false,
-                isVerifying: false
+                isVerifying: false,
             };
-        
+
         default:
             return state;
     }

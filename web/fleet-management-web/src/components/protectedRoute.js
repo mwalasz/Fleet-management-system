@@ -1,26 +1,24 @@
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import React from 'react';
+import { Route, Redirect } from 'react-router-dom';
 
 const ProtectedRoute = ({
-        component: Component,
-        isAuthenticated,
-        isVerifying,
-        ...rest
-    }) => (
+    component: Component,
+    isAuthenticated,
+    isVerifying,
+    ...rest
+}) => (
     <Route
         {...rest}
-        render={props =>
+        render={(props) =>
             isVerifying ? (
-                <div>
-                    Loging in...
-                </div>
+                <div>Loging in...</div>
             ) : isAuthenticated ? (
                 <Component {...props} />
             ) : (
                 <Redirect
                     to={{
-                        pathname: "/login",
-                        state: { from: props.location }
+                        pathname: '/login',
+                        state: { from: props.location },
                     }}
                 />
             )
