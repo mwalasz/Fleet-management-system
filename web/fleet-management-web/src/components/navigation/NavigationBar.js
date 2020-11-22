@@ -61,6 +61,7 @@ const Logo = styled.div`
 `;
 
 const Wrapper = styled.div`
+    box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1);
     background: ${({ theme }) => theme.primaryBackground};
     height: 100%;
     min-width: 300px;
