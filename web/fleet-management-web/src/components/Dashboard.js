@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-function Dashboard({ dispatch, user, children }) {
+const Dashboard = ({ dispatch, user, children }) => {
     return <Wrapper>{children}</Wrapper>;
-}
+};
 
 const mapStateToProps = (state) => {
     return {

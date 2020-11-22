@@ -3,13 +3,27 @@ import { connect } from 'react-redux';
 import Content from '../../components/Content';
 import Dashboard from '../../components/Dashboard';
 import DriverNavigation from './navigation/driverNavigation';
+import Vehicles from './content/Vehicles';
+import Statistics from './content/Statistics';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { DriverRoutes } from '../../utils/routes';
 
 const DriverView = ({ dispatch }) => {
     return (
         <Dashboard>
             <DriverNavigation dispatch={dispatch} />
             <Content>
-                <p>Driver site</p>
+                <Switch>
+                    <Route path={DriverRoutes.vehicles} component={Vehicles} />
+                    <Route
+                        path={DriverRoutes.statistics}
+                        component={Statistics}
+                    />
+
+                    <Route
+                        render={() => <Redirect to={DriverRoutes.vehicles} />}
+                    />
+                </Switch>
             </Content>
         </Dashboard>
     );
