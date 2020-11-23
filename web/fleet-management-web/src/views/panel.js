@@ -33,9 +33,9 @@ const Panel = ({ user }) => {
 
 Panel.propTypes = {};
 
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
     return {
         user: state.user,
     };
-}
+};
 export default connect(mapStateToProps)(Panel);
