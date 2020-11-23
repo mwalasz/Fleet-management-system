@@ -49,10 +49,10 @@ namespace FleetManagement.Controllers
         /// <param name="ids">Lista kont do dezaktywacji.</param>
         /// <param name="isActive">Czy konta mają być aktywne, czy nie.</param>
         [HttpPut]
-        public IActionResult ChangeAvailability(IEnumerable<int> ids, bool isActive = false)
+        public IActionResult ChangeAvailability(IEnumerable<string> emails, bool isActive = false)
         {
-            var users = userAccountProvider.GetAll().
-                Where(user => ids.Contains(user.Id));
+            var users = userAccountProvider.GetAll()
+                .Where(user => emails.Contains(user.Email));
 
             if (users.Count().Equals(0))
                 return NotFound("Nie znaleziono podanych użytkowników.");
