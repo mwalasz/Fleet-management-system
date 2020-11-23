@@ -6,32 +6,30 @@ import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
 import { API_URL } from '../../../utils/constans';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faRedo } from '@fortawesome/free-solid-svg-icons';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const Users = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(false);
     const [users, setUsers] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
+    const [activeUsers, setActiveUsers] = useState(true);
 
     useEffect(() => {
-        console.log(user);
         setLoading(true);
         axios
-            .get(`${API_URL}/users/get_all?onlyActiveUsers=true`, {
+            .get(`${API_URL}/users/get_all?activeUsers=${activeUsers}`, {
                 withCredentials: true,
                 headers: {
                     Authorization: 'Bearer ' + user.token,
-                    // 'Content-Type': 'application/json',
                 },
             })
             .then((res) => {
                 setLoading(false);
-                console.log(res.data.result);
                 res.data.result.forEach((x) => {
                     x.id = x.email;
                 });
-                console.log(res.data.result);
                 if (res.data.result) setUsers(res.data.result);
             })
             .catch((err) => {
@@ -39,16 +37,18 @@ const Users = ({ user }) => {
             });
     }, [refresh]);
 
-    const handleRemove = (mail) => {
-        const arr = [mail];
-
+    const handleUpdateUserAvailability = (mail) => {
         if (
-            window.confirm(`Czy chcesz usunąć użytkownika o emailu: ${mail} ?`)
+            window.confirm(
+                `Czy chcesz ${
+                    activeUsers ? 'usunąć' : 'aktywować'
+                } użytkownika o emailu: ${mail} ?`
+            )
         ) {
             axios
                 .put(
-                    `${API_URL}/users/change_availability?isActive=false`,
-                    arr,
+                    `${API_URL}/users/change_availability?isActive=${!activeUsers}`,
+                    [mail],
                     {
                         withCredentials: true,
                         headers: {
@@ -66,12 +66,12 @@ const Users = ({ user }) => {
 
     const columns = [
         { field: 'firstName', headerName: 'Imię', width: 130 },
-        { field: 'lastName', headerName: 'Nazwisko', width: 130 },
+        { field: 'lastName', headerName: 'Nazwisko', width: 160 },
         {
             field: 'phoneNumber',
             headerName: 'Numer telefonu',
             type: 'number',
-            width: 200,
+            width: 130,
             sortable: false,
         },
         {
@@ -86,23 +86,35 @@ const Users = ({ user }) => {
         },
         {
             field: 'remove',
-            headerName: 'Usuń',
+            headerName: activeUsers ? 'Usuń' : 'Aktywuj',
             width: 90,
             sortable: false,
             renderCell: (params) => {
                 return (
                     <FontAwesomeIcon
-                        icon={faTrash}
-                        onClick={() => handleRemove(params.data.email)}
+                        icon={activeUsers ? faTrash : faRedo}
+                        onClick={() =>
+                            handleUpdateUserAvailability(params.data.email)
+                        }
                     />
                 );
             },
         },
     ];
 
+    const handleChangeActiveness = () => {
+        setActiveUsers(!activeUsers);
+        setRefresh(!refresh);
+    };
+
     return (
         <div>
             <p>Users</p>
+            <Checkbox
+                color="default"
+                onChange={handleChangeActiveness}
+                checked={activeUsers}
+            />
             <button onClick={() => setModalVisible(!modalVisible)}>
                 dodaj
             </button>
@@ -113,7 +125,7 @@ const Users = ({ user }) => {
                     columns={columns}
                     pageSize={9}
                     disableSelectionOnClick
-                    checkboxSelection
+                    hideFooterRow
                 />
             </DataGridWrapper>
             <NewItemBar isVisible={modalVisible} />
