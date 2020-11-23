@@ -12,10 +12,8 @@ using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Text;
 
 namespace FleetManagement
 {
@@ -34,10 +32,16 @@ namespace FleetManagement
             services.AddRouting();
 
             //Dodanie obs³ugi CORS.
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder => 
+                    builder.WithOrigins("http://localhost:3000")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
 
             //Dodanie obs³ugi kontrolerów.
-            //services.AddControllers();
             services.AddControllers(options =>
             {
                 options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
@@ -87,11 +91,6 @@ namespace FleetManagement
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCors(x => x
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
-
             app.UseAuthentication();
 
             bool development = env.IsDevelopment();
@@ -116,7 +115,7 @@ namespace FleetManagement
             );;
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            //app.UseStaticFiles();
 
             app.UseRouting();
 
@@ -127,6 +126,8 @@ namespace FleetManagement
                 c.RoutePrefix = string.Empty;
             });
 
+            app.UseCors();
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => {
