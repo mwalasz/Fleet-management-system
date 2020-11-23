@@ -28,19 +28,11 @@ namespace FleetManagement.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<UserAccountDto> GetAll(bool onlyActiveUsers = false)
+        public IEnumerable<UserAccountDto> GetAll(bool activeUsers)
         {
-            if (onlyActiveUsers)
-            {
-                return userAccountProvider.GetAll()
-                    .Where(user => user.IsActive)
-                    .Select(user => mapper.Map<UserAccount, UserAccountDto>(user));
-            }
-            else
-            {
-                return userAccountProvider.GetAll()
-                    .Select(user => mapper.Map<UserAccount, UserAccountDto>(user));
-            }
+            return userAccountProvider.GetAll()
+                .Where(user => user.IsActive == activeUsers)
+                .Select(user => mapper.Map<UserAccount, UserAccountDto>(user));
         }
 
         /// <summary>
