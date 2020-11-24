@@ -38,7 +38,7 @@ namespace FleetManagement.Statistics
                 };
             }
 
-            return null;
+            return new DriverStatistics() { DriverLicenseNumber = driverAccount.DrivingLicenseNumber };
         }
     }
 }
