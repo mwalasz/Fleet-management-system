@@ -5,7 +5,7 @@ const Content = ({ children }) => {
         <div
             style={{
                 flex: '1 1',
-                padding: '30px 40px',
+                padding: '20px 40px',
             }}
         >
             {children}

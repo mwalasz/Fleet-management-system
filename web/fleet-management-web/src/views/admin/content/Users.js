@@ -8,6 +8,14 @@ import { API_URL } from '../../../utils/constans';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faRedo } from '@fortawesome/free-solid-svg-icons';
 import Checkbox from '@material-ui/core/Checkbox';
+// import Button from '@material-ui/core/Button';
+import Button from '../../../components/Button';
+import Title from '../../../components/Title';
+import {
+    ContentWrapper,
+    ContentBody,
+    ContentHeader,
+} from '../../../components/PageContents';
 
 const Users = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
@@ -108,35 +116,64 @@ const Users = ({ user }) => {
     };
 
     return (
-        <div>
-            <p>Users</p>
-            <Checkbox
-                color="default"
-                onChange={handleChangeActiveness}
-                checked={activeUsers}
-            />
-            <button onClick={() => setModalVisible(!modalVisible)}>
-                dodaj
-            </button>
-            <DataGridWrapper>
-                <DataGrid
-                    loading={loading}
-                    rows={users}
-                    columns={columns}
-                    pageSize={9}
-                    disableSelectionOnClick
-                    hideFooterRow
-                />
-            </DataGridWrapper>
-            <NewItemBar isVisible={modalVisible} />
-        </div>
+        <>
+            <ContentWrapper>
+                <ContentHeader>
+                    <Title>
+                        {activeUsers
+                            ? 'Aktywni użytkownicy'
+                            : 'Nieaktywni użytkownicy'}
+                    </Title>
+                    <Button
+                        secondary
+                        onClick={() => setModalVisible(!modalVisible)}
+                    >
+                        DODAJ NOWEGO
+                    </Button>
+                </ContentHeader>
+                <ContentBody>
+                    <FilterWrapper>
+                        <Checkbox
+                            color="default"
+                            onChange={handleChangeActiveness}
+                            checked={activeUsers}
+                        />
+                        <Text>
+                            {activeUsers
+                                ? 'Odznacz, aby wyświetlić nieaktywnych użytkowników:'
+                                : 'Zanacz, aby wyświetlić aktywnych użytkowników:'}
+                        </Text>
+                    </FilterWrapper>
+                    <DataGridWrapper>
+                        <DataGrid
+                            loading={loading}
+                            rows={users}
+                            columns={columns}
+                            pageSize={9}
+                            disableSelectionOnClick
+                            hideFooterRow
+                        />
+                    </DataGridWrapper>
+                </ContentBody>
+                <NewItemBar isVisible={modalVisible} />
+            </ContentWrapper>
+        </>
     );
 };
+const Text = styled.text`
+    font-size: ${({ theme }) => theme.font.M};
+    font-weight: ${({ theme }) => theme.font.Regular};
+    transition: all 0.3s;
+    display: inline;
+    margin: 10px;
+`;
+
+const FilterWrapper = styled.div`
+    margin-bottom: 10px;
+`;
 
 const DataGridWrapper = styled.div`
-    margin-top: 10px;
-    height: 800px;
-    width: '100vw';
+    height: calc(100vh - 220px);
 `;
 
 const mapStateToProps = (state) => {
