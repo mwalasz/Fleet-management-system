@@ -154,7 +154,7 @@ const Users = ({ user }) => {
                             loading={loading}
                             rows={users}
                             columns={columns}
-                            pageSize={11}
+                            pageSize={parseInt(visualViewport.height / 80)}
                             disableSelectionOnClick
                             hideFooterRow
                         />

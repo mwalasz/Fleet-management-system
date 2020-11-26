@@ -85,6 +85,7 @@ const NewItemBar = ({ isVisible, handleClose, setRefresh, token }) => {
                 }}
                 onSubmit={async (values) => {
                     setIsLoading(true);
+                    setIsError('');
                     const url = `${API_URL}/${
                         isDriver ? 'drivers' : 'managers'
                     }/add`;
@@ -103,7 +104,7 @@ const NewItemBar = ({ isVisible, handleClose, setRefresh, token }) => {
                             const error = res.data.result;
                             if (
                                 typeof error === 'string' &&
-                                error.includes('Błąd')
+                                error.includes('Błąd' || 'Error')
                             ) {
                                 console.log('error');
                                 setIsError(error);
@@ -115,6 +116,7 @@ const NewItemBar = ({ isVisible, handleClose, setRefresh, token }) => {
                             }
                         })
                         .catch((error) => {
+                            setIsError(error.toString());
                             console.log(
                                 `Error while user's attempt send data: ${error}`
                             );
