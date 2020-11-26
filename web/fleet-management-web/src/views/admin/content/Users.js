@@ -159,7 +159,6 @@ const Users = ({ user }) => {
                 <NewItemBar
                     isVisible={modalVisible}
                     handleClose={() => setModalVisible(false)}
-                    isDriver={true}
                 />
             </ContentWrapper>
         </>

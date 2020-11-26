@@ -33,6 +33,12 @@ const FormInput = styled.input`
         css`
             width: 250px;
         `}
+
+    ${({ error }) =>
+        error &&
+        css`
+            color: ${({ theme }) => theme.red};
+        `}
 `;
 
 export default FormInput;
