@@ -2,19 +2,23 @@ import React, { useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import Heading from '../components/Heading';
 import { connect } from 'react-redux';
-import { theme } from '../utils/theme';
 import { Formik, Form } from 'formik';
-import FormInput from './FormInput';
+import axios from 'axios';
+import { API_URL, userRoles } from '../utils/constans';
 import Button from './Button';
 import Select from './Select';
-import * as Yup from 'yup';
+import { NewUserValidationSchema } from '../utils/validations';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import NewItemInput from './newitem/NewItemInput';
+import NewItemText from './newitem/NewItemText';
 
 const StyledWrapper = styled.div`
     border-left: 10px solid ${({ theme }) => theme.primaryColor};
     z-index: 999;
     position: fixed;
     display: flex;
-    padding: 100px 90px;
+    padding: 50px 90px;
     flex-direction: column;
     right: 0;
     top: 0;
@@ -26,180 +30,175 @@ const StyledWrapper = styled.div`
     transition: transform 0.25s ease-in-out;
 `;
 
-const phoneRegex = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-const onlyLettersRegex = /^[^\W\d]+$/;
-
 const StyledForm = styled(Form)`
     display: flex;
     flex-direction: column;
     margin-top: 40px;
 `;
 
-const StyledInput = styled(FormInput)`
-    margin-top: 30px;
+const NameInputsWrapper = styled.div`
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
 `;
 
-const Text = styled.text`
+const ButtonsWrapper = styled.div`
+    display: flex;
+    position: fixed;
+    bottom: 200px;
     align-self: center;
-    margin-left: '10px';
-    font-size: '10px';
-    color: ${({ theme }) => theme.red};
-    font-weight: ${({ theme }) => theme.font.Bold};
 `;
 
-const ValidationSchema = Yup.object().shape({
-    firstName: Yup.string()
-        .min(2, 'Zbyt krótkie imię!')
-        .max(20, 'Zbyt długie imię!')
-        .matches(onlyLettersRegex, 'Dozwolone są tylko litery!')
-        .required('Imię jest wymagane!'),
-    lastName: Yup.string()
-        .min(2, 'Zbyt krótkie nazwisko!')
-        .max(20, 'Zbyt długie nazwisko!')
-        .matches(onlyLettersRegex, 'Dozwolone są tylko litery!')
-        .required('Nazwisko jest wymagane!'),
-    email: Yup.string()
-        .email('Niepoprawny adres. Spróbuj ponownie.')
-        .required('Mail jest wymagany!'),
-    phoneNumber: Yup.string()
-        .required('Numer telefonu jest wymagany!')
-        .matches(phoneRegex, 'Numer telefonu jest nieprawidłowy!')
-        .min(9, 'Numer telefonu jest zbyt krótki!')
-        .max(9, 'Numer telefonu jest zbyt długi!'),
-    drivingLicenseNumber: Yup.string()
-        .length(9, 'Numer musi zawierać 9 cyfr!')
-        .required('Numer prawa jazdy jest wymagany!'),
-});
+const HeadingWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
 
-const NewItemBar = ({ isVisible, addItem, handleClose }) => {
+const NewItemBar = ({ isVisible, handleClose, setRefresh, token }) => {
     const [isDriver, setIsDriver] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState('');
     const formRef = useRef(null);
 
     return (
         <StyledWrapper isVisible={isVisible}>
-            <Heading big>{`Dodaj nowego ${
-                isDriver ? 'kierowcę' : 'menedżera'
-            }:`}</Heading>
+            <HeadingWrapper>
+                <Heading big>
+                    {`Dodaj nowego ${isDriver ? 'kierowcę' : 'kierownika'}:  `}
+                    {isLoading && <FontAwesomeIcon icon={faSpinner} spin />}
+                </Heading>
+                {isError !== '' ? (
+                    <NewItemText>{isError}</NewItemText>
+                ) : (
+                    <span>&nbsp;&nbsp;</span>
+                )}
+            </HeadingWrapper>
             <Formik
                 innerRef={formRef}
                 initialValues={{
                     firstName: '',
                     lastName: '',
                     email: '',
+                    password: '',
                     phoneNumber: '',
                     drivingLicenseNumber: '',
                 }}
-                onSubmit={(values) => {
-                    console.log('submit');
-                    console.log(values);
-                    handleClose();
+                onSubmit={async (values) => {
+                    setIsLoading(true);
+                    const url = `${API_URL}/${
+                        isDriver ? 'drivers' : 'managers'
+                    }/add`;
+
+                    const payload = values;
+                    if (!isDriver) delete payload.drivingLicenseNumber;
+
+                    await axios
+                        .post(url, payload, {
+                            withCredentials: true,
+                            headers: {
+                                Authorization: 'Bearer ' + token,
+                            },
+                        })
+                        .then((res) => {
+                            const error = res.data.result;
+                            if (
+                                typeof error === 'string' &&
+                                error.includes('Błąd')
+                            ) {
+                                console.log('error');
+                                setIsError(error);
+                            } else {
+                                setRefresh();
+                                formRef.current.resetForm();
+                                setIsError('');
+                                setTimeout(handleClose, 1000);
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(
+                                `Error while user's attempt send data: ${error}`
+                            );
+                        });
+                    setIsLoading(false);
                 }}
-                validationSchema={ValidationSchema}
-                onReset={(values) => {
-                    console.log('reset');
-                    console.log('values');
-                    console.log(values);
-                    handleClose();
-                }}
+                validationSchema={NewUserValidationSchema}
             >
                 {({ values, handleChange, handleBlur, errors, touched }) => (
                     <StyledForm>
                         <Select
-                            options={['kierowca', 'menedżer']}
-                            value={isDriver ? 'kierowca' : 'menedżer'}
+                            options={[userRoles.driver, userRoles.manager]}
+                            value={
+                                isDriver ? userRoles.driver : userRoles.manager
+                            }
                             onClick={(e) =>
-                                setIsDriver(e.target.value === 'kierowca')
+                                setIsDriver(e.target.value === userRoles.driver)
                             }
                         />
                         <NameInputsWrapper>
-                            <InputWithError>
-                                <StyledInput
-                                    autoComplete="nope"
-                                    wide
-                                    error={
-                                        errors.firstName && touched.firstName
-                                    }
-                                    placeholder="imię"
-                                    type="text"
-                                    name="firstName"
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.firstName}
-                                />
-                                {errors.firstName && touched.firstName ? (
-                                    <Text>{errors.firstName}</Text>
-                                ) : (
-                                    <span>&nbsp;&nbsp;</span>
-                                )}
-                            </InputWithError>
-                            <InputWithError>
-                                <StyledInput
-                                    error={errors.lastName && touched.lastName}
-                                    wide
-                                    placeholder="nazwisko"
-                                    type="text"
-                                    name="lastName"
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.lastName}
-                                />
-                                {errors.lastName && touched.lastName ? (
-                                    <Text>{errors.lastName}</Text>
-                                ) : (
-                                    <span>&nbsp;&nbsp;</span>
-                                )}
-                            </InputWithError>
-                        </NameInputsWrapper>
-                        <InputWithError>
-                            <StyledInput
-                                error={errors.email && touched.email}
-                                placeholder="adres email"
-                                type="mail"
-                                name="email"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.email}
-                            />
-                            {errors.email && touched.email ? (
-                                <Text>{errors.email}</Text>
-                            ) : (
-                                <span>&nbsp;&nbsp;</span>
-                            )}
-                        </InputWithError>
-                        <InputWithError>
-                            <StyledInput
-                                error={
-                                    errors.phoneNumber && touched.phoneNumber
-                                }
-                                placeholder="numer telefonu"
+                            <NewItemInput
+                                wide
+                                handleChange={handleChange}
+                                handleBlur={handleBlur}
+                                errors={errors.firstName}
+                                touched={touched.firstName}
+                                value={values.firstName}
+                                placeholder="imię"
                                 type="text"
-                                name="phoneNumber"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.phoneNumber}
+                                name="firstName"
                             />
-                            {errors.phoneNumber && touched.phoneNumber ? (
-                                <Text>{errors.phoneNumber}</Text>
-                            ) : (
-                                <span>&nbsp;&nbsp;</span>
-                            )}
-                        </InputWithError>
+                            <NewItemInput
+                                wide
+                                handleChange={handleChange}
+                                handleBlur={handleBlur}
+                                errors={errors.lastName}
+                                touched={touched.lastName}
+                                value={values.lastName}
+                                placeholder="nazwisko"
+                                type="text"
+                                name="lastName"
+                            />
+                        </NameInputsWrapper>
+                        <NewItemInput
+                            handleChange={handleChange}
+                            handleBlur={handleBlur}
+                            errors={errors.email}
+                            touched={touched.email}
+                            value={values.email}
+                            placeholder="adres email"
+                            type="mail"
+                            name="email"
+                        />
+                        <NewItemInput
+                            handleChange={handleChange}
+                            handleBlur={handleBlur}
+                            errors={errors.password}
+                            touched={touched.password}
+                            value={values.password}
+                            placeholder="hasło"
+                            type="password"
+                            name="password"
+                        />
+                        <NewItemInput
+                            handleChange={handleChange}
+                            handleBlur={handleBlur}
+                            errors={errors.phoneNumber}
+                            touched={touched.phoneNumber}
+                            value={values.phoneNumber}
+                            placeholder="numer telefonu"
+                            type="text"
+                            name="phoneNumber"
+                        />
                         {isDriver && (
-                            <InputWithError>
-                                <StyledInput
-                                    placeholder="numer prawa jazdy"
-                                    name="drivingLicenseNumber"
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.drivingLicenseNumber}
-                                />
-                                {errors.drivingLicenseNumber &&
-                                touched.drivingLicenseNumber ? (
-                                    <Text>{errors.drivingLicenseNumber}</Text>
-                                ) : (
-                                    <span>&nbsp;&nbsp;</span>
-                                )}
-                            </InputWithError>
+                            <NewItemInput
+                                handleChange={handleChange}
+                                handleBlur={handleBlur}
+                                errors={errors.drivingLicenseNumber}
+                                touched={touched.drivingLicenseNumber}
+                                value={values.drivingLicenseNumber}
+                                placeholder="numer prawa jazdy"
+                                name="drivingLicenseNumber"
+                                name="drivingLicenseNumber"
+                            />
                         )}
                         <ButtonsWrapper>
                             <Button
@@ -217,16 +216,9 @@ const NewItemBar = ({ isVisible, addItem, handleClose }) => {
                                 cancel
                                 margin="0px 20px"
                                 type="button"
-                                // onClick={handleClose}
                                 onClick={() => {
-                                    values = {
-                                        firstName: '',
-                                        lastName: '',
-                                        email: '',
-                                        phoneNumber: '',
-                                        drivingLicenseNumber: '',
-                                    };
                                     formRef.current.resetForm();
+                                    setIsError('');
                                     handleClose();
                                 }}
                             >
@@ -240,24 +232,10 @@ const NewItemBar = ({ isVisible, addItem, handleClose }) => {
     );
 };
 
-const mapStateToProps = (state) => {};
-
-const InputWithError = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
-
-const NameInputsWrapper = styled.div`
-    display: flex;
-    justify-content: space-between;
-`;
-
-const ButtonsWrapper = styled.div`
-    /* margin-top: 50px; */
-    display: flex;
-    position: fixed;
-    bottom: 350px;
-    align-self: center;
-`;
+const mapStateToProps = (state) => {
+    return {
+        token: state.user,
+    };
+};
 
 export default connect(mapStateToProps)(NewItemBar);

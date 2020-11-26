@@ -4,11 +4,10 @@ import NewItemBar from '../../../components/NewItemBar';
 import { DataGrid } from '@material-ui/data-grid';
 import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
-import { API_URL } from '../../../utils/constans';
+import { API_URL, userRoles } from '../../../utils/constans';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faRedo } from '@fortawesome/free-solid-svg-icons';
 import Checkbox from '@material-ui/core/Checkbox';
-// import Button from '@material-ui/core/Button';
 import Button from '../../../components/Button';
 import Title from '../../../components/Title';
 import {
@@ -73,8 +72,8 @@ const Users = ({ user }) => {
     };
 
     const columns = [
-        { field: 'firstName', headerName: 'Imię', width: 130 },
-        { field: 'lastName', headerName: 'Nazwisko', width: 160 },
+        { field: 'firstName', headerName: 'Imię', width: 230 },
+        { field: 'lastName', headerName: 'Nazwisko', width: 260 },
         {
             field: 'phoneNumber',
             headerName: 'Numer telefonu',
@@ -85,12 +84,17 @@ const Users = ({ user }) => {
         {
             field: 'email',
             headerName: 'Mail',
-            width: 190,
+            width: 320,
         },
         {
             field: 'role',
             headerName: 'Rola',
-            width: 90,
+            width: 150,
+            renderCell: (params) => {
+                if (params.data.role === 'admin') return userRoles.admin;
+                if (params.data.role === 'driver') return userRoles.driver;
+                if (params.data.role === 'manager') return userRoles.manager;
+            },
         },
         {
             field: 'remove',
@@ -150,7 +154,7 @@ const Users = ({ user }) => {
                             loading={loading}
                             rows={users}
                             columns={columns}
-                            pageSize={9}
+                            pageSize={11}
                             disableSelectionOnClick
                             hideFooterRow
                         />
@@ -159,6 +163,7 @@ const Users = ({ user }) => {
                 <NewItemBar
                     isVisible={modalVisible}
                     handleClose={() => setModalVisible(false)}
+                    setRefresh={() => setRefresh(!refresh)}
                 />
             </ContentWrapper>
         </>
