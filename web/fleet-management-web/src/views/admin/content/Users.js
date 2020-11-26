@@ -125,10 +125,11 @@ const Users = ({ user }) => {
                             : 'Nieaktywni użytkownicy'}
                     </Title>
                     <Button
+                        wide
                         secondary
                         onClick={() => setModalVisible(!modalVisible)}
                     >
-                        DODAJ NOWEGO
+                        DODAJ
                     </Button>
                 </ContentHeader>
                 <ContentBody>
@@ -155,7 +156,11 @@ const Users = ({ user }) => {
                         />
                     </DataGridWrapper>
                 </ContentBody>
-                <NewItemBar isVisible={modalVisible} />
+                <NewItemBar
+                    isVisible={modalVisible}
+                    handleClose={() => setModalVisible(false)}
+                    isDriver={true}
+                />
             </ContentWrapper>
         </>
     );

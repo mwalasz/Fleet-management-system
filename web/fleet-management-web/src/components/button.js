@@ -2,10 +2,10 @@ import styled, { css } from 'styled-components';
 
 const Button = styled.button`
     font-size: ${({ theme }) => theme.font.S};
-    color: white;
-    font-weight: ${({ theme }) => theme.font.Regular};
+    font-weight: ${({ theme }) => theme.font.Bold};
     margin: ${({ margin }) => margin || '0px'};
     background: ${({ theme }) => theme.primaryColor};
+    color: ${({ theme }) => theme.secondColor};
     padding: 8px 25px;
     border-radius: 5px;
     border: none;
@@ -13,7 +13,12 @@ const Button = styled.button`
     align-items: center;
     justify-content: center;
     transition: all 0.3s;
+    text-transform: lowercase;
     cursor: pointer;
+
+    &:hover {
+        color: ${({ theme }) => theme.fourthColor};
+    }
 
     svg {
         margin-right: 10px;
@@ -24,23 +29,43 @@ const Button = styled.button`
         secondary &&
         css`
             background: ${({ theme }) => theme.primaryColor};
-            color: ${({ theme }) => theme.secondColor};
-            &:hover {
-                color: ${({ theme }) => theme.fourthColor};
-            }
-        `}
-
-    ${({ third }) =>
-        third &&
-        css`
-            background: none;
-            color: ${({ theme }) => theme.secondColor};
-            padding: 0px 25px;
+            padding: 8px 25px;
             &:focus {
                 outline: none;
             }
             &:hover {
-                color: ${({ theme }) => theme.primaryColor};
+                color: ${({ theme }) => theme.secondColor};
+                background: ${({ theme }) => theme.primaryBackground};
+            }
+        `}
+
+    ${({ cancel }) =>
+        cancel &&
+        css`
+            background: ${({ theme }) => theme.primaryBackground};
+            color: ${({ theme }) => theme.secondColor};
+            padding: 0px 25px;
+            &:focus {
+                outline: 'none';
+            }
+            &:hover {
+                background: ${({ theme }) => theme.red};
+                color: ${({ theme }) => theme.fourthColor};
+            }
+        `}
+
+    ${({ accept }) =>
+        accept &&
+        css`
+            background: ${({ theme }) => theme.primaryColor};
+            color: ${({ theme }) => theme.fourthColor};
+            padding: 8px 25px;
+            &:focus {
+                outline: 'none';
+            }
+            &:hover {
+                background: ${({ theme }) => theme.green};
+                color: ${({ theme }) => theme.fourthColor};
             }
         `}
    
@@ -56,6 +81,19 @@ const Button = styled.button`
         css`
             width: 100%;
             line-height: ${({ theme }) => theme.font.XL};
+        `}
+
+    ${({ wide }) =>
+        wide &&
+        css`
+            width: 200px;
+            line-height: ${({ theme }) => theme.font.XL};
+        `}
+
+    ${({ rounded }) =>
+        rounded &&
+        css`
+            border-radius: 50px;
         `}
 `;
 
