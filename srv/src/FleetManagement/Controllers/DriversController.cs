@@ -70,7 +70,7 @@ namespace FleetManagement.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add([FromQuery] NewDriverAccountParams newDriverParams)
+        public IActionResult Add([FromBody] NewDriverAccountParams newDriverParams)
         {
             var newDriverId = driverAccountProvider.AddNewAndGetId(newDriverParams);
             
