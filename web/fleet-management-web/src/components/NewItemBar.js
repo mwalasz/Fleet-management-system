@@ -84,22 +84,28 @@ const NewItemBar = ({ isVisible, handleClose, setRefresh, token }) => {
                     drivingLicenseNumber: '',
                 }}
                 onSubmit={async (values) => {
+                    formRef.current
+                        .validateForm()
+                        .then(console.log('validation'));
                     setIsLoading(true);
                     setIsError('');
-                    const url = `${API_URL}/${
-                        isDriver ? 'drivers' : 'managers'
-                    }/add`;
 
                     const payload = values;
                     if (!isDriver) delete payload.drivingLicenseNumber;
 
                     await axios
-                        .post(url, payload, {
-                            withCredentials: true,
-                            headers: {
-                                Authorization: 'Bearer ' + token,
-                            },
-                        })
+                        .post(
+                            `${API_URL}/${
+                                isDriver ? 'drivers' : 'managers'
+                            }/add`,
+                            payload,
+                            {
+                                withCredentials: true,
+                                headers: {
+                                    Authorization: 'Bearer ' + token,
+                                },
+                            }
+                        )
                         .then((res) => {
                             const error = res.data.result;
                             if (
@@ -123,7 +129,7 @@ const NewItemBar = ({ isVisible, handleClose, setRefresh, token }) => {
                         });
                     setIsLoading(false);
                 }}
-                validationSchema={NewUserValidationSchema}
+                validationSchema={NewUserValidationSchema(isDriver)}
             >
                 {({ values, handleChange, handleBlur, errors, touched }) => (
                     <StyledForm>

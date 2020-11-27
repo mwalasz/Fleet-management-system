@@ -125,8 +125,8 @@ const Users = ({ user }) => {
                 <ContentHeader>
                     <Title>
                         {activeUsers
-                            ? 'Aktywni użytkownicy'
-                            : 'Nieaktywni użytkownicy'}
+                            ? 'Aktywni Użytkownicy'
+                            : 'Nieaktywni Użytkownicy'}
                     </Title>
                     <Button
                         wide
