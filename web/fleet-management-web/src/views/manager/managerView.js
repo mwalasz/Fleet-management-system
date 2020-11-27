@@ -1,22 +1,42 @@
-import React from "react";
-import { connect } from "react-redux";
-import ManagerNavigation from "./navigation/managerNavigation";
+import React from 'react';
+import { connect } from 'react-redux';
+import ManagerNavigation from './navigation/managerNavigation';
+import Dashboard from '../../components/Dashboard';
+import Content from '../../components/Content';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { ManagerRoutes } from '../../utils/routes';
+import Vehicles from './content/Vehicles';
+import Informations from './content/Informations';
+import Drivers from './content/Drivers';
 
 const ManagerView = ({ dispatch }) => {
-  return (
-    <div>
-      <ManagerNavigation dispatch={dispatch} />
-      <p>Manager site</p>
-    </div>
-  );
+    return (
+        <Dashboard>
+            <ManagerNavigation dispatch={dispatch} />
+            <Content>
+                <Switch>
+                    <Route path={ManagerRoutes.vehicles} component={Vehicles} />
+                    <Route
+                        path={ManagerRoutes.informations}
+                        component={Informations}
+                    />
+                    <Route path={ManagerRoutes.drivers} component={Drivers} />
+
+                    <Route
+                        render={() => <Redirect to={ManagerRoutes.vehicles} />}
+                    />
+                </Switch>
+            </Content>
+        </Dashboard>
+    );
 };
 
 const mapStateToProps = (state) => {
-  return {
-    isLoggingOut: state.isLoggingOut,
-    logoutError: state.logoutError,
-    user: state.user,
-  };
+    return {
+        isLoggingOut: state.isLoggingOut,
+        logoutError: state.logoutError,
+        user: state.user,
+    };
 };
 
 export default connect(mapStateToProps)(ManagerView);

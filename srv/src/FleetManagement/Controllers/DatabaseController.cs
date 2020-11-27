@@ -155,7 +155,7 @@ namespace FleetManagement.Controllers
                     IsActive = true,
                     FirstName = "Ala",
                     LastName = "Elementarzowa",
-                    Email = "ala@poczta.pl",
+                    Email = "admin@poczta.pl",
                     PasswordHash = hashService.GenerateHash("admin"),
                     PhoneNumber = "123456789",
                     Role = Roles.Admin,
@@ -203,6 +203,17 @@ namespace FleetManagement.Controllers
                     PasswordHash = hashService.GenerateHash("admin"),
                     PhoneNumber = "987654321",
                     Role = Roles.Driver,
+                },
+                new UserAccount()
+                {
+                    Id = 6,
+                    IsActive = true,
+                    FirstName = "Lewis",
+                    LastName = "Hamilton",
+                    Email = "hamilton@poczta.pl",
+                    PasswordHash = hashService.GenerateHash("admin"),
+                    PhoneNumber = "123456789",
+                    Role = Roles.Driver,
                 }
             };   
         }
@@ -226,22 +237,29 @@ namespace FleetManagement.Controllers
                 {
                     Id = 1,
                     UserAccountId = 2,
-                    DrivingLicenseNumber = "jebacpis",
+                    DrivingLicenseNumber = "P1234509",
                     Vehicles = vehicles.ToList(),
                 },
                 new DriverAccount()
                 {
                     Id = 2,
                     UserAccountId = 4,
-                    DrivingLicenseNumber = "***** ***",
+                    DrivingLicenseNumber = "P898989",
                     Vehicles = vehicles.ToList(),
                 },
                 new DriverAccount()
                 {
                     Id = 3,
                     UserAccountId = 5,
-                    DrivingLicenseNumber = "***** ***",
+                    DrivingLicenseNumber = "P323232",
                     Vehicles = vehicles.ToList(),
+                },
+                new DriverAccount()
+                {
+                    Id = 4,
+                    UserAccountId = 6,
+                    DrivingLicenseNumber = "P111111",
+                    Vehicles = new List<Vehicle>(),
                 }
             };
         }
@@ -352,6 +370,19 @@ namespace FleetManagement.Controllers
                 new Company()
                 {
                     Id = 1,
+                    Name = "JakaśFirma",
+                    Description = "Transportujemy rzeczy.",
+                    Address = "ul. Miejska 1, Warszawa 89-989",
+                    Mail = "firma@poczta.pl",
+                    NIP = "123-46-79",
+                    PhoneNumber = "123456789",
+                    Vehicles = vehicles.ToList(),
+                    ManagerAccountId = 1,
+                    Drivers = new List<DriverAccount>() { driverAccounts[1], driverAccounts[2] }
+				},
+                new Company()
+                {
+                    Id = 2,
                     Name = "Koszmarh",
                     Description = "Kochają studentów.",
                     Address = "Koszmarhowo 13, Kraków 89-989",
@@ -360,7 +391,7 @@ namespace FleetManagement.Controllers
                     PhoneNumber = "123456789",
                     Vehicles = vehicles.ToList(),
                     ManagerAccountId = 1,
-                    Drivers = new List<DriverAccount>() { driverAccounts[1], driverAccounts[2] }
+                    Drivers = new List<DriverAccount>() { driverAccounts[3] }
 				}
             };
         }
@@ -372,7 +403,7 @@ namespace FleetManagement.Controllers
                 new Trip()
                 {
                     Id = 1,
-                    DriverAccountId = 1,
+                    DriverAccountId = 3,
                     StartPlace = "Katowice",
                     StartTime = new DateTime(2012, 12, 12, 12, 12, 12),
                     DestinationPlace = "Gliwice",
@@ -384,24 +415,24 @@ namespace FleetManagement.Controllers
 				},
                 new Trip()
                 {
-                    Id = 1,
-                    DriverAccountId = 2,
-                    StartPlace = "asdfgdas",
-                    StartTime = new DateTime(2014, 12, 12, 12, 12, 12),
-                    DestinationPlace = "pliouk",
-                    DestinationArrivalTime = new DateTime(2018, 12, 12, 12, 28, 12),
-                    Distance = 130300,
+                    Id = 2,
+                    DriverAccountId = 3,
+                    StartPlace = "Katowice",
+                    StartTime = new DateTime(2018, 12, 12, 12, 12, 12),
+                    DestinationPlace = "Kraków",
+                    DestinationArrivalTime = new DateTime(2018, 12, 13, 12, 28, 12),
+                    Distance = 92300,
                     AverageSpeed = 89.2,
                     MaximumSpeed = 250.9,
                     TravelTime = 1697,
 				},
                 new Trip()
                 {
-                    Id = 1,
-                    DriverAccountId = 2,
-                    StartPlace = "bxcvxcv",
+                    Id = 3,
+                    DriverAccountId = 4,
+                    StartPlace = "Warszawa",
                     StartTime = new DateTime(2010, 12, 12, 12, 12, 12),
-                    DestinationPlace = "tuyutyytu",
+                    DestinationPlace = "Gdańsk",
                     DestinationArrivalTime = new DateTime(2011, 12, 12, 12, 28, 12),
                     Distance = 12350,
                     AverageSpeed = 63.2,
@@ -419,17 +450,31 @@ namespace FleetManagement.Controllers
                 {
                     Id = 1,
                     Name = "Volkswagen",
-                    Models = CreateBrandModels().ToList()
+                    Models = new List<BrandModel>() {brandModels[0], brandModels[1]}
                 },
                 new Brand()
                 {
                     Id = 2,
-                    Name = "Renault"
+                    Name = "Renault",
+                    Models = new List<BrandModel>() {brandModels[4]}
                 },
                 new Brand()
                 {
                     Id = 3,
-                    Name = "KIA"
+                    Name = "KIA",
+                    Models = new List<BrandModel>() {brandModels[5]}
+                },
+                new Brand()
+                {
+                    Id = 4,
+                    Name = "Ferrari",
+                    Models = new List<BrandModel>() {brandModels[2]}
+                },
+                new Brand()
+                {
+                    Id = 5,
+                    Name = "Porsche",
+                    Models = new List<BrandModel>() {brandModels[3]}
                 }
             };
         }
@@ -447,6 +492,26 @@ namespace FleetManagement.Controllers
                 {
                     Id = 2,
                     Name = "Passat"
+				},
+                new BrandModel()
+                {
+                    Id = 3,
+                    Name = "456 Speciale"
+				},
+                new BrandModel()
+                {
+                    Id = 4,
+                    Name = "911"
+				},
+                new BrandModel()
+                {
+                    Id = 5,
+                    Name = "Clio"
+				},
+                new BrandModel()
+                {
+                    Id = 6,
+                    Name = "Cee'd"
 				}
             };
         }

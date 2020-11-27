@@ -35,7 +35,7 @@ namespace FleetManagement.Authentication
             var user = userAccountProvider.GetAll()
                 .SingleOrDefault(x => x.Email == request.Email && hashService.CompareHashes(request.Password, x.PasswordHash));
 
-            if (user == null) return null;
+            if (user == null || !user.IsActive) return null;
 
             var token = GenerateToken(user);
 

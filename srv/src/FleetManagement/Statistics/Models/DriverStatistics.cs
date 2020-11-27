@@ -4,6 +4,11 @@ namespace FleetManagement.Statistics.Models
 {
     public class DriverStatistics
     {
+        public DriverStatistics()
+        {
+
+        }
+
         public DriverStatistics(double avgSpeedMpS, double distanceM, double durationS, double maxSpeedKmPH, int numOfTrips)
         {
             NumberOfTrips = numOfTrips;

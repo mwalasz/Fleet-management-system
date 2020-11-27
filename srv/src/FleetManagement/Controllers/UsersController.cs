@@ -28,19 +28,11 @@ namespace FleetManagement.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<UserAccountDto> GetAll(bool onlyActiveUsers = false)
+        public IEnumerable<UserAccountDto> GetAll(bool activeUsers)
         {
-            if (onlyActiveUsers)
-            {
-                return userAccountProvider.GetAll()
-                    .Where(user => user.IsActive)
-                    .Select(user => mapper.Map<UserAccount, UserAccountDto>(user));
-            }
-            else
-            {
-                return userAccountProvider.GetAll()
-                    .Select(user => mapper.Map<UserAccount, UserAccountDto>(user));
-            }
+            return userAccountProvider.GetAll()
+                .Where(user => user.IsActive == activeUsers)
+                .Select(user => mapper.Map<UserAccount, UserAccountDto>(user));
         }
 
         /// <summary>
@@ -49,10 +41,10 @@ namespace FleetManagement.Controllers
         /// <param name="ids">Lista kont do dezaktywacji.</param>
         /// <param name="isActive">Czy konta mają być aktywne, czy nie.</param>
         [HttpPut]
-        public IActionResult ChangeAvailability(IEnumerable<int> ids, bool isActive = false)
+        public IActionResult ChangeAvailability(IEnumerable<string> emails, bool isActive = false)
         {
-            var users = userAccountProvider.GetAll().
-                Where(user => ids.Contains(user.Id));
+            var users = userAccountProvider.GetAll()
+                .Where(user => emails.Contains(user.Email));
 
             if (users.Count().Equals(0))
                 return NotFound("Nie znaleziono podanych użytkowników.");
