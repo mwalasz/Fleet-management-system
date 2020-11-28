@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import NewItemBar from '../../../components/NewItemBar';
+import NewCompanyBar from '../../../components/newitem/newcompany/NewCompanyBar';
 import { DataGrid } from '@material-ui/data-grid';
 import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
-import { API_URL, userRoles } from '../../../utils/constans';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faRedo } from '@fortawesome/free-solid-svg-icons';
-import Checkbox from '@material-ui/core/Checkbox';
+import { API_URL } from '../../../utils/constans';
 import Button from '../../../components/Button';
 import Title from '../../../components/Title';
 import {
@@ -33,7 +30,6 @@ const Companies = ({ user }) => {
             })
             .then((res) => {
                 setLoading(false);
-                console.log(res);
                 res.data.result.forEach((x) => {
                     x.id = x.nip;
                     const manager = x.managerAccount.account;
@@ -42,7 +38,9 @@ const Companies = ({ user }) => {
                 if (res.data.result) setCompanies(res.data.result);
             })
             .catch((err) => {
-                console.log(err);
+                console.log(
+                    `An error occurred while downloading company data: ${err}`
+                );
             });
     }, [refresh]);
 
@@ -96,7 +94,7 @@ const Companies = ({ user }) => {
                         />
                     </DataGridWrapper>
                 </ContentBody>
-                <NewItemBar
+                <NewCompanyBar
                     isVisible={modalVisible}
                     handleClose={() => setModalVisible(false)}
                     setRefresh={() => setRefresh(!refresh)}
