@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import NewItemBar from '../../../components/NewItemBar';
+import NewUserBar from '../../../components/newitem/newuser/NewUserBar';
 import { DataGrid } from '@material-ui/data-grid';
 import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
@@ -160,7 +160,7 @@ const Users = ({ user }) => {
                         />
                     </DataGridWrapper>
                 </ContentBody>
-                <NewItemBar
+                <NewUserBar
                     isVisible={modalVisible}
                     handleClose={() => setModalVisible(false)}
                     setRefresh={() => setRefresh(!refresh)}

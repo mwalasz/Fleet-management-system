@@ -20,6 +20,10 @@ const Button = styled.button`
         color: ${({ theme }) => theme.fourthColor};
     }
 
+    &:focus {
+        outline: none;
+    }
+
     svg {
         margin-right: 10px;
         font-size: ${({ theme }) => theme.font.XS};

@@ -1,17 +1,17 @@
 import React, { useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
-import Heading from '../components/Heading';
+import Heading from '../../Heading';
 import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
 import axios from 'axios';
-import { API_URL, userRoles } from '../utils/constans';
-import Button from './Button';
-import Select from './Select';
-import { NewUserValidationSchema } from '../utils/validations';
+import { API_URL, userRoles } from '../../../utils/constans';
+import Select from '../../Select';
+import { newUserValidationSchema } from '../../../utils/validations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import NewItemInput from './newitem/NewItemInput';
-import NewItemText from './newitem/NewItemText';
+import NewItemInput from '../NewItemInput';
+import NewItemText from '../NewItemText';
+import NewItemBottomButtons from '../NewItemBottomButtons';
 
 const StyledWrapper = styled.div`
     border-left: 10px solid ${({ theme }) => theme.primaryColor};
@@ -54,7 +54,7 @@ const HeadingWrapper = styled.div`
     flex-direction: column;
 `;
 
-const NewItemBar = ({ isVisible, handleClose, setRefresh, token }) => {
+const NewUserBar = ({ isVisible, handleClose, setRefresh, user }) => {
     const [isDriver, setIsDriver] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState('');
@@ -102,7 +102,7 @@ const NewItemBar = ({ isVisible, handleClose, setRefresh, token }) => {
                             {
                                 withCredentials: true,
                                 headers: {
-                                    Authorization: 'Bearer ' + token,
+                                    Authorization: 'Bearer ' + user.token,
                                 },
                             }
                         )
@@ -129,9 +129,16 @@ const NewItemBar = ({ isVisible, handleClose, setRefresh, token }) => {
                         });
                     setIsLoading(false);
                 }}
-                validationSchema={NewUserValidationSchema(isDriver)}
+                validationSchema={newUserValidationSchema(isDriver)}
             >
-                {({ values, handleChange, handleBlur, errors, touched }) => (
+                {({
+                    values,
+                    handleChange,
+                    handleBlur,
+                    errors,
+                    touched,
+                    onSubmit,
+                }) => (
                     <StyledForm>
                         <Select
                             options={[userRoles.driver, userRoles.manager]}
@@ -208,31 +215,14 @@ const NewItemBar = ({ isVisible, handleClose, setRefresh, token }) => {
                                 name="drivingLicenseNumber"
                             />
                         )}
-                        <ButtonsWrapper>
-                            <Button
-                                wide
-                                rounded
-                                accept
-                                margin="0px 20px"
-                                type="submit"
-                            >
-                                DODAJ
-                            </Button>
-                            <Button
-                                wide
-                                rounded
-                                cancel
-                                margin="0px 20px"
-                                type="button"
-                                onClick={() => {
-                                    formRef.current.resetForm();
-                                    setIsError('');
-                                    handleClose();
-                                }}
-                            >
-                                ANULUJ
-                            </Button>
-                        </ButtonsWrapper>
+                        <NewItemBottomButtons
+                            onSubmit={onSubmit}
+                            resetForm={() => {
+                                formRef.current.resetForm();
+                                setIsError('');
+                                handleClose();
+                            }}
+                        />
                     </StyledForm>
                 )}
             </Formik>
@@ -242,8 +232,8 @@ const NewItemBar = ({ isVisible, handleClose, setRefresh, token }) => {
 
 const mapStateToProps = (state) => {
     return {
-        token: state.user,
+        user: state.user,
     };
 };
 
-export default connect(mapStateToProps)(NewItemBar);
+export default connect(mapStateToProps)(NewUserBar);
