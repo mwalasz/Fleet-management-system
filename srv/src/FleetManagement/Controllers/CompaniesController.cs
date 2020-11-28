@@ -36,7 +36,7 @@ namespace FleetManagement.Db.Repositories
         [HttpPost]
         public IActionResult Add([FromBody] NewCompanyParam newCompanyParam)
         {
-            var manager = managerAccountProvider.GetByMail(newCompanyParam.ManagerAccountMail);
+            var manager = managerAccountProvider.GetByMail(newCompanyParam.ManagerMail);
 
             if (manager == null)
                 return BadRequest("Nie znaleziono managera o podanym adresie email!");

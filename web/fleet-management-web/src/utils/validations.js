@@ -53,5 +53,4 @@ export const NewCompanyValidationSchema = Yup.object().shape({
         .length(10, 'Numer NIP musi zawierać 10 cyfr!')
         .required('Numer NIP  jest wymagany!'),
     phoneNumber: phoneValidation,
-    managerMail: mailValidation,
 });

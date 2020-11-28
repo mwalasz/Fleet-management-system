@@ -94,6 +94,8 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, token }) => {
 
                     const payload = values;
 
+                    payload.managerMail = 'zbigniew@stonoga.pl';
+
                     console.log('payload');
                     console.log(payload);
 
@@ -120,9 +122,12 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, token }) => {
                             }
                         })
                         .catch((error) => {
-                            setIsError(error.toString());
+                            const errorMessage =
+                                error.response.data.responseException
+                                    .exceptionMessage;
+                            setIsError(`Błąd: ${errorMessage}`);
                             console.log(
-                                `Error while user's attempt send data: ${error}`
+                                `Błąd w trakcie próby dodania nowej firmy: ${errorMessage}`
                             );
                         });
                     setIsLoading(false);
