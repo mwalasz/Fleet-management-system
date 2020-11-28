@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const NewItemText = styled.text`
+const NewItemErrorText = styled.text`
     align-self: center;
     margin-left: '10px';
     font-size: '10px';
@@ -8,4 +8,4 @@ const NewItemText = styled.text`
     font-weight: ${({ theme }) => theme.font.Bold};
 `;
 
-export default NewItemText;
+export default NewItemErrorText;

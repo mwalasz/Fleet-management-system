@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import FormInput from '../FormInput';
-import NewItemText from './NewItemText';
+import NewItemErrorText from './NewItemErrorText';
 
 const InputWithError = styled.div`
     display: flex;
@@ -11,6 +11,17 @@ const InputWithError = styled.div`
 const StyledInput = styled(FormInput)`
     margin-top: 30px;
 `;
+
+export const ErrorWrapper = ({ children, errors, touched }) => (
+    <InputWithError>
+        {children}
+        {errors && touched ? (
+            <NewItemErrorText>{errors}</NewItemErrorText>
+        ) : (
+            <span>&nbsp;&nbsp;</span>
+        )}
+    </InputWithError>
+);
 
 const NewItemInput = ({
     wide,
@@ -23,7 +34,7 @@ const NewItemInput = ({
     name,
     value,
 }) => (
-    <InputWithError>
+    <ErrorWrapper errors={errors} touched={touched}>
         <StyledInput
             error={errors && touched}
             wide={wide}
@@ -34,12 +45,7 @@ const NewItemInput = ({
             onBlur={handleBlur}
             value={value}
         />
-        {errors && touched ? (
-            <NewItemText>{errors}</NewItemText>
-        ) : (
-            <span>&nbsp;&nbsp;</span>
-        )}
-    </InputWithError>
+    </ErrorWrapper>
 );
 
 export default NewItemInput;

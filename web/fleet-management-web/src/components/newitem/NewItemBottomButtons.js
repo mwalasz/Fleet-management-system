@@ -5,12 +5,12 @@ import Button from '../Button';
 const ButtonsWrapper = styled.div`
     display: flex;
     position: fixed;
-    bottom: 200px;
+    bottom: ${({ low }) => (low ? '140px' : '200px')};
     align-self: center;
 `;
 
-const NewItemBottomButtons = ({ resetForm, onSubmit }) => (
-    <ButtonsWrapper>
+const NewItemBottomButtons = ({ resetForm, onSubmit, low }) => (
+    <ButtonsWrapper low={low}>
         <Button wide rounded accept margin="0px 20px" onClick={onSubmit}>
             DODAJ
         </Button>

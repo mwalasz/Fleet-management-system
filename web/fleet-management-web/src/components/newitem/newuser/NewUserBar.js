@@ -10,49 +10,15 @@ import { newUserValidationSchema } from '../../../utils/validations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import NewItemInput from '../NewItemInput';
-import NewItemText from '../NewItemText';
+import NewItemErrorText from '../NewItemErrorText';
 import NewItemBottomButtons from '../NewItemBottomButtons';
-
-const StyledWrapper = styled.div`
-    border-left: 10px solid ${({ theme }) => theme.primaryColor};
-    z-index: 999;
-    position: fixed;
-    display: flex;
-    padding: 50px 90px;
-    flex-direction: column;
-    right: 0;
-    top: 0;
-    height: 100vh;
-    width: 680px;
-    background-color: white;
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-    transform: translate(${({ isVisible }) => (isVisible ? '0' : '100%')});
-    transition: transform 0.25s ease-in-out;
-`;
-
-const StyledForm = styled(Form)`
-    display: flex;
-    flex-direction: column;
-    margin-top: 40px;
-`;
-
-const NameInputsWrapper = styled.div`
-    margin-top: 5px;
-    display: flex;
-    justify-content: space-between;
-`;
-
-const ButtonsWrapper = styled.div`
-    display: flex;
-    position: fixed;
-    bottom: 200px;
-    align-self: center;
-`;
-
-const HeadingWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
+import {
+    StyledForm,
+    TwoInputsInRowWrapper,
+    HeadingWrapper,
+    StyledWrapper,
+} from '../FormComponents';
+import SelectWrapper from '../SelectWrapper';
 
 const NewUserBar = ({ isVisible, handleClose, setRefresh, user }) => {
     const [isDriver, setIsDriver] = useState(false);
@@ -68,7 +34,7 @@ const NewUserBar = ({ isVisible, handleClose, setRefresh, user }) => {
                     {isLoading && <FontAwesomeIcon icon={faSpinner} spin />}
                 </Heading>
                 {isError !== '' ? (
-                    <NewItemText>{isError}</NewItemText>
+                    <NewItemErrorText>{isError}</NewItemErrorText>
                 ) : (
                     <span>&nbsp;&nbsp;</span>
                 )}
@@ -140,16 +106,22 @@ const NewUserBar = ({ isVisible, handleClose, setRefresh, user }) => {
                     onSubmit,
                 }) => (
                     <StyledForm>
-                        <Select
-                            options={[userRoles.driver, userRoles.manager]}
-                            value={
-                                isDriver ? userRoles.driver : userRoles.manager
-                            }
-                            onClick={(e) =>
-                                setIsDriver(e.target.value === userRoles.driver)
-                            }
-                        />
-                        <NameInputsWrapper>
+                        <SelectWrapper title={'Rola użytkownika:'}>
+                            <Select
+                                options={[userRoles.driver, userRoles.manager]}
+                                value={
+                                    isDriver
+                                        ? userRoles.driver
+                                        : userRoles.manager
+                                }
+                                onClick={(e) =>
+                                    setIsDriver(
+                                        e.target.value === userRoles.driver
+                                    )
+                                }
+                            />
+                        </SelectWrapper>
+                        <TwoInputsInRowWrapper>
                             <NewItemInput
                                 wide
                                 handleChange={handleChange}
@@ -172,7 +144,7 @@ const NewUserBar = ({ isVisible, handleClose, setRefresh, user }) => {
                                 type="text"
                                 name="lastName"
                             />
-                        </NameInputsWrapper>
+                        </TwoInputsInRowWrapper>
                         <NewItemInput
                             handleChange={handleChange}
                             handleBlur={handleBlur}

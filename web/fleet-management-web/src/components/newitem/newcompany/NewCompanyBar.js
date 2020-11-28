@@ -1,64 +1,62 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import Heading from '../../Heading';
 import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
 import axios from 'axios';
 import { API_URL, userRoles } from '../../../utils/constans';
-import Button from '../../Button';
-import Select from '../../Select';
 import { NewCompanyValidationSchema } from '../../../utils/validations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import NewItemInput from '../NewItemInput';
-import NewItemText from '../NewItemText';
+import NewItemInput, { ErrorWrapper } from '../NewItemInput';
+import NewItemErrorText from '../NewItemErrorText';
 import NewItemBottomButtons from '../NewItemBottomButtons';
+import Select from '../../Select';
+import {
+    StyledForm,
+    TwoInputsInRowWrapper,
+    HeadingWrapper,
+    StyledWrapper,
+} from '../FormComponents';
+import SelectWrapper from '../SelectWrapper';
 
-const StyledWrapper = styled.div`
-    border-left: 10px solid ${({ theme }) => theme.primaryColor};
-    z-index: 999;
-    position: fixed;
-    display: flex;
-    padding: 50px 90px;
-    flex-direction: column;
-    right: 0;
-    top: 0;
-    height: 100vh;
-    width: 680px;
-    background-color: white;
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-    transform: translate(${({ isVisible }) => (isVisible ? '0' : '100%')});
-    transition: transform 0.25s ease-in-out;
-`;
-
-const StyledForm = styled(Form)`
-    display: flex;
-    flex-direction: column;
-    margin-top: 40px;
-`;
-
-const NameInputsWrapper = styled.div`
-    margin-top: 5px;
-    display: flex;
-    justify-content: space-between;
-`;
-
-const ButtonsWrapper = styled.div`
-    display: flex;
-    position: fixed;
-    bottom: 200px;
-    align-self: center;
-`;
-
-const HeadingWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
-
-const NewCompanyBar = ({ isVisible, handleClose, setRefresh, token }) => {
+const NewCompanyBar = ({ isVisible, handleClose, setRefresh, user }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState('');
+    const [managers, setManagers] = useState([]);
+    const [activeManager, setActiveManager] = useState('');
     const formRef = useRef(null);
+
+    useEffect(async () => {
+        setIsLoading(true);
+        await axios
+            .get(`${API_URL}/managers/get_all`, {
+                withCredentials: true,
+                headers: {
+                    Authorization: 'Bearer ' + user.token,
+                },
+            })
+            .then((res) => {
+                const data = res.data.result;
+                let tempManagers = [];
+                data.forEach((el) => {
+                    let manager = {
+                        name: `${el.account.firstName} ${el.account.lastName}`,
+                        mail: el.account.email,
+                    };
+                    tempManagers = [...tempManagers, manager];
+                });
+                setManagers(tempManagers);
+                console.log(managers);
+            })
+            .catch((error) => {
+                console.log(
+                    `Błąd w trakcie pobierania dostępnych kont kierowników: ${error}`
+                );
+            });
+
+        setIsLoading(false);
+    }, []);
 
     return (
         <StyledWrapper isVisible={isVisible}>
@@ -68,7 +66,7 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, token }) => {
                     {isLoading && <FontAwesomeIcon icon={faSpinner} spin />}
                 </Heading>
                 {isError !== '' ? (
-                    <NewItemText>{isError}</NewItemText>
+                    <NewItemErrorText>{isError}</NewItemErrorText>
                 ) : (
                     <span>&nbsp;&nbsp;</span>
                 )}
@@ -93,8 +91,7 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, token }) => {
                     setIsError('');
 
                     const payload = values;
-
-                    payload.managerMail = 'zbigniew@stonoga.pl';
+                    values.managerMail = activeManager;
 
                     console.log('payload');
                     console.log(payload);
@@ -103,7 +100,7 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, token }) => {
                         .post(`${API_URL}/companies/add`, payload, {
                             withCredentials: true,
                             headers: {
-                                Authorization: 'Bearer ' + token,
+                                Authorization: 'Bearer ' + user.token,
                             },
                         })
                         .then((res) => {
@@ -143,6 +140,19 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, token }) => {
                     onSubmit,
                 }) => (
                     <StyledForm>
+                        <SelectWrapper
+                            title="Adres email managera:"
+                            errors={errors.managerMail}
+                            touched={touched.managerMail}
+                        >
+                            <Select
+                                options={managers.map((x) => x.mail)}
+                                value={activeManager}
+                                onClick={(e) =>
+                                    setActiveManager(e.target.value)
+                                }
+                            />
+                        </SelectWrapper>
                         <NewItemInput
                             handleChange={handleChange}
                             handleBlur={handleBlur}
@@ -193,7 +203,7 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, token }) => {
                             type="text"
                             name="phoneNumber"
                         />
-                        <NameInputsWrapper>
+                        <TwoInputsInRowWrapper>
                             <NewItemInput
                                 wide
                                 handleChange={handleChange}
@@ -216,14 +226,16 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, token }) => {
                                 type="text"
                                 name="addressStreet"
                             />
-                        </NameInputsWrapper>
+                        </TwoInputsInRowWrapper>
                         <NewItemBottomButtons
                             onSubmit={onSubmit}
                             resetForm={() => {
                                 formRef.current.resetForm();
                                 setIsError('');
+                                setActiveManager('');
                                 handleClose();
                             }}
+                            low
                         />
                     </StyledForm>
                 )}
@@ -234,7 +246,7 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, token }) => {
 
 const mapStateToProps = (state) => {
     return {
-        token: state.user,
+        user: state.user,
     };
 };
 
