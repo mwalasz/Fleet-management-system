@@ -80,6 +80,8 @@ const Users = ({ user }) => {
             type: 'number',
             width: 130,
             sortable: false,
+            align: 'center',
+            headerAlign: 'center',
         },
         {
             field: 'email',
@@ -97,13 +99,14 @@ const Users = ({ user }) => {
             },
         },
         {
+            headerAlign: 'center',
             field: 'remove',
             headerName: activeUsers ? 'Usuń' : 'Aktywuj',
             width: 90,
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <FontAwesomeIcon
+                    <StyledIcon
                         icon={activeUsers ? faTrash : faRedo}
                         onClick={() =>
                             handleUpdateUserAvailability(params.data.email)
@@ -169,6 +172,12 @@ const Users = ({ user }) => {
         </>
     );
 };
+
+const StyledIcon = styled(FontAwesomeIcon)`
+    margin: 0px auto;
+    cursor: pointer;
+`;
+
 const Text = styled.text`
     font-size: ${({ theme }) => theme.font.M};
     font-weight: ${({ theme }) => theme.font.Regular};
