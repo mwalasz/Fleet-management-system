@@ -1,46 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_URL } from '../../../utils/constans';
+import { API_URL } from '../../../../utils/constans';
 import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
-import Button from '../../../components/Button';
-import Title from '../../../components/Title';
+import Button from '../../../../components/Button';
+import Title from '../../../../components/Title';
 import {
     ContentWrapper,
     ContentBody,
     ContentHeader,
-} from '../../../components/PageContents';
+} from '../../../../components/PageContents';
 import { DataGrid } from '@material-ui/data-grid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import VehicleModal from '../../../components/showitem/VehicleModal';
+import TripModal from './TripModal';
+import moment from 'moment';
 
 const StyledIcon = styled(FontAwesomeIcon)`
     margin: 0px auto;
     cursor: pointer;
 `;
 
-const Vehicles = ({ user }) => {
+const formatDate = (params, isStart) => {
+    const date = isStart
+        ? params.data.startTime
+        : params.data.destinationArrivalTime;
+    return <p>{date ? moment(date).format('HH:mm, D.M.YYYY') : '-'}</p>;
+};
+
+const Trips = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
-    const [vehicles, setVehicles] = useState([]);
-    const [selectedVehicle, setSelectedVehicle] = useState(null);
+    const [trips, setTrips] = useState([]);
+    const [selectedTrip, setSelectedTrip] = useState(null);
 
     useEffect(() => {
         console.log('user');
         console.log(user);
         setLoading(true);
         axios
-            .get(
-                `${API_URL}/drivers/get_assigned_vehicles?mail=${user.email}`,
-                {
-                    withCredentials: true,
-                    headers: {
-                        Authorization: 'Bearer ' + user.token,
-                    },
-                }
-            )
+            .get(`${API_URL}/drivers/get_all_trips?mail=${user.email}`, {
+                withCredentials: true,
+                headers: {
+                    Authorization: 'Bearer ' + user.token,
+                },
+            })
             .then((res) => {
                 setLoading(false);
                 const data = res.data.result;
@@ -48,10 +53,7 @@ const Vehicles = ({ user }) => {
                 if (data) {
                     console.log('res.data.result');
                     console.log(data);
-                    data.forEach((vehicle) => {
-                        vehicle.id = vehicle.vin;
-                    });
-                    setVehicles(data);
+                    setTrips(data);
                 }
             })
             .catch((err) => {
@@ -63,35 +65,57 @@ const Vehicles = ({ user }) => {
 
     const columns = [
         {
-            field: 'brand',
-            headerName: 'Marka',
+            field: 'startPlace',
+            headerName: 'Miejsce rozpoczęcia',
             width: 180,
         },
         {
-            field: 'model',
-            headerName: 'Model',
+            field: 'startTime',
+            headerName: 'Czas rozpoczęcia',
             width: 150,
-        },
-        {
-            field: 'yearOfProduction',
-            headerName: 'Rok produkcji',
-            width: 120,
             sortable: false,
-            align: 'center',
-            headerAlign: 'center',
+            renderCell: (params) => formatDate(params, true),
         },
         {
-            field: 'licensePlate',
-            headerName: 'Tablica rejestracyjna',
+            field: 'destinationPlace',
+            headerName: 'Cel',
+            width: 180,
+        },
+        {
+            field: 'destinationArrivalTime',
+            headerName: 'Czas zakończenia',
             width: 165,
             align: 'center',
             headerAlign: 'center',
+            sortable: false,
+            renderCell: (params) => formatDate(params, false),
         },
         {
-            field: 'vin',
-            headerName: 'Numer VIN',
-            width: 190,
+            field: 'distance',
+            headerName: 'Dystans',
+            width: 100,
+            align: 'center',
+            headerAlign: 'center',
+        },
+        {
+            field: 'travelTime',
+            headerName: 'Czas jazdy',
+            width: 100,
             sortable: false,
+            align: 'center',
+            headerAlign: 'center',
+        },
+        {
+            field: 'averageSpeed',
+            headerName: 'Średnia prędkość',
+            width: 100,
+            align: 'center',
+            headerAlign: 'center',
+        },
+        {
+            field: 'maximumSpeed',
+            headerName: 'Maks. prędkość',
+            width: 100,
             align: 'center',
             headerAlign: 'center',
         },
@@ -106,7 +130,7 @@ const Vehicles = ({ user }) => {
                     <StyledIcon
                         icon={faInfoCircle}
                         onClick={() => {
-                            setSelectedVehicle(params.data);
+                            setSelectedTrip(params.data);
                             setModalVisible(!modalVisible);
                         }}
                     />
@@ -118,20 +142,13 @@ const Vehicles = ({ user }) => {
     return (
         <ContentWrapper>
             <ContentHeader>
-                <Title>{'Twoje przydzielone pojazdy'}</Title>
-                {/* <Button
-                        wide
-                        secondary
-                        onClick={() => setModalVisible(!modalVisible)}
-                    >
-                        POJAZD
-                    </Button> */}
+                <Title>{'Twoje trasy'}</Title>
             </ContentHeader>
             <ContentBody>
                 <DataGridWrapper>
                     <DataGrid
                         loading={loading}
-                        rows={vehicles}
+                        rows={trips}
                         columns={columns}
                         pageSize={parseInt(visualViewport.height / 80)}
                         disableSelectionOnClick
@@ -139,9 +156,9 @@ const Vehicles = ({ user }) => {
                     />
                 </DataGridWrapper>
             </ContentBody>
-            <VehicleModal
+            <TripModal
                 wide
-                vehicle={selectedVehicle}
+                trip={selectedTrip}
                 isVisible={modalVisible}
                 handleClose={() => setModalVisible(false)}
                 setRefresh={() => setRefresh(!refresh)}
@@ -171,4 +188,4 @@ const mapStateToProps = (state) => {
         user: state.user,
     };
 };
-export default connect(mapStateToProps)(Vehicles);
+export default connect(mapStateToProps)(Trips);
