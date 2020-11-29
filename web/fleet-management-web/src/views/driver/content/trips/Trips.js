@@ -12,7 +12,10 @@ import {
 } from '../../../../components/PageContents';
 import { DataGrid } from '@material-ui/data-grid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import {
+    faInfoCircle,
+    faMapMarkedAlt,
+} from '@fortawesome/free-solid-svg-icons';
 import TripModal from './TripModal';
 import {
     formatTimeData,
@@ -132,13 +135,13 @@ const Trips = ({ user }) => {
         {
             headerAlign: 'center',
             field: 'open',
-            headerName: 'Informacje',
+            headerName: 'Otwórz mapę',
             width: 130,
             sortable: false,
             renderCell: (params) => {
                 return (
                     <StyledIcon
-                        icon={faInfoCircle}
+                        icon={faMapMarkedAlt}
                         onClick={() => {
                             setSelectedTrip(params.data);
                             setModalVisible(!modalVisible);
