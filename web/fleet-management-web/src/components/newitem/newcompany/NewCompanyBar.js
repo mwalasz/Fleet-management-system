@@ -1,28 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
-import Heading from '../../Heading';
 import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
 import axios from 'axios';
-import { API_URL, userRoles } from '../../../utils/constans';
+import { API_URL } from '../../../utils/constans';
 import { NewCompanyValidationSchema } from '../../../utils/validations';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import NewItemInput, { ErrorWrapper } from '../NewItemInput';
-import NewItemErrorText from '../NewItemErrorText';
+import NewItemInput from '../NewItemInput';
 import NewItemBottomButtons from '../NewItemBottomButtons';
 import Select from '../../Select';
-import {
-    StyledForm,
-    TwoInputsInRowWrapper,
-    HeadingWrapper,
-    StyledWrapper,
-} from '../FormComponents';
+import { StyledForm, TwoInputsInRowWrapper } from '../FormComponents';
 import SelectWrapper from '../SelectWrapper';
+import Modal from './../../Modal';
 
 const NewCompanyBar = ({ isVisible, handleClose, setRefresh, user }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [isError, setIsError] = useState('');
+    const [error, setError] = useState('');
     const [managers, setManagers] = useState([]);
     const formRef = useRef(null);
 
@@ -66,18 +58,13 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, user }) => {
     }, []);
 
     return (
-        <StyledWrapper isVisible={isVisible}>
-            <HeadingWrapper>
-                <Heading big>
-                    {`Dodaj nowe przedsiębiorstwo:  `}
-                    {isLoading && <FontAwesomeIcon icon={faSpinner} spin />}
-                </Heading>
-                {isError !== '' ? (
-                    <NewItemErrorText>{isError}</NewItemErrorText>
-                ) : (
-                    <span>&nbsp;&nbsp;</span>
-                )}
-            </HeadingWrapper>
+        <Modal
+            isVisible={isVisible}
+            handleClose={handleClose}
+            title={'Dodaj nowe przedsiębiorstwo: '}
+            error={error}
+            isLoading={isLoading}
+        >
             <Formik
                 innerRef={formRef}
                 initialValues={{
@@ -95,7 +82,7 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, user }) => {
                         .validateForm()
                         .then(console.log('validation'));
                     setIsLoading(true);
-                    setIsError('');
+                    setError('');
 
                     const payload = values;
                     payload.address = `ul. ${values.addressStreet}, ${values.addressCity}`;
@@ -119,11 +106,11 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, user }) => {
                                 error.includes('Błąd' || 'Error')
                             ) {
                                 console.log('error');
-                                setIsError(error);
+                                setError(error);
                             } else {
                                 setRefresh();
                                 formRef.current.resetForm();
-                                setIsError('');
+                                setError('');
                                 setTimeout(handleClose, 1000);
                             }
                         })
@@ -131,7 +118,7 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, user }) => {
                             const errorMessage =
                                 error.response.data.responseException
                                     .exceptionMessage;
-                            setIsError(`Błąd: ${errorMessage}`);
+                            setError(`Błąd: ${errorMessage}`);
                             console.log(
                                 `Błąd w trakcie próby dodania nowej firmy: ${errorMessage}`
                             );
@@ -242,7 +229,7 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, user }) => {
                             onSubmit={onSubmit}
                             resetForm={() => {
                                 formRef.current.resetForm();
-                                setIsError('');
+                                setError('');
                                 handleClose();
                             }}
                             low
@@ -250,7 +237,7 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, user }) => {
                     </StyledForm>
                 )}
             </Formik>
-        </StyledWrapper>
+        </Modal>
     );
 };
 

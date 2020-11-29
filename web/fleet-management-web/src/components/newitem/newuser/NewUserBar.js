@@ -1,44 +1,31 @@
 import React, { useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
-import Heading from '../../Heading';
 import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
 import axios from 'axios';
 import { API_URL, userRoles } from '../../../utils/constans';
 import Select from '../../Select';
 import { newUserValidationSchema } from '../../../utils/validations';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import NewItemInput from '../NewItemInput';
-import NewItemErrorText from '../NewItemErrorText';
 import NewItemBottomButtons from '../NewItemBottomButtons';
-import {
-    StyledForm,
-    TwoInputsInRowWrapper,
-    HeadingWrapper,
-    StyledWrapper,
-} from '../FormComponents';
+import { StyledForm, TwoInputsInRowWrapper } from '../FormComponents';
 import SelectWrapper from '../SelectWrapper';
+import Modal from './../../Modal';
 
 const NewUserBar = ({ isVisible, handleClose, setRefresh, user }) => {
     const [isDriver, setIsDriver] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [isError, setIsError] = useState('');
+    const [error, setError] = useState('');
     const formRef = useRef(null);
 
     return (
-        <StyledWrapper isVisible={isVisible}>
-            <HeadingWrapper>
-                <Heading big>
-                    {`Dodaj nowego ${isDriver ? 'kierowcę' : 'kierownika'}:  `}
-                    {isLoading && <FontAwesomeIcon icon={faSpinner} spin />}
-                </Heading>
-                {isError !== '' ? (
-                    <NewItemErrorText>{isError}</NewItemErrorText>
-                ) : (
-                    <span>&nbsp;&nbsp;</span>
-                )}
-            </HeadingWrapper>
+        <Modal
+            isVisible={isVisible}
+            handleClose={handleClose}
+            title={`Dodaj nowego ${isDriver ? 'kierowcę' : 'kierownika'}:  `}
+            error={error}
+            isLoading={isLoading}
+        >
             <Formik
                 innerRef={formRef}
                 initialValues={{
@@ -54,7 +41,7 @@ const NewUserBar = ({ isVisible, handleClose, setRefresh, user }) => {
                         .validateForm()
                         .then(console.log('validation'));
                     setIsLoading(true);
-                    setIsError('');
+                    setError('');
 
                     const payload = values;
                     if (!isDriver) delete payload.drivingLicenseNumber;
@@ -79,16 +66,16 @@ const NewUserBar = ({ isVisible, handleClose, setRefresh, user }) => {
                                 error.includes('Błąd' || 'Error')
                             ) {
                                 console.log('error');
-                                setIsError(error);
+                                setError(error);
                             } else {
                                 setRefresh();
                                 formRef.current.resetForm();
-                                setIsError('');
+                                setError('');
                                 setTimeout(handleClose, 1000);
                             }
                         })
                         .catch((error) => {
-                            setIsError(error.toString());
+                            setError(error.toString());
                             console.log(
                                 `Error while user's attempt send data: ${error}`
                             );
@@ -191,14 +178,14 @@ const NewUserBar = ({ isVisible, handleClose, setRefresh, user }) => {
                             onSubmit={onSubmit}
                             resetForm={() => {
                                 formRef.current.resetForm();
-                                setIsError('');
+                                setError('');
                                 handleClose();
                             }}
                         />
                     </StyledForm>
                 )}
             </Formik>
-        </StyledWrapper>
+        </Modal>
     );
 };
 
