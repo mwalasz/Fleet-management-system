@@ -28,5 +28,12 @@ namespace FleetManagement.Db.Repositories
                     .Where(x => x.NIP == nip)
                     .Count() != 0;
         }
+
+        public bool CheckIfThisMailAlreadyExists(string mail)
+        {
+            return GetAll()
+                    .Where(x => x.Mail == mail)
+                    .Count() != 0;
+        }
     }
 }

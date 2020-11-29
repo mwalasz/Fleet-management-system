@@ -7,5 +7,6 @@ namespace FleetManagement.Entities.Companies
     {
         bool CheckIfThisNipAlreadyExists(string nip);
         bool CheckIfThisNameAlreadyExists(string name);
+        bool CheckIfThisMailAlreadyExists(string mail);
     }
 }

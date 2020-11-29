@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import FormInput from '../FormInput';
 import NewItemErrorText from './NewItemErrorText';
 
@@ -10,6 +10,12 @@ const InputWithError = styled.div`
 
 const StyledInput = styled(FormInput)`
     margin-top: 30px;
+
+    ${({ type }) =>
+        type === 'text' &&
+        css`
+            text-transform: capitalize;
+        `}
 `;
 
 export const ErrorWrapper = ({ children, errors, touched }) => (

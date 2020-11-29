@@ -98,7 +98,7 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, user }) => {
                     setIsError('');
 
                     const payload = values;
-                    payload.address = `${values.addressCity}, ${values.addressStreet}`;
+                    payload.address = `ul. ${values.addressStreet}, ${values.addressCity}`;
                     delete payload.addressCity;
                     delete payload.addressStreet;
 
@@ -233,7 +233,7 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, user }) => {
                                 errors={errors.addressStreet}
                                 touched={touched.addressStreet}
                                 value={values.addressStreet}
-                                placeholder="ulica, numer lokalu"
+                                placeholder="ulica numer lokalu np. Ulica 12/65"
                                 type="text"
                                 name="addressStreet"
                             />

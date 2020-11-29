@@ -68,6 +68,7 @@ namespace FleetManagement.Entities.Companies.Models
                 .Not.Nullable();
             Map(x => x.Address);
             Map(x => x.Mail)
+                .Unique()
                 .Not.Nullable();
             Map(x => x.PhoneNumber)
                 .Not.Nullable();
