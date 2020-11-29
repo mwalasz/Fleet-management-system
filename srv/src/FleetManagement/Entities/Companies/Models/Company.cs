@@ -58,14 +58,21 @@ namespace FleetManagement.Entities.Companies.Models
         public CompanyMap()
         {
             Id(x => x.Id);
-            Map(x => x.Name);
+            Map(x => x.Name)
+                .Unique()
+                .Not.Nullable();
             Map(x => x.Description)
-                .Nullable();            
-            Map(x => x.NIP);
+                .Nullable();
+            Map(x => x.NIP)
+                .Unique()
+                .Not.Nullable();
             Map(x => x.Address);
-            Map(x => x.Mail);
-            Map(x => x.PhoneNumber);
-            Map(x => x.ManagerAccountId);
+            Map(x => x.Mail)
+                .Not.Nullable();
+            Map(x => x.PhoneNumber)
+                .Not.Nullable();
+            Map(x => x.ManagerAccountId)
+                .Not.Nullable();
             HasMany(x => x.Drivers)
                 .Cascade.All()
                 .Not.LazyLoad();

@@ -24,7 +24,6 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, user }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState('');
     const [managers, setManagers] = useState([]);
-    const [activeManager, setActiveManager] = useState('');
     const formRef = useRef(null);
 
     useEffect(async () => {
@@ -46,6 +45,14 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, user }) => {
                     };
                     tempManagers = [...tempManagers, manager];
                 });
+
+                if (tempManagers.length === 0) {
+                    let manager = {
+                        mail: 'Brak dostępnych kierowników',
+                    };
+                    tempManagers = [...tempManagers, manager];
+                }
+
                 setManagers(tempManagers);
                 console.log(managers);
             })
@@ -91,7 +98,9 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, user }) => {
                     setIsError('');
 
                     const payload = values;
-                    values.managerMail = activeManager;
+                    payload.address = `${values.addressCity}, ${values.addressStreet}`;
+                    delete payload.addressCity;
+                    delete payload.addressStreet;
 
                     console.log('payload');
                     console.log(payload);
@@ -146,11 +155,13 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, user }) => {
                             touched={touched.managerMail}
                         >
                             <Select
+                                handleChange={handleChange}
+                                handleBlur={handleBlur}
                                 options={managers.map((x) => x.mail)}
-                                value={activeManager}
-                                onClick={(e) =>
-                                    setActiveManager(e.target.value)
-                                }
+                                value={values.managerMail}
+                                onClick={(e) => {
+                                    values.managerMail = e.target.value;
+                                }}
                             />
                         </SelectWrapper>
                         <NewItemInput
@@ -232,7 +243,6 @@ const NewCompanyBar = ({ isVisible, handleClose, setRefresh, user }) => {
                             resetForm={() => {
                                 formRef.current.resetForm();
                                 setIsError('');
-                                setActiveManager('');
                                 handleClose();
                             }}
                             low

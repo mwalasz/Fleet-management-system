@@ -21,7 +21,6 @@ export const StyledWrapper = styled.div`
 export const StyledForm = styled(Form)`
     display: flex;
     flex-direction: column;
-    margin-top: 40px;
 `;
 
 export const TwoInputsInRowWrapper = styled.div`
@@ -33,4 +32,5 @@ export const TwoInputsInRowWrapper = styled.div`
 export const HeadingWrapper = styled.div`
     display: flex;
     flex-direction: column;
+    margin-bottom: 20px;
 `;

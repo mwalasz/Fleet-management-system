@@ -15,13 +15,9 @@ const Wrapper = styled.div`
 const SelectWrapper = ({ title, errors, touched, children }) => (
     <Wrapper>
         <Text>{title}</Text>
-        {errors && touched ? (
-            <ErrorWrapper errors={errors} touched={touched}>
-                {children}
-            </ErrorWrapper>
-        ) : (
-            children
-        )}
+        <ErrorWrapper errors={errors} touched={touched}>
+            {children}
+        </ErrorWrapper>
     </Wrapper>
 );
 

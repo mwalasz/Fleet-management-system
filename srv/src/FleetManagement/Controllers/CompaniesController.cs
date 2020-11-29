@@ -43,6 +43,12 @@ namespace FleetManagement.Db.Repositories
 
             try
             {
+                if (companyProvider.CheckIfThisNameAlreadyExists(newCompanyParam.Name))
+                    return BadRequest("Przedsiębiorstwo o takiej nazwie już istnieje!");
+
+                if (companyProvider.CheckIfThisNipAlreadyExists(newCompanyParam.NIP))
+                    return BadRequest("Przedsiębiorstwo o takim numerze nip już istnieje!");
+
                 companyProvider.Add(new Company()
                 {
                     Address = newCompanyParam.Address,
