@@ -13,6 +13,7 @@ import {
 import { DataGrid } from '@material-ui/data-grid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import VehicleModal from '../../../components/showitem/VehicleModal';
 
 const StyledIcon = styled(FontAwesomeIcon)`
     margin: 0px auto;
@@ -24,6 +25,7 @@ const Vehicles = ({ user }) => {
     const [loading, setLoading] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [vehicles, setVehicles] = useState([]);
+    const [selectedVehicle, setSelectedVehicle] = useState(null);
 
     useEffect(() => {
         console.log('user');
@@ -103,7 +105,10 @@ const Vehicles = ({ user }) => {
                 return (
                     <StyledIcon
                         icon={faInfoCircle}
-                        onClick={() => console.log('dupa')}
+                        onClick={() => {
+                            setSelectedVehicle(params.data);
+                            setModalVisible(!modalVisible);
+                        }}
                     />
                 );
             },
@@ -114,7 +119,7 @@ const Vehicles = ({ user }) => {
         <>
             <ContentWrapper>
                 <ContentHeader>
-                    <Title>{'Dostępne pojazdy'}</Title>
+                    <Title>{'Twoje przydzielone pojazdy'}</Title>
                     {/* <Button
                         wide
                         secondary
@@ -135,6 +140,13 @@ const Vehicles = ({ user }) => {
                         />
                     </DataGridWrapper>
                 </ContentBody>
+                <VehicleModal
+                    wide
+                    vehicle={selectedVehicle}
+                    isVisible={modalVisible}
+                    handleClose={() => setModalVisible(false)}
+                    setRefresh={() => setRefresh(!refresh)}
+                />
             </ContentWrapper>
         </>
     );
