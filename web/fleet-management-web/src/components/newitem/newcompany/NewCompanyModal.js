@@ -10,9 +10,9 @@ import NewItemBottomButtons from '../NewItemBottomButtons';
 import Select from '../../Select';
 import { StyledForm, TwoInputsInRowWrapper } from '../FormComponents';
 import SelectWrapper from '../SelectWrapper';
-import Modal from './../../Modal';
+import Modal from '../../Modal';
 
-const NewCompanyBar = ({ isVisible, handleClose, setRefresh, user }) => {
+const NewCompanyModal = ({ isVisible, handleClose, setRefresh, user }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [managers, setManagers] = useState([]);
@@ -247,4 +247,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps)(NewCompanyBar);
+export default connect(mapStateToProps)(NewCompanyModal);

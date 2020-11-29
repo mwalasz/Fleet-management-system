@@ -10,9 +10,9 @@ import NewItemInput from '../NewItemInput';
 import NewItemBottomButtons from '../NewItemBottomButtons';
 import { StyledForm, TwoInputsInRowWrapper } from '../FormComponents';
 import SelectWrapper from '../SelectWrapper';
-import Modal from './../../Modal';
+import Modal from '../../Modal';
 
-const NewUserBar = ({ isVisible, handleClose, setRefresh, user }) => {
+const NewUserModal = ({ isVisible, handleClose, setRefresh, user }) => {
     const [isDriver, setIsDriver] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
@@ -195,4 +195,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps)(NewUserBar);
+export default connect(mapStateToProps)(NewUserModal);

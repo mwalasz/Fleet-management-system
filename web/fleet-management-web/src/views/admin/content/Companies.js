@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import NewCompanyBar from '../../../components/newitem/newcompany/NewCompanyBar';
+import NewCompanyModal from '../../../components/newitem/newcompany/NewCompanyModal';
 import { DataGrid } from '@material-ui/data-grid';
 import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
@@ -103,7 +103,7 @@ const Companies = ({ user }) => {
                         />
                     </DataGridWrapper>
                 </ContentBody>
-                <NewCompanyBar
+                <NewCompanyModal
                     isVisible={modalVisible}
                     handleClose={() => setModalVisible(false)}
                     setRefresh={() => setRefresh(!refresh)}
