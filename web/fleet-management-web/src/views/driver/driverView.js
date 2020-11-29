@@ -5,6 +5,7 @@ import Dashboard from '../../components/Dashboard';
 import DriverNavigation from './navigation/driverNavigation';
 import Vehicles from './content/Vehicles';
 import Statistics from './content/Statistics';
+import Trips from './content/Trips';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { DriverRoutes } from '../../utils/routes';
 
@@ -19,6 +20,7 @@ const DriverView = ({ dispatch }) => {
                         path={DriverRoutes.statistics}
                         component={Statistics}
                     />
+                    <Route path={DriverRoutes.trips} component={Trips} />
 
                     <Route
                         render={() => <Redirect to={DriverRoutes.vehicles} />}

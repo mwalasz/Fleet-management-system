@@ -3,6 +3,7 @@ const prefix = '/panel';
 export const DriverRoutes = {
     vehicles: prefix + '/vehicles',
     statistics: prefix + '/statistics',
+    trips: prefix + '/trips',
 };
 
 export const ManagerRoutes = {
