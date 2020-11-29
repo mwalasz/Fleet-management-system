@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCar, faInfo } from '@fortawesome/free-solid-svg-icons';
+import { faCar, faInfo, faRoute } from '@fortawesome/free-solid-svg-icons';
 import NavigationBar from '../../../components/navigation/NavigationBar';
 import StyledNavLink from '../../../components/navigation/StyledNavLink';
 import { DriverRoutes } from '../../../utils/routes';
@@ -13,6 +13,9 @@ const DriverNavigation = ({ dispatch }) => {
             </StyledNavLink>
             <StyledNavLink exact to={DriverRoutes.statistics}>
                 <FontAwesomeIcon icon={faInfo} /> Twoje statystyki
+            </StyledNavLink>
+            <StyledNavLink exact to={DriverRoutes.trips}>
+                <FontAwesomeIcon icon={faRoute} /> Twoje trasy
             </StyledNavLink>
         </NavigationBar>
     );
