@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Content from '../../components/Content';
 import Dashboard from '../../components/Dashboard';
 import DriverNavigation from './navigation/driverNavigation';
-import Vehicles from './content/Vehicles';
+import Vehicles from './content/vehicles/Vehicles';
 import Statistics from './content/Statistics';
 import Trips from './content/trips/Trips';
 import { Redirect, Route, Switch } from 'react-router-dom';

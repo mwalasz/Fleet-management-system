@@ -14,18 +14,24 @@ import { DataGrid } from '@material-ui/data-grid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import TripModal from './TripModal';
-import moment from 'moment';
+import {
+    formatTimeData,
+    formatDate,
+    formatDistance,
+    formatSpeed,
+} from '../../../../utils/formating';
 
 const StyledIcon = styled(FontAwesomeIcon)`
     margin: 0px auto;
     cursor: pointer;
 `;
 
-const formatDate = (params, isStart) => {
-    const date = isStart
-        ? params.data.startTime
-        : params.data.destinationArrivalTime;
-    return <p>{date ? moment(date).format('HH:mm, D.M.YYYY') : '-'}</p>;
+const StyledCell = styled.p`
+    margin: 0px auto;
+`;
+
+const p = (data) => {
+    return <StyledCell>{data}</StyledCell>;
 };
 
 const Trips = ({ user }) => {
@@ -74,7 +80,7 @@ const Trips = ({ user }) => {
             headerName: 'Czas rozpoczęcia',
             width: 150,
             sortable: false,
-            renderCell: (params) => formatDate(params, true),
+            renderCell: (params) => p(formatDate(params.data.startTime)),
         },
         {
             field: 'destinationPlace',
@@ -88,7 +94,8 @@ const Trips = ({ user }) => {
             align: 'center',
             headerAlign: 'center',
             sortable: false,
-            renderCell: (params) => formatDate(params, false),
+            renderCell: (params) =>
+                p(formatDate(params.data.destinationArrivalTime)),
         },
         {
             field: 'distance',
@@ -96,28 +103,31 @@ const Trips = ({ user }) => {
             width: 100,
             align: 'center',
             headerAlign: 'center',
+            renderCell: (params) => p(formatDistance(params.data.distance)),
         },
         {
             field: 'travelTime',
             headerName: 'Czas jazdy',
-            width: 100,
+            width: 150,
             sortable: false,
-            align: 'center',
             headerAlign: 'center',
+            renderCell: (params) => p(formatTimeData(params.data.travelTime)),
         },
         {
             field: 'averageSpeed',
-            headerName: 'Średnia prędkość',
-            width: 100,
+            headerName: 'Śr. prędkość',
+            width: 120,
             align: 'center',
             headerAlign: 'center',
+            renderCell: (params) => p(formatSpeed(params.data.averageSpeed)),
         },
         {
             field: 'maximumSpeed',
             headerName: 'Maks. prędkość',
-            width: 100,
+            width: 140,
             align: 'center',
             headerAlign: 'center',
+            renderCell: (params) => p(formatSpeed(params.data.maximumSpeed)),
         },
         {
             headerAlign: 'center',

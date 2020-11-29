@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_URL } from '../../../utils/constans';
+import { API_URL } from '../../../../utils/constans';
 import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
-import Button from '../../../components/Button';
-import Title from '../../../components/Title';
+import Button from '../../../../components/Button';
+import Title from '../../../../components/Title';
 import {
     ContentWrapper,
     ContentBody,
     ContentHeader,
-} from '../../../components/PageContents';
+} from '../../../../components/PageContents';
 import { DataGrid } from '@material-ui/data-grid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import VehicleModal from '../../../components/showitem/VehicleModal';
+import VehicleModal from './VehicleModal';
 
 const StyledIcon = styled(FontAwesomeIcon)`
     margin: 0px auto;
