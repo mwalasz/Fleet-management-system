@@ -12,8 +12,16 @@ import {
 } from '../../../../components/PageContents';
 import { DataGrid } from '@material-ui/data-grid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import VehicleModal from './VehicleModal';
+import {
+    faGasPump,
+    faInfoCircle,
+    faRoute,
+    faTools,
+} from '@fortawesome/free-solid-svg-icons';
+import VehicleInformationModal from './VehicleInformationModal';
+import VehicleMaintenancesModal from './modals/VehicleMaintenancesModal';
+import VehicleTripsModal from './modals/VehicleTripsModal';
+import VehicleRefuelingsModal from './modals/VehicleRefuelingsModal';
 
 const StyledIcon = styled(FontAwesomeIcon)`
     margin: 0px auto;
@@ -23,7 +31,12 @@ const StyledIcon = styled(FontAwesomeIcon)`
 const Vehicles = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
+    const [detailsModalVisible, setDetailsModalVisible] = useState(false);
+    const [tripsModalVisible, setTripsModalVisible] = useState(false);
+    const [refuelingsModalVisible, setRefuelingsModalVisible] = useState(false);
+    const [maintenancesModalVisible, setMaintenancesModalVisible] = useState(
+        false
+    );
     const [vehicles, setVehicles] = useState([]);
     const [selectedVehicle, setSelectedVehicle] = useState(null);
 
@@ -98,8 +111,8 @@ const Vehicles = ({ user }) => {
         {
             headerAlign: 'center',
             field: 'open',
-            headerName: 'Informacje',
-            width: 130,
+            headerName: 'Szczegóły',
+            width: 100,
             sortable: false,
             renderCell: (params) => {
                 return (
@@ -107,7 +120,63 @@ const Vehicles = ({ user }) => {
                         icon={faInfoCircle}
                         onClick={() => {
                             setSelectedVehicle(params.data);
-                            setModalVisible(!modalVisible);
+                            setDetailsModalVisible(!detailsModalVisible);
+                        }}
+                    />
+                );
+            },
+        },
+        {
+            headerAlign: 'center',
+            field: 'open',
+            headerName: 'Trasy',
+            width: 100,
+            sortable: false,
+            renderCell: (params) => {
+                return (
+                    <StyledIcon
+                        icon={faRoute}
+                        onClick={() => {
+                            setSelectedVehicle(params.data);
+                            setTripsModalVisible(!tripsModalVisible);
+                        }}
+                    />
+                );
+            },
+        },
+        {
+            headerAlign: 'center',
+            field: 'open',
+            headerName: 'Tankowania',
+            width: 140,
+            sortable: false,
+            renderCell: (params) => {
+                return (
+                    <StyledIcon
+                        icon={faGasPump}
+                        onClick={() => {
+                            setSelectedVehicle(params.data);
+                            setRefuelingsModalVisible(!refuelingsModalVisible);
+                        }}
+                    />
+                );
+            },
+        },
+        {
+            headerAlign: 'center',
+            field: 'open',
+            headerName: 'Serwisy',
+            width: 100,
+            sortable: false,
+            renderCell: (params) => {
+                return (
+                    <StyledIcon
+                        icon={faTools}
+                        onClick={() => {
+                            setSelectedVehicle(params.data);
+                            setMaintenancesModalVisible(
+                                !maintenancesModalVisible
+                            );
                         }}
                     />
                 );
@@ -139,11 +208,32 @@ const Vehicles = ({ user }) => {
                     />
                 </DataGridWrapper>
             </ContentBody>
-            <VehicleModal
+            <VehicleInformationModal
                 wide
                 vehicle={selectedVehicle}
-                isVisible={modalVisible}
-                handleClose={() => setModalVisible(false)}
+                isVisible={detailsModalVisible}
+                handleClose={() => setDetailsModalVisible(false)}
+                setRefresh={() => setRefresh(!refresh)}
+            />
+            <VehicleMaintenancesModal
+                wide
+                vehicle={selectedVehicle}
+                isVisible={maintenancesModalVisible}
+                handleClose={() => setMaintenancesModalVisible(false)}
+                setRefresh={() => setRefresh(!refresh)}
+            />
+            <VehicleTripsModal
+                wide
+                vehicle={selectedVehicle}
+                isVisible={tripsModalVisible}
+                handleClose={() => setTripsModalVisible(false)}
+                setRefresh={() => setRefresh(!refresh)}
+            />
+            <VehicleRefuelingsModal
+                wide
+                vehicle={selectedVehicle}
+                isVisible={refuelingsModalVisible}
+                handleClose={() => setRefuelingsModalVisible(false)}
                 setRefresh={() => setRefresh(!refresh)}
             />
         </ContentWrapper>

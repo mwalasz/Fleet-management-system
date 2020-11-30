@@ -1,11 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
-import Modal from '../../../../components/Modal';
+import Modal from '../../../../../components/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
-const VehicleModal = ({ isVisible, handleClose, children, wide, vehicle }) => {
+const VehicleTripsModal = ({
+    isVisible,
+    handleClose,
+    children,
+    wide,
+    vehicle,
+}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -16,7 +22,10 @@ const VehicleModal = ({ isVisible, handleClose, children, wide, vehicle }) => {
                 handleClose={handleClose}
                 error={error}
                 isLoading={isLoading}
-                title={vehicle ? `${vehicle.brand} ${vehicle.model}` : 'Pojazd'}
+                title={
+                    'Trasy pojazdu' +
+                    (vehicle && ` ${vehicle.brand} ${vehicle.model}`)
+                }
                 wide
             >
                 {/* <HeadingWrapper>
@@ -37,4 +46,4 @@ const VehicleModal = ({ isVisible, handleClose, children, wide, vehicle }) => {
     );
 };
 
-export default VehicleModal;
+export default VehicleTripsModal;
