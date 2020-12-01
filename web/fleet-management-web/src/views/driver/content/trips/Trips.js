@@ -66,6 +66,7 @@ const Trips = ({ user }) => {
                 }
             })
             .catch((err) => {
+                setLoading(false);
                 console.log(
                     `An error occurred while downloading user's vehicles: ${err}`
                 );

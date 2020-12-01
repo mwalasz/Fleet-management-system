@@ -18,7 +18,7 @@ import {
     faRoute,
     faTools,
 } from '@fortawesome/free-solid-svg-icons';
-import VehicleInformationModal from './VehicleInformationModal';
+import VehicleInformationModal from './modals/VehicleInformationModal';
 import VehicleMaintenancesModal from './modals/VehicleMaintenancesModal';
 import VehicleTripsModal from './modals/VehicleTripsModal';
 import VehicleRefuelingsModal from './modals/VehicleRefuelingsModal';
