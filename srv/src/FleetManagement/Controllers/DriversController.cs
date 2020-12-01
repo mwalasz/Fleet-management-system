@@ -53,7 +53,7 @@ namespace FleetManagement.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAssignedVehicles([FromQuery] string mail)
+        public IActionResult GetAssignedVehicles([FromQuery] string mail, bool extended = false)
         {
             var emptyList = new List<VehicleBasicInfoDto>();
             var driver = driverAccountProvider.GetByMail(mail);
@@ -62,11 +62,14 @@ namespace FleetManagement.Controllers
             {
                 var vehicles = driver.Vehicles.ToList();
 
-                var toReturn = vehicles.Count != 0
-                    ? vehicles.Select(x => mapper.Map<Vehicle, VehicleBasicInfoDto>(x))
-                    : emptyList;
+                if (vehicles.Count != 0)
+                {
+                    return extended
+                        ? Ok(vehicles.Select(x => mapper.Map<Vehicle, VehicleDto>(x)))
+                        : Ok(vehicles.Select(x => mapper.Map<Vehicle, VehicleBasicInfoDto>(x)));
+                }
 
-                return Ok(toReturn);
+                return Ok(vehicles);
             }
             
             return BadRequest("Użytkownik nie jest kierowcą lub podano błędny mail!");

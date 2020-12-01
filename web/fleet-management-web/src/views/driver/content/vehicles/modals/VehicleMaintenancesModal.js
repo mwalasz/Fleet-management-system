@@ -23,7 +23,7 @@ const VehicleMaintenancesModal = ({
                 error={error}
                 isLoading={isLoading}
                 title={
-                    'Serwisy i naprawy pojazdu' +
+                    'Wszystkie serwisy i naprawy pojazdu' +
                     (vehicle && ` ${vehicle.brand} ${vehicle.model}`)
                 }
                 wide

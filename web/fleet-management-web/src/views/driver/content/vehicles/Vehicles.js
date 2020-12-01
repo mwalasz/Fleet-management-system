@@ -46,7 +46,7 @@ const Vehicles = ({ user }) => {
         setLoading(true);
         axios
             .get(
-                `${API_URL}/drivers/get_assigned_vehicles?mail=${user.email}`,
+                `${API_URL}/drivers/get_assigned_vehicles?mail=${user.email}&extended=true`,
                 {
                     withCredentials: true,
                     headers: {

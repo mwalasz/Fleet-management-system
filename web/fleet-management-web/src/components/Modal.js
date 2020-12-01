@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Heading from './Heading';
 import { connect } from 'react-redux';
 import axios from 'axios';
@@ -27,34 +27,56 @@ const StyledWrapper = styled.div`
     right: 0;
     top: 0;
     height: 100vh;
-    width: ${({ wide }) => (wide ? '50vw' : '680px')};
+    width: 680px;
     background-color: white;
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
     transform: translate(${({ isVisible }) => (isVisible ? '0' : '100%')});
     transition: transform 0.25s ease-in-out;
+
+    ${({ wide }) =>
+        wide &&
+        css`
+            width: 50vw;
+        `}
+
+    ${({ ultraWide }) =>
+        ultraWide &&
+        css`
+            width: 65vw;
+        `}
 `;
 
 const Content = styled.div``;
+
+const StyledSpinner = styled(FontAwesomeIcon)`
+    margin-left: 10px;
+    color: ${({ theme }) => theme.primaryColor};
+`;
 
 const Modal = ({
     isVisible,
     handleClose,
     children,
     wide,
+    ultraWide,
     title,
     error,
     isLoading,
 }) => {
     return (
         <>
-            <StyledWrapper isVisible={isVisible} wide={wide}>
+            <StyledWrapper
+                isVisible={isVisible}
+                wide={wide}
+                ultraWide={ultraWide}
+            >
                 <Content>
                     <ExitIcon icon={faTimes} onClick={handleClose} />
                     <HeadingWrapper>
                         <Heading big>
                             {title}
                             {isLoading && (
-                                <FontAwesomeIcon icon={faSpinner} spin />
+                                <StyledSpinner icon={faSpinner} spin />
                             )}
                         </Heading>
                         {error !== '' ? (

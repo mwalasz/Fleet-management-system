@@ -23,7 +23,7 @@ const VehicleRefuelingsModal = ({
                 error={error}
                 isLoading={isLoading}
                 title={
-                    'Tankowania pojazdu' +
+                    'Wszystkie tankowania pojazdu' +
                     (vehicle && ` ${vehicle.brand} ${vehicle.model}`)
                 }
                 wide
