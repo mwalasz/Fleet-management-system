@@ -2,6 +2,7 @@
 using FleetManagement.Entities.Vehicles;
 using FleetManagement.Entities.Vehicles.Models;
 using NHibernate;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FleetManagement.Db.Repositories
@@ -19,6 +20,16 @@ namespace FleetManagement.Db.Repositories
         {
             return GetAll()
                 .FirstOrDefault(x => x.VIN.Equals(vin)) ?? null;
+        }
+
+        public List<Vehicle> GetVehiclesByVinNumber(string[] vinNumbers)
+        {
+            if (vinNumbers.Length == 0)
+                return new List<Vehicle>();
+
+            return GetAll()
+                .Where(x => vinNumbers.Contains(x.VIN))
+                .ToList();
         }
     }
 }

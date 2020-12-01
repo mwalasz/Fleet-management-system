@@ -49,7 +49,7 @@ namespace FleetManagement.Controllers
             var vehicle = vehicleProvider.GetByVinNumber(vin);
 
             if (vehicle == null)
-                return NotFound("No vehicle with corresponding VIN number!");
+                return BadRequest("No vehicle with corresponding VIN number!");
 
             var powertrain = powertrainProvider.GetById(vehicle?.Powertrain.Id);
 
@@ -66,7 +66,7 @@ namespace FleetManagement.Controllers
             var vehicle = vehicleProvider.GetByVinNumber(vin);
 
             if (vehicle == null)
-                return NotFound("No vehicle with corresponding VIN number!");
+                return BadRequest("No vehicle with corresponding VIN number!");
 
             var refuelings = vehicle.Refuelings.Select(x => mapper.Map<Refueling, RefuelingDto>(x));
 
@@ -79,7 +79,7 @@ namespace FleetManagement.Controllers
             var vehicle = vehicleProvider.GetByVinNumber(vin);
 
             if (vehicle == null)
-                return NotFound("No vehicle with corresponding VIN number!");
+                return BadRequest("No vehicle with corresponding VIN number!");
 
             var repairs = vehicle.RepairsAndServices.Select(x => mapper.Map<Maintenance, MaintenanceDto>(x));
 
@@ -92,11 +92,22 @@ namespace FleetManagement.Controllers
             var vehicle = vehicleProvider.GetByVinNumber(vin);
 
             if (vehicle == null)
-                return NotFound("No vehicle with corresponding VIN number!");
+                return BadRequest("No vehicle with corresponding VIN number!");
 
             var trips = vehicle.Trips.Select(x => mapper.Map<Trip, TripDto>(x));
 
             return Ok(trips);
+        }
+
+        [HttpGet]
+        public IActionResult GetInfo([FromQuery] string vin)
+        {
+            var vehicle = vehicleProvider.GetByVinNumber(vin);
+
+            if (vehicle == null)
+                return BadRequest("No vehicle with corresponding VIN number!");
+
+            return Ok(mapper.Map<Vehicle, VehicleDto>(vehicle));
         }
     }
 }

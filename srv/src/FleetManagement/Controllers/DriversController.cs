@@ -5,6 +5,7 @@ using FleetManagement.Entities.Accounts.DriverAccounts.Models;
 using FleetManagement.Entities.Accounts.DriverAccounts.Params;
 using FleetManagement.Entities.Companies.Models;
 using FleetManagement.Entities.Trips;
+using FleetManagement.Entities.Vehicles;
 using FleetManagement.Entities.Vehicles.Models;
 using FleetManagement.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -23,13 +24,15 @@ namespace FleetManagement.Controllers
         private readonly IMapper mapper;
         private readonly IDriverAccountProvider driverAccountProvider;
         private readonly ITripProvider tripProvider;
+        private readonly IVehicleProvider vehicleProvider;
 
         public DriversController(IMapper mapper, IDriverAccountProvider driverAccountProvider,
-            ITripProvider tripProvider)
+            ITripProvider tripProvider, IVehicleProvider vehicleProvider)
         {
             this.mapper = mapper;
             this.driverAccountProvider = driverAccountProvider;
             this.tripProvider = tripProvider;
+            this.vehicleProvider = vehicleProvider;
         }
 
         [HttpGet]
@@ -66,7 +69,7 @@ namespace FleetManagement.Controllers
                 return Ok(toReturn);
             }
             
-            return NotFound("User is not a driver or wrong email!");
+            return BadRequest("Użytkownik nie jest kierowcą lub podano błędny mail!");
         }
 
         [HttpPost]
@@ -102,6 +105,31 @@ namespace FleetManagement.Controllers
             }
 
             return NotFound();
+        }
+
+        [HttpPut]
+        public IActionResult ChangeAvailableVehicles([FromBody] ChangeAvailableVehiclesParams changeUserVehiclesParams)
+        {
+            var driver = driverAccountProvider.GetByMail(changeUserVehiclesParams.Mail);
+
+            if (driver != null)
+            {
+                try
+                {
+                    var newList = vehicleProvider.GetVehiclesByVinNumber(changeUserVehiclesParams.VehiclesVin);
+
+                    driver.Vehicles = newList;
+                    driverAccountProvider.Update(driver);
+
+                    return Ok("Pomyślnie zaktualizowano listę dostępnych pojazdów.");
+                }
+                catch (System.Exception e)
+                {
+                    BadRequest(e);
+                }
+            }
+            
+            return BadRequest("Użytkownik nie jest kierowcą lub podano błędny mail!");
         }
     }
 }
