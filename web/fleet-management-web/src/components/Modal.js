@@ -60,6 +60,7 @@ const Modal = ({
     wide,
     ultraWide,
     title,
+    centeredTitle,
     error,
     isLoading,
 }) => {
@@ -73,7 +74,7 @@ const Modal = ({
                 <Content>
                     <ExitIcon icon={faTimes} onClick={handleClose} />
                     <HeadingWrapper>
-                        <Heading big>
+                        <Heading big centered={centeredTitle}>
                             {title}
                             {isLoading && (
                                 <StyledSpinner icon={faSpinner} spin />

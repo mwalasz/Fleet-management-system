@@ -17,11 +17,13 @@ import {
     faInfoCircle,
     faRoute,
     faTools,
+    faTachometerAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import VehicleInformationModal from './modals/VehicleInformationModal';
 import VehicleMaintenancesModal from './modals/VehicleMaintenancesModal';
 import VehicleTripsModal from './modals/VehicleTripsModal';
 import VehicleRefuelingsModal from './modals/VehicleRefuelingsModal';
+import { vehiclesCondensedColumns } from '../../../../utils/columns';
 
 const StyledIcon = styled(FontAwesomeIcon)`
     margin: 0px auto;
@@ -74,40 +76,7 @@ const Vehicles = ({ user }) => {
             });
     }, [refresh]);
 
-    const columns = [
-        {
-            field: 'brand',
-            headerName: 'Marka',
-            width: 180,
-        },
-        {
-            field: 'model',
-            headerName: 'Model',
-            width: 150,
-        },
-        {
-            field: 'yearOfProduction',
-            headerName: 'Rok produkcji',
-            width: 120,
-            sortable: false,
-            align: 'center',
-            headerAlign: 'center',
-        },
-        {
-            field: 'licensePlate',
-            headerName: 'Tablica rejestracyjna',
-            width: 165,
-            align: 'center',
-            headerAlign: 'center',
-        },
-        {
-            field: 'vin',
-            headerName: 'Numer VIN',
-            width: 190,
-            sortable: false,
-            align: 'center',
-            headerAlign: 'center',
-        },
+    const columnsButtons = [
         {
             headerAlign: 'center',
             field: 'open',
@@ -201,7 +170,10 @@ const Vehicles = ({ user }) => {
                     <DataGrid
                         loading={loading}
                         rows={vehicles}
-                        columns={columns}
+                        columns={[
+                            ...vehiclesCondensedColumns,
+                            ...columnsButtons,
+                        ]}
                         pageSize={parseInt(visualViewport.height / 80)}
                         disableSelectionOnClick
                         hideFooterRow

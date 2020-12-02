@@ -72,6 +72,36 @@ export const formatMileage = (mileage) => {
     return p(toReturn);
 };
 
+export const formatWeight = (weight) => {
+    const toReturn = weight != null ? `${weight} kg` : errorMessage;
+
+    return p(toReturn);
+};
+
+export const formatEngineType = (engineType) => {
+    switch (engineType) {
+        case 'Petrol':
+            return 'benzynowy';
+
+        default:
+            return errorMessage;
+    }
+};
+
+export const formatDriveType = (driveType) => {
+    switch (driveType) {
+        case 'RWD':
+            return 'tylno-napędowy';
+        case 'FWD':
+            return 'przednio-napędowy';
+        case '4x4':
+            return '4x4';
+
+        default:
+            return errorMessage;
+    }
+};
+
 const StyledCell = styled.p`
     margin: 0px auto;
 `;

@@ -149,3 +149,39 @@ export const maintenancesColumns = [
         headerAlign: 'center',
     },
 ];
+
+export const vehiclesCondensedColumns = [
+    {
+        field: 'brand',
+        headerName: 'Marka',
+        width: 180,
+    },
+    {
+        field: 'model',
+        headerName: 'Model',
+        width: 150,
+    },
+    {
+        field: 'yearOfProduction',
+        headerName: 'Rok produkcji',
+        width: 120,
+        sortable: false,
+        align: 'center',
+        headerAlign: 'center',
+    },
+    {
+        field: 'licensePlate',
+        headerName: 'Tablica rejestracyjna',
+        width: 165,
+        align: 'center',
+        headerAlign: 'center',
+    },
+    {
+        field: 'vin',
+        headerName: 'Numer VIN',
+        width: 190,
+        sortable: false,
+        align: 'center',
+        headerAlign: 'center',
+    },
+];
