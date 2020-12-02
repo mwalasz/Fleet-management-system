@@ -12,17 +12,9 @@ import {
 } from '../../../../components/PageContents';
 import { DataGrid } from '@material-ui/data-grid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faInfoCircle,
-    faMapMarkedAlt,
-} from '@fortawesome/free-solid-svg-icons';
+import { faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons';
 import TripModal from './TripModal';
-import {
-    formatTimeData,
-    formatDate,
-    formatDistance,
-    formatSpeed,
-} from '../../../../utils/formating';
+import { tripsColumns } from '../../../../utils/columns';
 
 const StyledIcon = styled(FontAwesomeIcon)`
     margin: 0px auto;
@@ -65,66 +57,7 @@ const Trips = ({ user }) => {
             });
     }, [refresh]);
 
-    const columns = [
-        {
-            field: 'startPlace',
-            headerName: 'Miejsce rozpoczęcia',
-            width: 180,
-        },
-        {
-            field: 'startTime',
-            headerName: 'Czas rozpoczęcia',
-            width: 150,
-            sortable: false,
-            renderCell: (params) => formatDate(params.data.startTime),
-        },
-        {
-            field: 'destinationPlace',
-            headerName: 'Cel',
-            width: 180,
-        },
-        {
-            field: 'destinationArrivalTime',
-            headerName: 'Czas zakończenia',
-            width: 165,
-            align: 'center',
-            headerAlign: 'center',
-            sortable: false,
-            renderCell: (params) =>
-                formatDate(params.data.destinationArrivalTime),
-        },
-        {
-            field: 'distance',
-            headerName: 'Dystans',
-            width: 100,
-            align: 'center',
-            headerAlign: 'center',
-            renderCell: (params) => formatDistance(params.data.distance),
-        },
-        {
-            field: 'travelTime',
-            headerName: 'Czas jazdy',
-            width: 150,
-            sortable: false,
-            headerAlign: 'center',
-            renderCell: (params) => formatTimeData(params.data.travelTime),
-        },
-        {
-            field: 'averageSpeed',
-            headerName: 'Śr. prędkość',
-            width: 120,
-            align: 'center',
-            headerAlign: 'center',
-            renderCell: (params) => formatSpeed(params.data.averageSpeed),
-        },
-        {
-            field: 'maximumSpeed',
-            headerName: 'Maks. prędkość',
-            width: 140,
-            align: 'center',
-            headerAlign: 'center',
-            renderCell: (params) => formatSpeed(params.data.maximumSpeed),
-        },
+    const columnsButton = [
         {
             headerAlign: 'center',
             field: 'open',
@@ -155,7 +88,7 @@ const Trips = ({ user }) => {
                     <DataGrid
                         loading={loading}
                         rows={trips}
-                        columns={columns}
+                        columns={[...tripsColumns, ...columnsButton]}
                         pageSize={parseInt(visualViewport.height / 80)}
                         disableSelectionOnClick
                         hideFooterRow

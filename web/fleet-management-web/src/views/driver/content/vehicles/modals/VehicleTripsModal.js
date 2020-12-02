@@ -5,17 +5,7 @@ import Modal from '../../../../../components/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { DataGrid } from '@material-ui/data-grid';
-import {
-    formatTimeData,
-    formatDate,
-    formatDistance,
-    formatSpeed,
-} from '../../../../../utils/formating';
-
-const StyledIcon = styled(FontAwesomeIcon)`
-    margin: 0px auto;
-    cursor: pointer;
-`;
+import { tripsColumns } from '../../../../../utils/columns';
 
 const VehicleTripsModal = ({
     isVisible,
@@ -31,68 +21,6 @@ const VehicleTripsModal = ({
     const [trips, setTrips] = useState([]);
 
     useEffect(() => {}, [refresh]);
-
-    const columns = [
-        {
-            field: 'startPlace',
-            headerName: 'Miejsce rozpoczęcia',
-            width: 180,
-        },
-        {
-            field: 'startTime',
-            headerName: 'Czas rozpoczęcia',
-            width: 150,
-            sortable: false,
-            renderCell: (params) => formatDate(params.data.startTime),
-        },
-        {
-            field: 'destinationPlace',
-            headerName: 'Cel',
-            width: 180,
-        },
-        {
-            field: 'destinationArrivalTime',
-            headerName: 'Czas zakończenia',
-            width: 165,
-            align: 'center',
-            headerAlign: 'center',
-            sortable: false,
-            renderCell: (params) =>
-                formatDate(params.data.destinationArrivalTime),
-        },
-        {
-            field: 'distance',
-            headerName: 'Dystans',
-            width: 100,
-            align: 'center',
-            headerAlign: 'center',
-            renderCell: (params) => formatDistance(params.data.distance),
-        },
-        {
-            field: 'travelTime',
-            headerName: 'Czas jazdy',
-            width: 150,
-            sortable: false,
-            headerAlign: 'center',
-            renderCell: (params) => formatTimeData(params.data.travelTime),
-        },
-        {
-            field: 'averageSpeed',
-            headerName: 'Śr. prędkość',
-            width: 120,
-            align: 'center',
-            headerAlign: 'center',
-            renderCell: (params) => formatSpeed(params.data.averageSpeed),
-        },
-        {
-            field: 'maximumSpeed',
-            headerName: 'Maks. prędkość',
-            width: 140,
-            align: 'center',
-            headerAlign: 'center',
-            renderCell: (params) => formatSpeed(params.data.maximumSpeed),
-        },
-    ];
 
     return (
         <>
@@ -122,7 +50,7 @@ const VehicleTripsModal = ({
                                   )
                                 : []
                         }
-                        columns={columns}
+                        columns={tripsColumns}
                         pageSize={parseInt(visualViewport.height / 80)}
                         disableSelectionOnClick
                         hideFooterRow

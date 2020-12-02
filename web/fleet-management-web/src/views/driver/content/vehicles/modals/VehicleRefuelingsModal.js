@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { DataGrid } from '@material-ui/data-grid';
 import { formatDate, formatPrice } from '../../../../../utils/formating';
+import { refuelingsColumns } from '../../../../../utils/columns';
 
 const VehicleRefuelingsModal = ({
     isVisible,
@@ -16,45 +17,6 @@ const VehicleRefuelingsModal = ({
 }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
-
-    const columns = [
-        {
-            field: 'placeDescription',
-            headerName: 'Miejsce',
-            width: 300,
-            sortable: false,
-        },
-        {
-            field: 'time',
-            headerName: 'Czas',
-            width: 150,
-            sortable: false,
-            renderCell: (params) => formatDate(params.data.time),
-        },
-        {
-            field: 'cost',
-            headerName: 'Koszt',
-            width: 100,
-            align: 'center',
-            headerAlign: 'center',
-            renderCell: (params) => formatPrice(params.data.cost),
-        },
-        {
-            field: 'liters',
-            headerName: 'Litry',
-            width: 100,
-            align: 'center',
-            headerAlign: 'center',
-        },
-        {
-            field: 'costPerLiter',
-            headerName: 'l/zł',
-            width: 100,
-            align: 'center',
-            headerAlign: 'center',
-            renderCell: (params) => formatPrice(params.data.costPerLiter),
-        },
-    ];
 
     return (
         <>
@@ -73,7 +35,7 @@ const VehicleRefuelingsModal = ({
                     <DataGrid
                         loading={isLoading}
                         rows={isVisible ? vehicle.refuelings : []}
-                        columns={columns}
+                        columns={refuelingsColumns}
                         pageSize={parseInt(visualViewport.height / 80)}
                         disableSelectionOnClick
                         hideFooterRow
