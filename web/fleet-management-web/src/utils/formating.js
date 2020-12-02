@@ -1,4 +1,7 @@
 import moment from 'moment';
+import styled from 'styled-components';
+
+const errorMessage = 'Błąd!';
 
 export const roundTo = (numOfPlaces, numberToRound) => {
     return numOfPlaces !== 0
@@ -7,43 +10,65 @@ export const roundTo = (numOfPlaces, numberToRound) => {
 };
 
 export const formatTimeData = (time) => {
+    let toReturn;
+
     if (time < 60) {
-        return `${time} s`;
+        toReturn = `${time} s`;
     } else if (time >= 60 && time < 3600) {
         const s = time % 60;
         const m = parseInt((time - s) / 60);
 
-        return `${m} min, ${s} s`;
+        toReturn = `${m} min, ${s} s`;
     } else {
         const minSecs = time % 3600;
         const h = (time - minSecs) / 3600;
         const s = time % 60;
         const m = (minSecs - s) / 60;
 
-        return `${h} h, ${m} min, ${s} s`;
+        toReturn = `${h} h, ${m} min, ${s} s`;
     }
+
+    return p(toReturn);
 };
 
 export const formatDate = (date) => {
     if (date) {
-        return moment(date).format('hh:mm, MM.DD.YYYY');
+        return p(moment(date).format('hh:mm, MM.DD.YYYY'));
     }
 
-    return 'Błąd!';
+    return p(errorMessage);
 };
 
 export const formatDistance = (distance) => {
+    let toReturn;
+
     if (distance) {
         if (distance < 1000) {
-            return `${roundTo(0, distance)} m`;
+            return p(`${roundTo(0, distance)} m`);
         } else {
-            return `${roundTo(1, distance / 1000)} km`;
+            return p(`${roundTo(1, distance / 1000)} km`);
         }
     }
 
-    return '0 km';
+    return p('0 km');
 };
 
 export const formatSpeed = (speed) => {
-    return speed != null ? `${roundTo(1, speed)} km/h` : 'Błąd!';
+    const toReturn = speed != null ? `${roundTo(1, speed)} km/h` : errorMessage;
+
+    return p(toReturn);
+};
+
+export const formatPrice = (price) => {
+    const toReturn = price != null ? `${roundTo(2, price)} zł` : errorMessage;
+
+    return p(toReturn);
+};
+
+const StyledCell = styled.p`
+    margin: 0px auto;
+`;
+
+const p = (data) => {
+    return <StyledCell>{data}</StyledCell>;
 };

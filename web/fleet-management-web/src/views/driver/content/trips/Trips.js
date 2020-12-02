@@ -29,14 +29,6 @@ const StyledIcon = styled(FontAwesomeIcon)`
     cursor: pointer;
 `;
 
-const StyledCell = styled.p`
-    margin: 0px auto;
-`;
-
-const p = (data) => {
-    return <StyledCell>{data}</StyledCell>;
-};
-
 const Trips = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -84,7 +76,7 @@ const Trips = ({ user }) => {
             headerName: 'Czas rozpoczęcia',
             width: 150,
             sortable: false,
-            renderCell: (params) => p(formatDate(params.data.startTime)),
+            renderCell: (params) => formatDate(params.data.startTime),
         },
         {
             field: 'destinationPlace',
@@ -99,7 +91,7 @@ const Trips = ({ user }) => {
             headerAlign: 'center',
             sortable: false,
             renderCell: (params) =>
-                p(formatDate(params.data.destinationArrivalTime)),
+                formatDate(params.data.destinationArrivalTime),
         },
         {
             field: 'distance',
@@ -107,7 +99,7 @@ const Trips = ({ user }) => {
             width: 100,
             align: 'center',
             headerAlign: 'center',
-            renderCell: (params) => p(formatDistance(params.data.distance)),
+            renderCell: (params) => formatDistance(params.data.distance),
         },
         {
             field: 'travelTime',
@@ -115,7 +107,7 @@ const Trips = ({ user }) => {
             width: 150,
             sortable: false,
             headerAlign: 'center',
-            renderCell: (params) => p(formatTimeData(params.data.travelTime)),
+            renderCell: (params) => formatTimeData(params.data.travelTime),
         },
         {
             field: 'averageSpeed',
@@ -123,7 +115,7 @@ const Trips = ({ user }) => {
             width: 120,
             align: 'center',
             headerAlign: 'center',
-            renderCell: (params) => p(formatSpeed(params.data.averageSpeed)),
+            renderCell: (params) => formatSpeed(params.data.averageSpeed),
         },
         {
             field: 'maximumSpeed',
@@ -131,7 +123,7 @@ const Trips = ({ user }) => {
             width: 140,
             align: 'center',
             headerAlign: 'center',
-            renderCell: (params) => p(formatSpeed(params.data.maximumSpeed)),
+            renderCell: (params) => formatSpeed(params.data.maximumSpeed),
         },
         {
             headerAlign: 'center',

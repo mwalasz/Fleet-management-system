@@ -17,14 +17,6 @@ const StyledIcon = styled(FontAwesomeIcon)`
     cursor: pointer;
 `;
 
-const StyledCell = styled.p`
-    margin: 0px auto;
-`;
-
-const p = (data) => {
-    return <StyledCell>{data}</StyledCell>;
-};
-
 const VehicleTripsModal = ({
     isVisible,
     handleClose,
@@ -51,7 +43,7 @@ const VehicleTripsModal = ({
             headerName: 'Czas rozpoczęcia',
             width: 150,
             sortable: false,
-            renderCell: (params) => p(formatDate(params.data.startTime)),
+            renderCell: (params) => formatDate(params.data.startTime),
         },
         {
             field: 'destinationPlace',
@@ -66,7 +58,7 @@ const VehicleTripsModal = ({
             headerAlign: 'center',
             sortable: false,
             renderCell: (params) =>
-                p(formatDate(params.data.destinationArrivalTime)),
+                formatDate(params.data.destinationArrivalTime),
         },
         {
             field: 'distance',
@@ -74,7 +66,7 @@ const VehicleTripsModal = ({
             width: 100,
             align: 'center',
             headerAlign: 'center',
-            renderCell: (params) => p(formatDistance(params.data.distance)),
+            renderCell: (params) => formatDistance(params.data.distance),
         },
         {
             field: 'travelTime',
@@ -82,7 +74,7 @@ const VehicleTripsModal = ({
             width: 150,
             sortable: false,
             headerAlign: 'center',
-            renderCell: (params) => p(formatTimeData(params.data.travelTime)),
+            renderCell: (params) => formatTimeData(params.data.travelTime),
         },
         {
             field: 'averageSpeed',
@@ -90,7 +82,7 @@ const VehicleTripsModal = ({
             width: 120,
             align: 'center',
             headerAlign: 'center',
-            renderCell: (params) => p(formatSpeed(params.data.averageSpeed)),
+            renderCell: (params) => formatSpeed(params.data.averageSpeed),
         },
         {
             field: 'maximumSpeed',
@@ -98,7 +90,7 @@ const VehicleTripsModal = ({
             width: 140,
             align: 'center',
             headerAlign: 'center',
-            renderCell: (params) => p(formatSpeed(params.data.maximumSpeed)),
+            renderCell: (params) => formatSpeed(params.data.maximumSpeed),
         },
     ];
 

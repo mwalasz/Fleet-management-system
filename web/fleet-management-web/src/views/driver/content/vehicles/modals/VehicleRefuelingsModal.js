@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import Modal from '../../../../../components/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { DataGrid } from '@material-ui/data-grid';
+import { formatDate, formatPrice } from '../../../../../utils/formating';
 
 const VehicleRefuelingsModal = ({
     isVisible,
@@ -14,6 +16,45 @@ const VehicleRefuelingsModal = ({
 }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+
+    const columns = [
+        {
+            field: 'placeDescription',
+            headerName: 'Miejsce',
+            width: 300,
+            sortable: false,
+        },
+        {
+            field: 'time',
+            headerName: 'Czas',
+            width: 150,
+            sortable: false,
+            renderCell: (params) => formatDate(params.data.time),
+        },
+        {
+            field: 'cost',
+            headerName: 'Koszt',
+            width: 100,
+            align: 'center',
+            headerAlign: 'center',
+            renderCell: (params) => formatPrice(params.data.cost),
+        },
+        {
+            field: 'liters',
+            headerName: 'Litry',
+            width: 100,
+            align: 'center',
+            headerAlign: 'center',
+        },
+        {
+            field: 'costPerLiter',
+            headerName: 'l/zł',
+            width: 100,
+            align: 'center',
+            headerAlign: 'center',
+            renderCell: (params) => formatPrice(params.data.costPerLiter),
+        },
+    ];
 
     return (
         <>
@@ -28,22 +69,24 @@ const VehicleRefuelingsModal = ({
                 }
                 wide
             >
-                {/* <HeadingWrapper>
-                    <Heading big>
-                        {vehicle
-                            ? `${vehicle.brand} ${vehicle.model}`
-                            : 'Pojazd'}
-                        {isLoading && <FontAwesomeIcon icon={faSpinner} spin />}
-                    </Heading>
-                    {isError !== '' ? (
-                        <NewItemErrorText>{isError}</NewItemErrorText>
-                    ) : (
-                        <span>&nbsp;&nbsp;</span>
-                    )}
-                </HeadingWrapper> */}
+                <DataGridWrapper>
+                    <DataGrid
+                        loading={isLoading}
+                        rows={isVisible ? vehicle.refuelings : []}
+                        columns={columns}
+                        pageSize={parseInt(visualViewport.height / 80)}
+                        disableSelectionOnClick
+                        hideFooterRow
+                    />
+                </DataGridWrapper>
             </Modal>
         </>
     );
 };
+
+const DataGridWrapper = styled.div`
+    height: calc(100vh - 220px);
+    margin: 0px auto;
+`;
 
 export default VehicleRefuelingsModal;
