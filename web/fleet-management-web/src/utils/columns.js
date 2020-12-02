@@ -5,6 +5,7 @@ import {
     formatDistance,
     formatSpeed,
     formatTimeData,
+    formatMileage,
 } from './formating';
 
 export const refuelingsColumns = [
@@ -16,7 +17,7 @@ export const refuelingsColumns = [
     },
     {
         field: 'time',
-        headerName: 'Czas',
+        headerName: 'Data',
         width: 150,
         sortable: false,
         renderCell: (params) => formatDate(params.data.time),
@@ -104,5 +105,47 @@ export const tripsColumns = [
         align: 'center',
         headerAlign: 'center',
         renderCell: (params) => formatSpeed(params.data.maximumSpeed),
+    },
+];
+
+export const maintenancesColumns = [
+    {
+        field: 'maintenanceProviderDescription',
+        headerName: 'Wykonawca',
+        width: 200,
+    },
+    {
+        field: 'description',
+        headerName: 'Opis',
+        width: 300,
+    },
+    {
+        field: 'date',
+        headerName: 'Data',
+        width: 150,
+        renderCell: (params) => formatDate(params.data.date),
+    },
+    {
+        field: 'cost',
+        headerName: 'Koszt',
+        width: 100,
+        align: 'center',
+        headerAlign: 'center',
+        renderCell: (params) => formatPrice(params.data.cost),
+    },
+    {
+        field: 'odometerMileage',
+        headerName: 'Przebieg',
+        width: 150,
+        align: 'center',
+        headerAlign: 'center',
+        renderCell: (params) => formatMileage(params.data.odometerMileage),
+    },
+    {
+        field: 'usedParts',
+        headerName: 'Części',
+        width: 200,
+        align: 'center',
+        headerAlign: 'center',
     },
 ];

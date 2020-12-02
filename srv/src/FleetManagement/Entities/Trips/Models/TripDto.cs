@@ -5,9 +5,8 @@ using System.Collections.Generic;
 
 namespace FleetManagement.Entities.Trips.Models
 {
-    public class TripDto
+    public class TripDto : EntityBase
     {
-        public int Id { get; set; }
         public List<Coordinates> LocationHistory { get; set; }
         public string StartPlace { get; set; }
         public DateTime StartTime { get; set; }

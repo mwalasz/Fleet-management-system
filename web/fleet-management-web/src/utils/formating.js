@@ -65,6 +65,13 @@ export const formatPrice = (price) => {
     return p(toReturn);
 };
 
+export const formatMileage = (mileage) => {
+    const toReturn =
+        mileage != null ? `${mileage.toLocaleString()} km` : errorMessage;
+
+    return p(toReturn);
+};
+
 const StyledCell = styled.p`
     margin: 0px auto;
 `;

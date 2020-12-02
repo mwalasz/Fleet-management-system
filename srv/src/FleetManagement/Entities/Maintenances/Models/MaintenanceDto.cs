@@ -2,7 +2,7 @@
 
 namespace FleetManagement.Entities.Maintenances.Models
 {
-    public class MaintenanceDto
+    public class MaintenanceDto : EntityBase
     {
         public DateTime Date { get; set; }
         public int OdometerMileage { get; set; }

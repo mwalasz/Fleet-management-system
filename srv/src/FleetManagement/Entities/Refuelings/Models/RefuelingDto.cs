@@ -2,9 +2,8 @@
 
 namespace FleetManagement.Entities.Refuelings.Models
 {
-    public class RefuelingDto
+    public class RefuelingDto : EntityBase
     {
-        public int Id { get; set; }
         public DateTime Time { get; set; }
         public string PlaceDescription { get; set; }
         public double Cost { get; set; }

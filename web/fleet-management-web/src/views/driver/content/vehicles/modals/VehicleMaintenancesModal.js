@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import Modal from '../../../../../components/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { DataGrid } from '@material-ui/data-grid';
+import { maintenancesColumns } from '../../../../../utils/columns';
 
 const VehicleMaintenancesModal = ({
     isVisible,
@@ -26,24 +28,26 @@ const VehicleMaintenancesModal = ({
                     'Wszystkie serwisy i naprawy pojazdu' +
                     (vehicle && ` ${vehicle.brand} ${vehicle.model}`)
                 }
-                wide
+                ultraWide
             >
-                {/* <HeadingWrapper>
-                    <Heading big>
-                        {vehicle
-                            ? `${vehicle.brand} ${vehicle.model}`
-                            : 'Pojazd'}
-                        {isLoading && <FontAwesomeIcon icon={faSpinner} spin />}
-                    </Heading>
-                    {isError !== '' ? (
-                        <NewItemErrorText>{isError}</NewItemErrorText>
-                    ) : (
-                        <span>&nbsp;&nbsp;</span>
-                    )}
-                </HeadingWrapper> */}
+                <DataGridWrapper>
+                    <DataGrid
+                        loading={isLoading}
+                        rows={isVisible ? vehicle.repairsAndServices : []}
+                        columns={maintenancesColumns}
+                        pageSize={parseInt(visualViewport.height / 80)}
+                        disableSelectionOnClick
+                        hideFooterRow
+                    />
+                </DataGridWrapper>
             </Modal>
         </>
     );
 };
+
+const DataGridWrapper = styled.div`
+    height: calc(100vh - 220px);
+    margin: 0px auto;
+`;
 
 export default VehicleMaintenancesModal;

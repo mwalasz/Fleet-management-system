@@ -33,7 +33,6 @@ namespace FleetManagement.AutoMapper.Profiles
                 .ForMember(dto => dto.PhoneNumber, mce => mce.MapFrom(q => q.UserAccount.PhoneNumber))
                 .ForMember(dto => dto.Role, mce => mce.MapFrom(q => q.UserAccount.Role));
 
-
             CreateMap<ManagerAccount, ManagerAccountDto>()
                 .ForMember(dto => dto.Account, mce => mce.MapFrom<ManagerDtoAccountValueResolver>());
 
