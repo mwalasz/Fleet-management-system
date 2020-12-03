@@ -16,11 +16,6 @@ const TripModal = ({ isVisible, handleClose, children, wide, trip }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const coords = [
-        { lat: 50.266176525436435, lng: 19.025380626984497 },
-        { lat: 50.288656691715516, lng: 18.677390815233935 },
-    ];
-
     return (
         <>
             <Modal
@@ -51,6 +46,7 @@ const TripModal = ({ isVisible, handleClose, children, wide, trip }) => {
                 <MapWrapper>
                     {isVisible && (
                         <Map
+                            coords={isVisible ? trip.locationHistory : []}
                             isMarkerShown
                             googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
                             loadingElement={
@@ -68,17 +64,11 @@ const TripModal = ({ isVisible, handleClose, children, wide, trip }) => {
 
 const Map = withScriptjs(
     withGoogleMap((props) => {
-        const coords = [
-            { lat: 50.266176525436435, lng: 19.025380626984497 },
-            { lat: 50.288656691715516, lng: 18.677390815233935 },
-        ];
         return (
             <GoogleMap
-                defaultZoom={10}
-                defaultCenter={{
-                    lat: 50.288656691715516,
-                    lng: 18.677390815233935,
-                }}
+                defaultZoom={15}
+                strokeColor={'#FF0000'}
+                defaultCenter={props.coords[parseInt(props.coords.length / 2)]}
             >
                 {props.isMarkerShown && (
                     // <Marker
@@ -87,7 +77,7 @@ const Map = withScriptjs(
                     //         lng: 18.677390815233935,
                     //     }}
                     // />
-                    <Polyline path={coords} geodesic />
+                    <Polyline path={props.coords} geodesic />
                 )}
             </GoogleMap>
         );

@@ -66,13 +66,15 @@ const Trips = ({ user }) => {
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <StyledIcon
-                        icon={faMapMarkedAlt}
-                        onClick={() => {
-                            setSelectedTrip(params.data);
-                            setModalVisible(!modalVisible);
-                        }}
-                    />
+                    params.data.locationHistory.length !== 0 && (
+                        <StyledIcon
+                            icon={faMapMarkedAlt}
+                            onClick={() => {
+                                setSelectedTrip(params.data);
+                                setModalVisible(!modalVisible);
+                            }}
+                        />
+                    )
                 );
             },
         },
