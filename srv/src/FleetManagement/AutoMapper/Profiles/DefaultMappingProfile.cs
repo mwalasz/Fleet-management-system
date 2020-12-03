@@ -50,6 +50,10 @@ namespace FleetManagement.AutoMapper.Profiles
 
             CreateMap<Refueling, RefuelingDto>();
 
+            CreateMap<Coordinates, CoordinatesDto>()
+                .ForMember(dto => dto.Lat, mce => mce.MapFrom(c => c.Latitude))
+                .ForMember(dto => dto.Lng, mce => mce.MapFrom(c => c.Longitude));
+
             CreateMap<Trip, TripDto>()
                 .ForMember(dto => dto.LocationHistory, mce => mce.MapFrom<TripDtoLocationHistoryValueResolver>())
                 .ForMember(dto => dto.DriverAccount, mce => mce.MapFrom<TripDtoDriverAccountValueResolver>());

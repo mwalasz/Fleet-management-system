@@ -1,4 +1,4 @@
-﻿using FleetManagement.Entities.Trips.Params.NewTrip;
+﻿using FleetManagement.Entities.Trips.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;

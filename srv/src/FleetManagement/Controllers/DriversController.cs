@@ -5,6 +5,7 @@ using FleetManagement.Entities.Accounts.DriverAccounts.Models;
 using FleetManagement.Entities.Accounts.DriverAccounts.Params;
 using FleetManagement.Entities.Companies.Models;
 using FleetManagement.Entities.Trips;
+using FleetManagement.Entities.Trips.Models;
 using FleetManagement.Entities.Vehicles;
 using FleetManagement.Entities.Vehicles.Models;
 using FleetManagement.Utils;
@@ -104,7 +105,7 @@ namespace FleetManagement.Controllers
                 var trips = tripProvider.GetAll()
                     .Where(x => x.DriverAccountId == driver.Id);
 
-                return Ok(trips);
+                return Ok(trips.Count() != 0 ? trips.Select(x => mapper.Map<Trip, TripDto>(x)) : new List<TripDto>());
             }
 
             return NotFound();

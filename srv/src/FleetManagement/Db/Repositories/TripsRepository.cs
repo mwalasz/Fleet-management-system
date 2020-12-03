@@ -87,8 +87,8 @@ namespace FleetManagement.Db.Repositories
 
         private string GoogleGeocoding(double latitude, double longitude)
         {
-            var lat = latitude.ToString("0.0000000", System.Globalization.CultureInfo.InvariantCulture);;
-            var lon = longitude.ToString("0.0000000", System.Globalization.CultureInfo.InvariantCulture);;
+            var lat = latitude.ToString("0.0000000", System.Globalization.CultureInfo.InvariantCulture);
+            var lon = longitude.ToString("0.0000000", System.Globalization.CultureInfo.InvariantCulture);
             
             var client = new RestClient(options.MapsApiUrl);
             var request = new RestRequest("maps/api/geocode/json")

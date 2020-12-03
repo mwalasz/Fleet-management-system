@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FleetManagement.Entities.Trips.Models;
+using System;
 
 namespace FleetManagement.Entities.Trips.Params.NewTrip
 {
