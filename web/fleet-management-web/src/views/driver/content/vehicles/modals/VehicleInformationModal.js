@@ -132,9 +132,8 @@ const VehicleInformationModal = ({
 };
 
 const StyledGridComponent = styled.div`
-    height: calc(100vh - 320px);
+    height: calc(100vh - 220px);
     margin: 0px auto;
-    
 `;
 
 const mapStateToProps = (state) => {

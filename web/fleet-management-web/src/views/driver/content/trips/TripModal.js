@@ -4,10 +4,22 @@ import { connect } from 'react-redux';
 import Modal from '../../../../components/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import {
+    withScriptjs,
+    withGoogleMap,
+    GoogleMap,
+    Marker,
+    Polyline,
+} from 'react-google-maps';
 
 const TripModal = ({ isVisible, handleClose, children, wide, trip }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+
+    const coords = [
+        { lat: 50.266176525436435, lng: 19.025380626984497 },
+        { lat: 50.288656691715516, lng: 18.677390815233935 },
+    ];
 
     return (
         <>
@@ -36,9 +48,55 @@ const TripModal = ({ isVisible, handleClose, children, wide, trip }) => {
                         <span>&nbsp;&nbsp;</span>
                     )}
                 </HeadingWrapper> */}
+                <MapWrapper>
+                    {isVisible && (
+                        <Map
+                            isMarkerShown
+                            googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+                            loadingElement={
+                                <FontAwesomeIcon icon={faSpinner} spin />
+                            }
+                            containerElement={<MapWrapper />}
+                            mapElement={<div style={{ height: `100%` }} />}
+                        />
+                    )}
+                </MapWrapper>
             </Modal>
         </>
     );
 };
+
+const Map = withScriptjs(
+    withGoogleMap((props) => {
+        const coords = [
+            { lat: 50.266176525436435, lng: 19.025380626984497 },
+            { lat: 50.288656691715516, lng: 18.677390815233935 },
+        ];
+        return (
+            <GoogleMap
+                defaultZoom={10}
+                defaultCenter={{
+                    lat: 50.288656691715516,
+                    lng: 18.677390815233935,
+                }}
+            >
+                {props.isMarkerShown && (
+                    // <Marker
+                    //     position={{
+                    //         lat: 50.288656691715516,
+                    //         lng: 18.677390815233935,
+                    //     }}
+                    // />
+                    <Polyline path={coords} geodesic />
+                )}
+            </GoogleMap>
+        );
+    })
+);
+
+const MapWrapper = styled.div`
+    height: calc(100vh - 220px);
+    margin: 0px auto;
+`;
 
 export default TripModal;
