@@ -4,18 +4,14 @@ import StyledLogout from './StyledLogout';
 import { logoutUser } from '../../redux/actions/authorization_actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import {
-    API_URL,
-    DEFAULT_USER_IMAGE,
-    DEFAULT_VEHICLE_IMAGE,
-} from '../../utils/constans';
+import { API_URL, DEFAULT_USER_IMAGE } from '../../utils/constans';
 import { connect } from 'react-redux';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useState } from 'react';
 
 const NavigationBar = ({ dispatch, children, user }) => {
-    const [image, setImage] = useState('');
+    const [avatar, setAvatar] = useState('');
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -32,7 +28,7 @@ const NavigationBar = ({ dispatch, children, user }) => {
                 const data = res.data.result;
 
                 if (data) {
-                    setImage(data);
+                    setAvatar(data);
                 }
             })
             .catch((err) => {
@@ -46,12 +42,12 @@ const NavigationBar = ({ dispatch, children, user }) => {
     return (
         <Wrapper>
             <div>
-                <Logo>
+                <UserDataWrapper>
                     {loading ? (
-                        <FontAwesomeIcon icon={faSpinner} spin />
+                        <Spinner icon={faSpinner} spin size={'2x'} />
                     ) : (
-                        <img
-                            src={image ? image : DEFAULT_USER_IMAGE}
+                        <Avatar
+                            src={avatar ? avatar : DEFAULT_USER_IMAGE}
                             alt={'Avatar'}
                         />
                     )}
@@ -60,7 +56,7 @@ const NavigationBar = ({ dispatch, children, user }) => {
                             ? `${user.firstName} ${user.lastName}`
                             : 'Imię Nazwisko'}
                     </Text>
-                </Logo>
+                </UserDataWrapper>
                 <NavLinksWrapper>{children}</NavLinksWrapper>
             </div>
             <StyledLogout onClick={() => dispatch(logoutUser())}>
@@ -80,26 +76,35 @@ export default connect(mapStateToProps)(NavigationBar);
 
 const NavLinksWrapper = styled.div``;
 
+const UserDataWrapper = styled.div`
+    justify-content: center;
+`;
+
+const Spinner = styled(FontAwesomeIcon)`
+    display: block;
+    width: 200px;
+    height: 200px;
+    margin: 30px auto;
+`;
+
 const Text = styled.div`
-    margin-top: 20px;
-    color: ${({ theme }) => theme.thirdColor};
-    font-size: ${({ theme }) => theme.font.L};
+    margin-bottom: 30px;
+    color: ${({ theme }) => theme.primaryColor};
+    font-size: ${({ theme }) => theme.font.XL};
     font-weight: ${({ theme }) => theme.font.Regular};
     position: relative;
     transition: all 0.3s;
     text-align: center;
 `;
 
-const Logo = styled.div`
-    margin: 40px;
-    padding: 0 20px;
-    img {
-        border-radius: 60px;
-        max-height: 400px;
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-    }
+const Avatar = styled.img`
+    display: block;
+    margin: 30px auto;
+    border-radius: 60px;
+    background-color: white;
+    object-fit: cover;
+    width: 200px;
+    height: 200px;
 `;
 
 const Wrapper = styled.div`
