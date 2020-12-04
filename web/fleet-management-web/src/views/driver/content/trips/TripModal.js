@@ -29,31 +29,39 @@ const TripModal = ({ isVisible, handleClose, trip }) => {
 
     const createTitle = () => {
         if (isVisible) {
-            const startData = trip.startPlace.split(', ');
-            const destinationData = trip.destinationPlace.split(', ');
-            const arePlacesFromSameCountry =
-                startData[1] === destinationData[1];
-            // const countryName = startData[1];
-            const startPlaceName = startData[0];
-            const destinationPlaceName = destinationData[0];
+            let start = trip.startPlace;
+            let destination = trip.destinationPlace;
+
+            const startData = start.split(', ');
+            const destinationData = destination.split(', ');
+
+            if (startData.length === 2 && destinationData.length === 2) {
+                const arePlacesFromSameCountry =
+                    startData[1] === destinationData[1];
+                // const countryName = startData[1];
+                const startPlaceName = startData[0];
+                const destinationPlaceName = destinationData[0];
+
+                start = `Start: ${
+                    arePlacesFromSameCountry ? startPlaceName : start
+                }`;
+
+                destination = `Cel: ${
+                    arePlacesFromSameCountry
+                        ? destinationPlaceName
+                        : destination
+                }`;
+            }
 
             return (
                 <div style={{ margin: '0px 0px 30px 0px' }}>
                     <div>
                         <StyledIcon icon={faPlayCircle} start />
-                        {`Start: ${
-                            arePlacesFromSameCountry
-                                ? startPlaceName
-                                : trip.startPlace
-                        }`}
+                        {start}
                     </div>
                     <div>
                         <StyledIcon icon={faStopCircle} stop />
-                        {`Cel: ${
-                            arePlacesFromSameCountry
-                                ? destinationPlaceName
-                                : trip.destinationPlace
-                        }`}
+                        {destination}
                     </div>
                 </div>
             );
