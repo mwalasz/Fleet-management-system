@@ -9,22 +9,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FleetManagement.Utils;
+using FleetManagement.Images;
 
 namespace FleetManagement.Controllers
 {
     [ApiController]
     [DefaultRoute]
-    [Authorize(Roles = Roles.Admin)]
+    [AllowAnonymous]
+    //[Authorize(Roles = Roles.Admin)]
     public class UsersController : ControllerBase
     {
         private readonly IUserAccountProvider userAccountProvider;
         private readonly IMapper mapper;
+        private readonly IImagesService imagesService;
 
         public UsersController(IUserAccountProvider userAccountProvider,
-            IMapper mapper)
+            IMapper mapper, IImagesService imagesService)
         {
             this.userAccountProvider = userAccountProvider;
             this.mapper = mapper;
+            this.imagesService = imagesService;
         }
 
         [HttpGet]
@@ -64,6 +68,28 @@ namespace FleetManagement.Controllers
             return userAccountProvider.UpdateCredentials(mail, password)
                 ? Ok("Pomyślnie zaktualizowano hasło użytkownika.")
                 : Ok("Nie udało się zaktualizować hasła.");
+        }
+
+
+        [HttpGet]
+        public IActionResult DownloadAvatar(string mail)
+        {
+            var user = userAccountProvider.GetByMail(mail);
+
+            if (user != null)
+            {
+                if (string.IsNullOrEmpty(user.AvatarImagePath))
+                    return NotFound("Użytkownik nie posiada zdjęcia.");
+
+                var image = imagesService.GetUserImage(user);
+
+                if (string.IsNullOrEmpty(image))
+                    return BadRequest("Błąd podczas wysyłania zdjęcia.");
+
+                return Ok(image);
+            }
+            
+            return BadRequest("Brak użytkownika o podanym mailu!");
         }
     }
 }

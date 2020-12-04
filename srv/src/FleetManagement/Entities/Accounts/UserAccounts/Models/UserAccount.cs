@@ -38,6 +38,11 @@ namespace FleetManagement.Entities.Accounts.UserAccounts.Models
         /// Rola użytkownika.
         /// </summary>
         public virtual string Role { get; set; }
+        
+        /// <summary>
+        /// Wewnętrzna ścieżka do pliku z avatarem użytkownika.
+        /// </summary>
+        public virtual string AvatarImagePath { get; set; }
     }
 
     public class UserAccountMap : ClassMap<UserAccount>
@@ -58,6 +63,7 @@ namespace FleetManagement.Entities.Accounts.UserAccounts.Models
                 .Not.Nullable();
             Map(x => x.Role)
                 .Not.Nullable();
+            Map(x => x.AvatarImagePath);
         }
     }
 }
