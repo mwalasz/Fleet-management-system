@@ -10,6 +10,12 @@ const Heading = styled.h1`
         css`
             text-align: center;
         `}
+
+    ${({ doubleLine }) =>
+        doubleLine &&
+        css`
+            font-size: ${({ theme }) => theme.font.XL};
+        `}
 `;
 
 export default Heading;

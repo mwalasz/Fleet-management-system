@@ -74,16 +74,18 @@ const Modal = ({
                 <Content>
                     <ExitIcon icon={faTimes} onClick={handleClose} />
                     <HeadingWrapper>
-                        <Heading big centered={centeredTitle}>
-                            {title}
-                            {isLoading && (
-                                <StyledSpinner icon={faSpinner} spin />
-                            )}
-                        </Heading>
+                        {title && (
+                            <Heading big centered={centeredTitle}>
+                                {title}
+                                {isLoading && (
+                                    <StyledSpinner icon={faSpinner} spin />
+                                )}
+                            </Heading>
+                        )}
                         {error !== '' ? (
                             <NewItemErrorText>{error}</NewItemErrorText>
                         ) : (
-                            <span>&nbsp;&nbsp;</span>
+                            title && <span>&nbsp;&nbsp;</span>
                         )}
                     </HeadingWrapper>
                     {children}
