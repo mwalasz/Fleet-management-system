@@ -4,13 +4,7 @@ import { connect } from 'react-redux';
 import Modal from '../../../../components/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import {
-    withScriptjs,
-    withGoogleMap,
-    GoogleMap,
-    Marker,
-    Polyline,
-} from 'react-google-maps';
+import Map from './maps/Map';
 
 const TripModal = ({ isVisible, handleClose, children, wide, trip }) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -43,50 +37,29 @@ const TripModal = ({ isVisible, handleClose, children, wide, trip }) => {
                         <span>&nbsp;&nbsp;</span>
                     )}
                 </HeadingWrapper> */}
-                <MapWrapper>
-                    {isVisible && (
-                        <Map
-                            coords={isVisible ? trip.locationHistory : []}
-                            isMarkerShown
-                            googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
-                            loadingElement={
-                                <FontAwesomeIcon icon={faSpinner} spin />
-                            }
-                            containerElement={<MapWrapper />}
-                            mapElement={<div style={{ height: `100%` }} />}
-                        />
-                    )}
-                </MapWrapper>
+                {isVisible && (
+                    <Map
+                        coords={isVisible ? trip.locationHistory : []}
+                        isMarkerShown
+                        isRouteShown
+                        googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+                        loadingElement={
+                            <FontAwesomeIcon icon={faSpinner} spin />
+                        }
+                        containerElement={<MapWrapper />}
+                        mapElement={<div style={{ height: `100%` }} />}
+                    />
+                )}
             </Modal>
         </>
     );
 };
 
-const Map = withScriptjs(
-    withGoogleMap((props) => {
-        return (
-            <GoogleMap
-                defaultZoom={15}
-                strokeColor={'#FF0000'}
-                defaultCenter={props.coords[parseInt(props.coords.length / 2)]}
-            >
-                {props.isMarkerShown && (
-                    // <Marker
-                    //     position={{
-                    //         lat: 50.288656691715516,
-                    //         lng: 18.677390815233935,
-                    //     }}
-                    // />
-                    <Polyline path={props.coords} geodesic />
-                )}
-            </GoogleMap>
-        );
-    })
-);
-
 const MapWrapper = styled.div`
     height: calc(100vh - 220px);
     margin: 0px auto;
+    border: 4px solid ${({ theme }) => theme.primaryColor};
+    box-shadow: 0 0 15px gray;
 `;
 
 export default TripModal;

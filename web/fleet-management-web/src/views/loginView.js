@@ -38,7 +38,7 @@ const LoginView = (props) => {
                     {isLoggingIn && <LinearProgress color="primary" />}
                 </LoadingBar>
                 <FormWrapper>
-                    <Title margin="0 0 20px">
+                    <Title big margin="0 0 20px">
                         SYSTEM ZARZĄDZANIA POJAZDAMI
                     </Title>
                     <LogoImage src={logo} />
