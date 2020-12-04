@@ -1,5 +1,11 @@
 export const API_URL = 'http://localhost:59657/api';
 
+export const GOOGLE_MAPS_API_KEY = '';
+
+export const GOOGLE_MAPS_URL = GOOGLE_MAPS_API_KEY
+    ? `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&v=3.exp&libraries=geometry,drawing,places`
+    : 'https://maps.googleapis.com/maps/api/js?&v=3.exp&libraries=geometry,drawing,places';
+
 export const defaultVehicleImagePath =
     'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSEnzWRkeRjv7fTFRWTFnFj3WrUakycnYxhAg&usqp=CAU';
 
