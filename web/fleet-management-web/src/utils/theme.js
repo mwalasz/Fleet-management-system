@@ -22,6 +22,7 @@ export const theme = {
         L: '20px',
         XL: '22px',
         XXL: '26px',
+        XXXL: '36px',
 
         Bold: '700',
         Regular: '600',

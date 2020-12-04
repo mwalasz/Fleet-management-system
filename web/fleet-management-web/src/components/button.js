@@ -76,7 +76,7 @@ const Button = styled.button`
   ${({ disabled }) =>
         disabled &&
         css`
-            color: gray;
+            color: white;
             cursor: not-allowed;
         `}
 
@@ -91,6 +91,13 @@ const Button = styled.button`
         wide &&
         css`
             width: 200px;
+            line-height: ${({ theme }) => theme.font.XL};
+        `}
+
+    ${({ ultraWide }) =>
+        ultraWide &&
+        css`
+            width: 350px;
             line-height: ${({ theme }) => theme.font.XL};
         `}
 

@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { loginUser } from '../redux/actions/authorization_actions';
 import Input from '../components/Input';
 import Title from '../components/Title';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
+import Button from '../components/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import styled from 'styled-components';
 import logo from '../images/logo.png';
@@ -22,9 +23,15 @@ const LoginView = (props) => {
         dispatch(loginUser(mail, password));
     };
 
+    const checkIfCorrectMail = () => {
+        return state.mail.length !== 0 && isMailWrong(state.mail);
+    };
+
     if (isAuthenticated) {
         return <Redirect to="/panel" />;
     } else {
+        const isMailCorrect = checkIfCorrectMail();
+
         return (
             <Wrapper>
                 <LoadingBar>
@@ -38,10 +45,7 @@ const LoginView = (props) => {
                     <Form>
                         <Row>
                             <Input
-                                error={
-                                    state.mail.length != 0 &&
-                                    isMailWrong(state.mail)
-                                }
+                                error={isMailCorrect}
                                 errorText="Podaj prawidłowy adres mailowy!"
                                 label="Mail"
                                 type="email"
@@ -51,6 +55,7 @@ const LoginView = (props) => {
                                     setState({ ...state, mail: e.target.value })
                                 }
                             />
+                            {isMailCorrect ? undefined : SPACER}
                         </Row>
                         <Row>
                             <Input
@@ -65,25 +70,27 @@ const LoginView = (props) => {
                                     })
                                 }
                             />
+                            {SPACER}
                         </Row>
                         <Row>
                             <Button
-                                color="primary"
-                                variant="contained"
+                                ultraWide
+                                secondary
                                 onClick={handleSubmit}
-                                fullWidth="350px"
                                 disabled={
-                                    state.mail.length == 0 ||
-                                    state.password.length == 0
+                                    checkIfCorrectMail() &&
+                                    state.password.length === 0
                                 }
                             >
                                 Zaloguj się
                             </Button>
                         </Row>
                         <Row>
-                            {loginError
-                                ? 'Wystąpił błąd, proszę spróbować ponownie.'
-                                : '  '}
+                            <ErrorText>
+                                {loginError
+                                    ? 'Wystąpił błąd, proszę spróbować ponownie.'
+                                    : SPACER}
+                            </ErrorText>
                         </Row>
                     </Form>
                 </FormWrapper>
@@ -105,6 +112,14 @@ const mapStateToProps = (state) => {
     };
 };
 export default connect(mapStateToProps)(LoginView);
+
+const ErrorText = styled.div`
+    text-align: center;
+    color: ${({ theme }) => theme.red};
+    font-weight: ${({ theme }) => theme.font.Bold};
+`;
+
+const SPACER = <span>&nbsp;&nbsp;</span>;
 
 const LoadingBar = styled.div`
     width: 100vw;
