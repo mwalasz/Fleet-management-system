@@ -93,7 +93,7 @@ const MyDropzone = ({ token }) => {
                 onClick={() => {
                     console.log('file', acceptedFiles[0]);
                     Axios.post(
-                        `${API_URL}/users/upload_avatar`,
+                        `${API_URL}/images/upload`,
                         {
                             mail: 'admin@poczta.pl',
                             imageBase64: binaryImg,

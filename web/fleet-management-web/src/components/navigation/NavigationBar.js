@@ -17,7 +17,7 @@ const NavigationBar = ({ dispatch, children, user }) => {
     useEffect(() => {
         setLoading(true);
         axios
-            .get(`${API_URL}/users/download_avatar?mail=${user.email}`, {
+            .get(`${API_URL}/images/download?mail=${user.email}`, {
                 withCredentials: true,
                 headers: {
                     Authorization: 'Bearer ' + user.token,

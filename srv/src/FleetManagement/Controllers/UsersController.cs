@@ -1,18 +1,14 @@
 ﻿using AutoMapper;
-using FleetManagement.Authentication.Policies;
 using FleetManagement.Entities.Accounts.UserAccounts;
 using FleetManagement.Entities.Accounts.UserAccounts.DTO;
 using FleetManagement.Entities.Accounts.UserAccounts.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using FleetManagement.Utils;
 using FleetManagement.Images;
-using FleetManagement.Images.Params;
-using Microsoft.AspNetCore.Http;
 
 namespace FleetManagement.Controllers
 {
@@ -71,44 +67,6 @@ namespace FleetManagement.Controllers
             return userAccountProvider.UpdateCredentials(mail, password)
                 ? Ok("Pomyślnie zaktualizowano hasło użytkownika.")
                 : Ok("Nie udało się zaktualizować hasła.");
-        }
-
-
-        [HttpGet]
-        public IActionResult DownloadAvatar(string mail)
-        {
-            var user = userAccountProvider.GetByMail(mail);
-
-            if (user != null)
-            {
-                if (string.IsNullOrEmpty(user.AvatarImagePath))
-                    return NotFound("Użytkownik nie posiada zdjęcia.");
-
-                var image = imagesService.UploadUserImage(user);
-
-                if (string.IsNullOrEmpty(image))
-                    return BadRequest("Błąd podczas wysyłania zdjęcia.");
-
-                return Ok(image);
-            }
-            
-            return BadRequest("Brak użytkownika o podanym mailu!");
-        }
-
-        [HttpPost]
-        public IActionResult UploadAvatar([FromBody] UploadUserAvatarParams avatarParams)
-        {
-            var user = userAccountProvider.GetByMail(avatarParams.Mail);
-
-            if (user != null)
-            {
-                if (imagesService.DownloadUserImage(avatarParams, user))
-                    return Ok();
-
-                return BadRequest("Nie udało się dodać avataru do użytkownika");
-            }
-            
-            return BadRequest("Brak użytkownika o podanym mailu!");
         }
     }
 }
