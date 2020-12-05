@@ -17,7 +17,7 @@ namespace FleetManagement.Images
             this.userAccountProvider = userAccountProvider;
         }
 
-        public string UploadUserImage(UserAccount user)
+        public string ReadUserImage(UserAccount user)
         {
             var imagePath = user.AvatarImagePath;
 
@@ -43,23 +43,31 @@ namespace FleetManagement.Images
             return string.Empty;
         }
 
-        public bool DownloadUserImage(UploadUserAvatarParams uploadUserAvatar, UserAccount user)
+        public string SaveUserNewImage(UploadUserAvatarParams uploadUserAvatar, UserAccount user = null)
         {
             try
             {
-                var filePath = CreateUniqueFilePath(true);
+                if (!string.IsNullOrEmpty(uploadUserAvatar.ImageBase64))
+                {
+                    var filePath = CreateUniqueFilePath(true);
                 
-                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
-                File.WriteAllText(filePath, uploadUserAvatar.ImageBase64);
+                    Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+                    File.WriteAllText(filePath, uploadUserAvatar.ImageBase64);
                 
-                user.AvatarImagePath = filePath;
-                userAccountProvider.Update(user);
+                    if (user != null)
+                    {
+                        user.AvatarImagePath = filePath;
+                        userAccountProvider.Update(user);
+                    }
 
-                return true;
+                    return filePath;
+                }
+
+                return string.Empty;
             }
             catch (Exception)
             {
-                return false;
+                return string.Empty;
             }
         }
 

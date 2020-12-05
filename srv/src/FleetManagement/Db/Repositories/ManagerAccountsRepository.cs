@@ -6,6 +6,8 @@ using FleetManagement.Entities.Accounts.ManagerAccounts.Models;
 using FleetManagement.Entities.Accounts.ManagerAccounts.Params;
 using FleetManagement.Entities.Accounts.UserAccounts;
 using FleetManagement.Entities.Accounts.UserAccounts.Models;
+using FleetManagement.Images;
+using FleetManagement.Images.Params;
 using NHibernate;
 using System.Linq;
 
@@ -14,13 +16,16 @@ namespace FleetManagement.Db.Repositories
     public class ManagerAccountsRepository : DbBasicOperations<ManagerAccount>, IManagerAccountProvider
     {
         private readonly IHashService hashService;
+        private readonly IImagesService imagesService;
         private readonly IUserAccountProvider userAccountProvider;
 
         public ManagerAccountsRepository(ISessionFactory sessionFactory, 
                                          IHashService hashService,
+                                         IImagesService imagesService,
                                          IUserAccountProvider userAccountProvider) : base(sessionFactory)
         {
             this.hashService = hashService;
+            this.imagesService = imagesService;
             this.userAccountProvider = userAccountProvider;
         }
 
@@ -30,6 +35,8 @@ namespace FleetManagement.Db.Repositories
 
             try
             {
+                var avatarPath = imagesService.SaveUserNewImage(new UploadUserAvatarParams { ImageBase64 = newAccountParams.AvatarImageBase64 });
+
                 userAccountProvider.Add(new UserAccount()
                 {
                     Email = newAccountParams.Email,
@@ -37,6 +44,7 @@ namespace FleetManagement.Db.Repositories
                     FirstName = newAccountParams.FirstName,
                     LastName = newAccountParams.LastName,
                     PhoneNumber = newAccountParams.PhoneNumber,
+                    AvatarImagePath = avatarPath,
                     Role = Roles.Manager,
                     IsActive = true,
                 });

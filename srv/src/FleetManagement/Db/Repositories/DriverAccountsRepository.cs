@@ -8,6 +8,8 @@ using FleetManagement.Entities.Accounts.UserAccounts;
 using FleetManagement.Entities.Accounts.UserAccounts.Models;
 using FleetManagement.Entities.Companies;
 using FleetManagement.Entities.Companies.Models;
+using FleetManagement.Images;
+using FleetManagement.Images.Params;
 using NHibernate;
 using System.Linq;
 
@@ -17,15 +19,18 @@ namespace FleetManagement.Db.Repositories
     {
         private readonly IUserAccountProvider userAccountProvider;
         private readonly ICompanyProvider companyProvider;
+        private readonly IImagesService imagesService;
         private readonly IHashService hashService;
 
         public DriverAccountsRepository(ISessionFactory sessionFactory,
             IUserAccountProvider userAccountProvider,
             ICompanyProvider companyProvider,
+            IImagesService imagesService,
             IHashService hashService) : base(sessionFactory)
         {
             this.userAccountProvider = userAccountProvider;
             this.companyProvider = companyProvider;
+            this.imagesService = imagesService;
             this.hashService = hashService;
         }
 
@@ -45,6 +50,8 @@ namespace FleetManagement.Db.Repositories
 
             try
             {
+                var avatarPath = imagesService.SaveUserNewImage(new UploadUserAvatarParams { ImageBase64 = newAccountParams.AvatarImageBase64 });
+
                 userAccountProvider.Add(new UserAccount()
                 {
                     Email = newAccountParams.Email,
@@ -52,6 +59,7 @@ namespace FleetManagement.Db.Repositories
                     FirstName = newAccountParams.FirstName,
                     LastName = newAccountParams.LastName,
                     PhoneNumber = newAccountParams.PhoneNumber,
+                    AvatarImagePath = avatarPath,
                     Role = Roles.Driver,
                     IsActive = true,
                 });

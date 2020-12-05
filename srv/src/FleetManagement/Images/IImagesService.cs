@@ -5,7 +5,7 @@ namespace FleetManagement.Images
 {
     public interface IImagesService
     {
-        string UploadUserImage(UserAccount user);
-        bool DownloadUserImage(UploadUserAvatarParams uploadUserAvatar, UserAccount user);
+        string ReadUserImage(UserAccount user);
+        string SaveUserNewImage(UploadUserAvatarParams uploadUserAvatar, UserAccount user = null);
     }
 }

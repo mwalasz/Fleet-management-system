@@ -31,7 +31,7 @@ namespace FleetManagement.Controllers
                 if (string.IsNullOrEmpty(user.AvatarImagePath))
                     return NotFound("Użytkownik nie posiada zdjęcia.");
 
-                var image = imagesService.UploadUserImage(user);
+                var image = imagesService.ReadUserImage(user);
 
                 if (string.IsNullOrEmpty(image))
                     return BadRequest("Błąd podczas wysyłania zdjęcia.");
@@ -49,7 +49,7 @@ namespace FleetManagement.Controllers
 
             if (user != null)
             {
-                if (imagesService.DownloadUserImage(avatarParams, user))
+                if (!string.IsNullOrEmpty(imagesService.SaveUserNewImage(avatarParams, user)))
                     return Ok();
 
                 return BadRequest("Nie udało się dodać avataru do użytkownika");

@@ -10,5 +10,6 @@ namespace FleetManagement.Entities.Accounts.DriverAccounts.Params
         public string Password { get; set; }
         public string PhoneNumber { get; set; }
         public string DrivingLicenseNumber { get; set; }
+        public string AvatarImageBase64 { get; set; }
     }
 }
