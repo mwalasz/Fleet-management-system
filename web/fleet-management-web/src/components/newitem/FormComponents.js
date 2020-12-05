@@ -7,7 +7,6 @@ export const StyledForm = styled(Form)`
 `;
 
 export const TwoInputsInRowWrapper = styled.div`
-    margin-top: 5px;
     display: flex;
     justify-content: space-between;
 `;

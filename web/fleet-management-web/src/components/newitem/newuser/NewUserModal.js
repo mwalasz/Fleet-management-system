@@ -11,12 +11,18 @@ import NewItemBottomButtons from '../NewItemBottomButtons';
 import { StyledForm, TwoInputsInRowWrapper } from '../FormComponents';
 import SelectWrapper from '../SelectWrapper';
 import Modal from '../../Modal';
+import Dropzone from '../../dropzone/Dropzone';
 
 const NewUserModal = ({ isVisible, handleClose, setRefresh, user }) => {
     const [isDriver, setIsDriver] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [avatar, setAvatar] = useState('');
     const formRef = useRef(null);
+
+    const handleImageChange = (img) => {
+        setAvatar(img);
+    };
 
     return (
         <Modal
@@ -44,6 +50,7 @@ const NewUserModal = ({ isVisible, handleClose, setRefresh, user }) => {
                     setError('');
 
                     const payload = values;
+                    payload['avatarImageBase64'] = avatar;
                     if (!isDriver) delete payload.drivingLicenseNumber;
 
                     await axios
@@ -162,6 +169,11 @@ const NewUserModal = ({ isVisible, handleClose, setRefresh, user }) => {
                             type="text"
                             name="phoneNumber"
                         />
+                        <Dropzone
+                            key={isVisible ? 1 : 0}
+                            isVisible={isVisible}
+                            setImage={handleImageChange}
+                        />
                         {isDriver && (
                             <NewItemInput
                                 handleChange={handleChange}
@@ -170,7 +182,6 @@ const NewUserModal = ({ isVisible, handleClose, setRefresh, user }) => {
                                 touched={touched.drivingLicenseNumber}
                                 value={values.drivingLicenseNumber}
                                 placeholder="numer prawa jazdy"
-                                name="drivingLicenseNumber"
                                 name="drivingLicenseNumber"
                             />
                         )}

@@ -9,7 +9,7 @@ const InputWithError = styled.div`
 `;
 
 const StyledInput = styled(FormInput)`
-    margin-top: 30px;
+    margin-top: 20px;
 
     ${({ type }) =>
         type === 'text' &&

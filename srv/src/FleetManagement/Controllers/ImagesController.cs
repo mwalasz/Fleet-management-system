@@ -28,13 +28,7 @@ namespace FleetManagement.Controllers
 
             if (user != null)
             {
-                if (string.IsNullOrEmpty(user.AvatarImagePath))
-                    return NotFound("Użytkownik nie posiada zdjęcia.");
-
                 var image = imagesService.ReadUserImage(user);
-
-                if (string.IsNullOrEmpty(image))
-                    return BadRequest("Błąd podczas wysyłania zdjęcia.");
 
                 return Ok(image);
             }
