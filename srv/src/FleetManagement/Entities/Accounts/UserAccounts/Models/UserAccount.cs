@@ -1,4 +1,5 @@
-﻿using FluentNHibernate.Mapping;
+﻿using FleetManagement.Extensions;
+using FluentNHibernate.Mapping;
 
 namespace FleetManagement.Entities.Accounts.UserAccounts.Models
 {
@@ -12,12 +13,20 @@ namespace FleetManagement.Entities.Accounts.UserAccounts.Models
         /// <summary>
         /// Imię.
         /// </summary>
-        public virtual string FirstName { get; set; }
+        public virtual string FirstName 
+        { 
+            get => firstName; 
+            set => firstName = value.FirstLetterToUpper();
+        }
 
         /// <summary>
         /// Nazwisko.
         /// </summary>
-        public virtual string LastName { get; set; }
+        public virtual string LastName
+        {
+            get => lastName; 
+            set => lastName = value.FirstLetterToUpper();
+        }
 
         /// <summary>
         /// Mail.
@@ -43,6 +52,9 @@ namespace FleetManagement.Entities.Accounts.UserAccounts.Models
         /// Wewnętrzna ścieżka do pliku z avatarem użytkownika.
         /// </summary>
         public virtual string AvatarImagePath { get; set; }
+
+        private string firstName;
+        private string lastName;
     }
 
     public class UserAccountMap : ClassMap<UserAccount>
