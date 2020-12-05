@@ -20,5 +20,12 @@ namespace FleetManagement.Entities.Vehicles
         /// <param name="vinNumbers">Numery VIN pojazdów do znalezienia</param>
         /// <returns></returns>
         public List<Vehicle> GetVehiclesByVinNumber(string[] vinNumbers);
+
+        /// <summary>
+        /// Zwraca krótki opis pojazdu w postaci "Marka Model".
+        /// </summary>
+        /// <param name="vin"></param>
+        /// <returns></returns>
+        public string GetVehicleName(string vin);
     }
 }

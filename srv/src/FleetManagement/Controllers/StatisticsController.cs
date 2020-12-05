@@ -8,10 +8,12 @@ namespace FleetManagement.Controllers
 {
 
     [ApiController]
-    [DefaultRoute]
     [AllowAnonymous] // TODO: zmienić
     public class StatisticsController : ControllerBase
     {
+        const string DRIVER_STATISTICS_ROUTE = "api/[controller]/driver/[action]";
+        const string VEHICLE_STATISTICS_ROUTE = "api/[controller]/vehicle/[action]";
+
         private readonly IDriverAccountProvider driverAccountProvider;
         private readonly IStatisticsService statistics;
 
@@ -21,9 +23,10 @@ namespace FleetManagement.Controllers
             this.statistics = statistics;
         }
 
-
         [HttpGet]
-        public IActionResult GetDriverStatistics([FromQuery] string mail)
+        [Route(DRIVER_STATISTICS_ROUTE)]
+
+        public IActionResult Get([FromQuery] string mail)
         {
             var driver = driverAccountProvider.GetByMail(mail);
 
@@ -31,6 +34,20 @@ namespace FleetManagement.Controllers
                 return NotFound("User is not a driver or wrong email!");
 
             var stats = statistics.CalculateDriverStatistics(driver);
+
+            return Ok(stats);
+        }
+
+        [HttpGet]
+        [Route(DRIVER_STATISTICS_ROUTE)]
+        public IActionResult GetMileagePerVehicleChart([FromQuery] string mail)
+        {
+            var driver = driverAccountProvider.GetByMail(mail);
+
+            if (driver == null)
+                return NotFound("User is not a driver or wrong email!");
+
+            var stats = statistics.CalculateSummaryMileagePerVehicle(driver);
 
             return Ok(stats);
         }
