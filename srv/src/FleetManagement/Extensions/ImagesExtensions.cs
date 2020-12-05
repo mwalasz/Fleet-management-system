@@ -9,7 +9,19 @@ namespace FleetManagement.Extensions
             try
             {
                 var convertedImage = Convert.ToBase64String(image);
-                return $"{imageFormat};base64,{convertedImage}";
+                return convertedImage.AddTypeOfImageInfo(imageFormat);
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+        }
+
+        public static string AddTypeOfImageInfo(this string base64Image, string imageFormat)
+        {
+            try
+            {
+                return $"{imageFormat};base64,{base64Image}";
             }
             catch (Exception)
             {

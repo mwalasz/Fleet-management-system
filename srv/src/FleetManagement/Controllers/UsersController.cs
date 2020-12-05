@@ -6,10 +6,13 @@ using FleetManagement.Entities.Accounts.UserAccounts.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using FleetManagement.Utils;
 using FleetManagement.Images;
+using FleetManagement.Images.Params;
+using Microsoft.AspNetCore.Http;
 
 namespace FleetManagement.Controllers
 {
@@ -81,12 +84,28 @@ namespace FleetManagement.Controllers
                 if (string.IsNullOrEmpty(user.AvatarImagePath))
                     return NotFound("Użytkownik nie posiada zdjęcia.");
 
-                var image = imagesService.GetUserImage(user);
+                var image = imagesService.UploadUserImage(user);
 
                 if (string.IsNullOrEmpty(image))
                     return BadRequest("Błąd podczas wysyłania zdjęcia.");
 
                 return Ok(image);
+            }
+            
+            return BadRequest("Brak użytkownika o podanym mailu!");
+        }
+
+        [HttpPost]
+        public IActionResult UploadAvatar([FromBody] UploadUserAvatarParams avatarParams)
+        {
+            var user = userAccountProvider.GetByMail(avatarParams.Mail);
+
+            if (user != null)
+            {
+                if (imagesService.DownloadUserImage(avatarParams, user))
+                    return Ok();
+
+                return BadRequest("Nie udało się dodać avataru do użytkownika");
             }
             
             return BadRequest("Brak użytkownika o podanym mailu!");

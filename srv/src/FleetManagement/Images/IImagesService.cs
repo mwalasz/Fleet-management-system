@@ -1,11 +1,11 @@
 ﻿using FleetManagement.Entities.Accounts.UserAccounts.Models;
+using FleetManagement.Images.Params;
 
 namespace FleetManagement.Images
 {
     public interface IImagesService
     {
-        string GetUserImage(UserAccount user);
-
-        //string GetVehicleImage(Vehicle vehicle);
+        string UploadUserImage(UserAccount user);
+        bool DownloadUserImage(UploadUserAvatarParams uploadUserAvatar, UserAccount user);
     }
 }
