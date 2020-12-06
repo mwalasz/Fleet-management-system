@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
@@ -41,8 +40,8 @@ const StyledNavLink = styled(NavLink)`
         }
     }
     &:hover {
-        color: ${({ theme }) => theme.secondColor};
-        font-weight: bold;
+        color: ${({ theme }) => theme.primaryColor};
+        background: ${({ theme }) => theme.primaryBackground};
     }
 
     &.active {
