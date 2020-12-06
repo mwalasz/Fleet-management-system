@@ -4,7 +4,7 @@ import StyledLogout from './StyledLogout';
 import { logoutUser } from '../../redux/actions/authorization_actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { API_URL, DEFAULT_USER_IMAGE } from '../../utils/constans';
+import { API_URL, DEFAULT_USER_IMAGE, USER_ROLES } from '../../utils/constans';
 import { connect } from 'react-redux';
 import { useEffect } from 'react';
 import axios from 'axios';
@@ -56,6 +56,9 @@ const NavigationBar = ({ dispatch, children, user }) => {
                             ? `${user.firstName} ${user.lastName}`
                             : 'Imię Nazwisko'}
                     </Text>
+                    <SmallText>
+                        {user ? getRoleText(user.role) : 'rola'}
+                    </SmallText>
                 </UserDataWrapper>
                 <NavLinksWrapper>{children}</NavLinksWrapper>
             </div>
@@ -74,6 +77,20 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps)(NavigationBar);
 
+const getRoleText = (role) => {
+    switch (role) {
+        case 'admin':
+            return USER_ROLES.admin;
+        case 'driver':
+            return USER_ROLES.driver;
+        case 'manager':
+            return USER_ROLES.manager;
+
+        default:
+            return '';
+    }
+};
+
 const NavLinksWrapper = styled.div``;
 
 const UserDataWrapper = styled.div`
@@ -87,8 +104,17 @@ const Spinner = styled(FontAwesomeIcon)`
     margin: 30px auto;
 `;
 
-const Text = styled.div`
+const SmallText = styled.div`
     margin-bottom: 30px;
+    color: ${({ theme }) => theme.primaryColor};
+    font-size: ${({ theme }) => theme.font.S};
+    font-weight: ${({ theme }) => theme.font.Light};
+    position: relative;
+    transition: all 0.3s;
+    text-align: center;
+`;
+
+const Text = styled.div`
     color: ${({ theme }) => theme.primaryColor};
     font-size: ${({ theme }) => theme.font.XL};
     font-weight: ${({ theme }) => theme.font.Regular};

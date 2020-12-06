@@ -4,7 +4,7 @@ import NewUserModal from '../../../components/newitem/newuser/NewUserModal';
 import { DataGrid } from '@material-ui/data-grid';
 import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
-import { API_URL, userRoles } from '../../../utils/constans';
+import { API_URL, USER_ROLES } from '../../../utils/constans';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faRedo } from '@fortawesome/free-solid-svg-icons';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -93,9 +93,9 @@ const Users = ({ user }) => {
             headerName: 'Rola',
             width: 150,
             renderCell: (params) => {
-                if (params.data.role === 'admin') return userRoles.admin;
-                if (params.data.role === 'driver') return userRoles.driver;
-                if (params.data.role === 'manager') return userRoles.manager;
+                if (params.data.role === 'admin') return USER_ROLES.admin;
+                if (params.data.role === 'driver') return USER_ROLES.driver;
+                if (params.data.role === 'manager') return USER_ROLES.manager;
             },
         },
         {

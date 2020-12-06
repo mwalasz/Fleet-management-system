@@ -8,26 +8,28 @@ import {
     Tooltip,
     Cell,
     Legend,
-    Label,
-    PolarAngleAxis,
-    ResponsiveContainer,
     BarChart,
     Bar,
     XAxis,
     YAxis,
     CartesianGrid,
 } from 'recharts';
-import {
-    formatDurationWithNoStyling,
-    formatDuration,
-} from '../../../../../utils/formating';
-import FontAwesome from 'react-fontawesome';
+import { formatDurationWithNoStyling } from '../../../../../utils/formating';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Grid } from '@material-ui/core';
 import { StyledGrid, StyledGridRow } from '../../../../../components/Grid';
 
-const PieCharts = ({ user }) => {
+const Spinner = styled(FontAwesomeIcon)`
+    color: ${({ theme }) => theme.primaryColor};
+    display: block;
+    width: 200px;
+    height: 200px;
+    margin: 30px auto;
+`;
+
+const DataWithCharts = ({ user }) => {
     const [dataPerVehicle, setDataPerVehicle] = useState(false);
     const [data, setData] = useState(false);
     const [refresh, setRefresh] = useState(false);
@@ -51,47 +53,9 @@ const PieCharts = ({ user }) => {
         }
     };
 
-    const data1 = [
-        {
-            name: 'Page A',
-            uv: 4000,
-            pv: 2400,
-        },
-        {
-            name: 'Page B',
-            uv: 3000,
-            pv: 1398,
-        },
-        {
-            name: 'Page C',
-            uv: 2000,
-            pv: 9800,
-        },
-        {
-            name: 'Page D',
-            uv: 2780,
-            pv: 3908,
-        },
-        {
-            name: 'Page E',
-            uv: 1890,
-            pv: 4800,
-        },
-        {
-            name: 'Page F',
-            uv: 2390,
-            pv: 3800,
-        },
-        {
-            name: 'Page G',
-            uv: 3490,
-            pv: 4300,
-        },
-    ];
-
     useEffect(() => {
         setLoading(true);
-        axios
+        const vehicleStatsPromise = axios
             .get(
                 `${API_URL}/statistics/driver/get_data_per_vehicle_chart?mail=${user.email}`,
                 {
@@ -102,25 +66,20 @@ const PieCharts = ({ user }) => {
                 }
             )
             .then((res) => {
-                setLoading(false);
                 const data = res.data.result;
 
                 if (data) {
-                    console.log('res.data.result');
-                    console.log(data);
-
                     setColorPerVehicle(data);
                     setDataPerVehicle(data);
                 }
             })
             .catch((err) => {
-                setLoading(false);
                 console.log(
                     `An error occurred while downloading user's vehicles: ${err}`
                 );
             });
 
-        axios
+        const driverStatsPromise = axios
             .get(`${API_URL}/statistics/driver/get?mail=${user.email}`, {
                 withCredentials: true,
                 headers: {
@@ -128,21 +87,19 @@ const PieCharts = ({ user }) => {
                 },
             })
             .then((res) => {
-                setLoading(false);
                 const data = res.data.result;
 
-                if (data) {
-                    console.log('res.data.result');
-                    console.log(data);
-                    setData(data);
-                }
+                if (data) setData(data);
             })
             .catch((err) => {
-                setLoading(false);
                 console.log(
                     `An error occurred while downloading user's vehicles: ${err}`
                 );
             });
+
+        Promise.all([vehicleStatsPromise, driverStatsPromise]).then(() =>
+            setLoading(false)
+        );
     }, []);
 
     const formatLabelDistance = (entry) => {
@@ -155,8 +112,8 @@ const PieCharts = ({ user }) => {
 
     return (
         <>
-            {loading && <FontAwesome icon={faSpinner} spin />}
-            {dataPerVehicle && data && (
+            {loading && <Spinner icon={faSpinner} spin size={'3x'} />}
+            {!loading && data && (
                 <Grid
                     container
                     direction="column"
@@ -208,52 +165,56 @@ const PieCharts = ({ user }) => {
                             />
                         </Grid>
                     </Grid>
-                    <Grid
-                        item
-                        container
-                        justify="space-around"
-                        alignItems="center"
-                        direction="row"
-                    >
-                        <PieChartGridItem
-                            title={'Łączny dystans przejechany pojazdem'}
+                    {dataPerVehicle && (
+                        <Grid
+                            item
+                            container
+                            justify="space-around"
+                            alignItems="center"
+                            direction="row"
                         >
-                            <Pie
-                                data={dataPerVehicle.distance}
-                                cx="50%"
-                                cy="50%"
-                                outerRadius={80}
-                                label={formatLabelDistance}
-                            >
-                                {dataPerVehicle.distance.map((entry, index) => (
-                                    <Cell
-                                        key={`cell-${index}`}
-                                        fill={colors[index]}
-                                    />
-                                ))}
-                            </Pie>
-                        </PieChartGridItem>
-                        <PieChartGridItem title={'Łączny czas użycia pojazdu'}>
-                            <Pie
-                                data={dataPerVehicle.duration}
-                                cx="50%"
-                                cy="50%"
-                                outerRadius={80}
-                                label={formatLabelDuration}
-                            >
-                                {dataPerVehicle.duration.map((entry, index) => (
-                                    <Cell
-                                        key={`cell-${index}`}
-                                        fill={colors[index]}
-                                    />
-                                ))}
-                            </Pie>
-                        </PieChartGridItem>
-                        <BarChartGridItem
-                            title={'Porównania prędkości'}
-                            data={dataPerVehicle.speed}
-                        />
-                    </Grid>
+                            <PieChartGridItem title={'Łączny dystans'}>
+                                <Pie
+                                    data={dataPerVehicle.distance}
+                                    cx="50%"
+                                    cy="50%"
+                                    outerRadius={80}
+                                    label={formatLabelDistance}
+                                >
+                                    {dataPerVehicle.distance.map(
+                                        (entry, index) => (
+                                            <Cell
+                                                key={`cell-${index}`}
+                                                fill={colors[index]}
+                                            />
+                                        )
+                                    )}
+                                </Pie>
+                            </PieChartGridItem>
+                            <PieChartGridItem title={'Łączny czas użytku'}>
+                                <Pie
+                                    data={dataPerVehicle.duration}
+                                    cx="50%"
+                                    cy="50%"
+                                    outerRadius={80}
+                                    label={formatLabelDuration}
+                                >
+                                    {dataPerVehicle.duration.map(
+                                        (entry, index) => (
+                                            <Cell
+                                                key={`cell-${index}`}
+                                                fill={colors[index]}
+                                            />
+                                        )
+                                    )}
+                                </Pie>
+                            </PieChartGridItem>
+                            <BarChartGridItem
+                                title={'Porównanie prędkości'}
+                                data={dataPerVehicle.speed}
+                            />
+                        </Grid>
+                    )}
                 </Grid>
             )}
         </>
@@ -309,4 +270,4 @@ const mapStateToProps = (state) => {
         user: state.user,
     };
 };
-export default connect(mapStateToProps)(PieCharts);
+export default connect(mapStateToProps)(DataWithCharts);

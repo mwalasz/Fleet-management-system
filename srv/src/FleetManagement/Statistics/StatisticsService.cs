@@ -75,7 +75,8 @@ namespace FleetManagement.Statistics
                             max = trip.MaximumSpeed;
                     }
 
-                    avg /= driverTrips.Count;
+                    if (driverTrips.Count >= 1)
+                        avg /= driverTrips.Count;
 
                     list.Add(new BarChartSpeedData { Name = vehicleName, AverageSpeed = Math.Round(avg, 2), MaxSpeed = Math.Round(max, 2) });
                 }

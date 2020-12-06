@@ -86,6 +86,10 @@ export const formatEngineType = (engineType) => {
     switch (engineType) {
         case 'Petrol':
             return 'benzynowy';
+        case 'Diesel':
+            return 'diesel';
+        case 'Hybrid':
+            return 'hybryda';
 
         default:
             return errorMessage;
@@ -98,7 +102,7 @@ export const formatDriveType = (driveType) => {
             return 'tylno-napędowy';
         case 'FWD':
             return 'przednio-napędowy';
-        case '4x4':
+        case '4WD':
             return '4x4';
 
         default:

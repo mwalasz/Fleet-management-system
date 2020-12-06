@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import Heading from './Heading';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { API_URL, userRoles } from '../utils/constans';
+import { API_URL, USER_ROLES } from '../utils/constans';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner, faTimes } from '@fortawesome/free-solid-svg-icons';
 import NewItemErrorText from './newitem/NewItemErrorText';

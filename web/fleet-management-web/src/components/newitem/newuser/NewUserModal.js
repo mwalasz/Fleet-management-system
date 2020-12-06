@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
 import axios from 'axios';
-import { API_URL, userRoles } from '../../../utils/constans';
+import { API_URL, USER_ROLES } from '../../../utils/constans';
 import Select from '../../Select';
 import { newUserValidationSchema } from '../../../utils/validations';
 import NewItemInput from '../NewItemInput';
@@ -102,15 +102,18 @@ const NewUserModal = ({ isVisible, handleClose, setRefresh, user }) => {
                     <StyledForm>
                         <SelectWrapper title={'Rola użytkownika:'}>
                             <Select
-                                options={[userRoles.driver, userRoles.manager]}
+                                options={[
+                                    USER_ROLES.driver,
+                                    USER_ROLES.manager,
+                                ]}
                                 value={
                                     isDriver
-                                        ? userRoles.driver
-                                        : userRoles.manager
+                                        ? USER_ROLES.driver
+                                        : USER_ROLES.manager
                                 }
                                 onClick={(e) =>
                                     setIsDriver(
-                                        e.target.value === userRoles.driver
+                                        e.target.value === USER_ROLES.driver
                                     )
                                 }
                             />
