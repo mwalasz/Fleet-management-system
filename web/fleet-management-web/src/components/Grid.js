@@ -6,6 +6,7 @@ export const StyledGridRow = ({ heading, text, icon }) => (
     <StyledRow
         icon={icon}
         container
+        item
         direction="row"
         justify={icon ? 'center' : 'space-between'}
         alignItems="center"

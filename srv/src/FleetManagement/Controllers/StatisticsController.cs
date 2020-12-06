@@ -71,6 +71,20 @@ namespace FleetManagement.Controllers
 
         [HttpGet]
         [Route(DRIVER_STATISTICS_ROUTE)]
+        public IActionResult GetSpeedsPerVehicleChart([FromQuery] string mail)
+        {
+            var driver = driverAccountProvider.GetByMail(mail);
+
+            if (driver == null)
+                return NotFound("User is not a driver or wrong email!");
+
+            var speeds = statistics.CalculateSpeedsPerVehicle(driver);
+            
+            return Ok(speeds);
+        }
+
+        [HttpGet]
+        [Route(DRIVER_STATISTICS_ROUTE)]
         public IActionResult GetDataPerVehicleChart([FromQuery] string mail)
         {
             var driver = driverAccountProvider.GetByMail(mail);
@@ -80,15 +94,9 @@ namespace FleetManagement.Controllers
 
             var duration = statistics.CalculateSummaryDurationPerVehicle(driver);
             var distance = statistics.CalculateSummaryDistancePerVehicle(driver);
+            var speeds = statistics.CalculateSpeedsPerVehicle(driver);
             
-            return Ok(new DataPerVehicleChart { Distance = distance, Duration = duration });
+            return Ok(new ChartSummaryDataPerVehicle { Distance = distance, Duration = duration, Speed = speeds });
         }
-    }
-
-
-    public class DataPerVehicleChart
-    {
-        public List<ChartData> Duration { get; set; }
-        public List<ChartData> Distance { get; set; }
     }
 }

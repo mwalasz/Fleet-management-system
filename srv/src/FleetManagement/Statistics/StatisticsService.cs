@@ -3,7 +3,7 @@ using FleetManagement.Entities.Accounts.DriverAccounts.Models;
 using FleetManagement.Entities.Trips;
 using FleetManagement.Entities.Vehicles;
 using FleetManagement.Statistics.Models;
-using FleetManagement.Statistics.Models.Charts;
+using FleetManagement.Statistics.Models.Charts.DataModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,9 +50,43 @@ namespace FleetManagement.Statistics
             return new DriverStatistics() { DriverLicenseNumber = driverAccount.DrivingLicenseNumber };
         }
 
-        public List<ChartData> CalculateSummaryDistancePerVehicle(DriverAccount driverAccount)
+        public List<BarChartSpeedData> CalculateSpeedsPerVehicle(DriverAccount driverAccount)
         {
-            var list = new List<ChartData>();
+            var list = new List<BarChartSpeedData>();
+            var userVehicles = driverAccount.Vehicles;
+
+            if (userVehicles.Count != 0)
+            {
+                foreach (var vehicle in userVehicles)
+                {
+                    var vehicleData = vehicleProvider.GetById(vehicle.Id);
+
+                    var vehicleName = vehicleProvider.GetVehicleName(vehicleData.VIN);
+                    var driverTrips = vehicleData.Trips.Where(x => x.DriverAccountId == driverAccount.Id)?.ToList();
+                    
+                    double avg = 0;
+                    double max = 0;
+
+                    foreach (var trip in driverTrips)
+                    {
+                        avg += trip.AverageSpeed;
+
+                        if (trip.MaximumSpeed > max)
+                            max = trip.MaximumSpeed;
+                    }
+
+                    avg /= driverTrips.Count;
+
+                    list.Add(new BarChartSpeedData { Name = vehicleName, AverageSpeed = Math.Round(avg, 2), MaxSpeed = Math.Round(max, 2) });
+                }
+            }
+
+            return list;
+        }
+
+        public List<PieChartData> CalculateSummaryDistancePerVehicle(DriverAccount driverAccount)
+        {
+            var list = new List<PieChartData>();
             var userVehicles = driverAccount.Vehicles;
 
             if (userVehicles.Count != 0)
@@ -68,16 +102,16 @@ namespace FleetManagement.Statistics
                     foreach (var trip in driverTrips)
                         mileage += trip.Distance;
 
-                    list.Add(new ChartData { Name = vehicleName, Value = Math.Round(mileage / 1000, 2) });
+                    list.Add(new PieChartData { Name = vehicleName, Value = Math.Round(mileage / 1000, 2) });
                 }
             }
 
             return list;
         }
 
-        public List<ChartData> CalculateSummaryDurationPerVehicle(DriverAccount driverAccount)
+        public List<PieChartData> CalculateSummaryDurationPerVehicle(DriverAccount driverAccount)
         {
-            var list = new List<ChartData>();
+            var list = new List<PieChartData>();
             var userVehicles = driverAccount.Vehicles;
 
             if (userVehicles.Count != 0)
@@ -93,7 +127,7 @@ namespace FleetManagement.Statistics
                     foreach (var trip in driverTrips)
                         duration += trip.TravelTime;
 
-                    list.Add(new ChartData { Name = vehicleName, Value = duration });
+                    list.Add(new PieChartData { Name = vehicleName, Value = duration });
                 }
             }
 
