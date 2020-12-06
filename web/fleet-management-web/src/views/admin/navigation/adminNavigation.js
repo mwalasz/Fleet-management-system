@@ -12,7 +12,7 @@ const AdminNavigation = ({ dispatch }) => {
                 <FontAwesomeIcon icon={faUsers} /> Użytkownicy
             </StyledNavLink>
             <StyledNavLink exact to={AdminRoutes.companies}>
-                <FontAwesomeIcon icon={faIndustry} /> Firmy
+                <FontAwesomeIcon icon={faIndustry} /> Przedsiębiorstwa
             </StyledNavLink>
         </NavigationBar>
     );

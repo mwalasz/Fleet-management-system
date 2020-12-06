@@ -63,7 +63,7 @@ const Companies = ({ user }) => {
         {
             field: 'mail',
             headerName: 'Mail',
-            width: 320,
+            width: 230,
         },
         {
             field: 'phoneNumber',
@@ -74,7 +74,7 @@ const Companies = ({ user }) => {
             align: 'center',
             headerAlign: 'center',
         },
-        { field: 'address', headerName: 'Adres', width: 200, sortable: false },
+        { field: 'address', headerName: 'Adres', width: 290, sortable: false },
         { field: 'manager', headerName: 'Kierownik', width: 200 },
     ];
 
