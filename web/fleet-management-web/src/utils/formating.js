@@ -9,7 +9,7 @@ export const roundTo = (numOfPlaces, numberToRound) => {
         : parseFloat(numberToRound);
 };
 
-export const formatTimeData = (time) => {
+export const formatDurationWithNoStyling = (time) => {
     let toReturn;
 
     if (time < 60) {
@@ -28,7 +28,11 @@ export const formatTimeData = (time) => {
         toReturn = `${h} h, ${m} min, ${s} s`;
     }
 
-    return p(toReturn);
+    return toReturn;
+};
+
+export const formatDuration = (time) => {
+    return p(formatDurationWithNoStyling(time));
 };
 
 export const formatDate = (date) => {

@@ -50,7 +50,7 @@ namespace FleetManagement.Statistics
             return new DriverStatistics() { DriverLicenseNumber = driverAccount.DrivingLicenseNumber };
         }
 
-        public List<ChartData> CalculateSummaryMileagePerVehicle(DriverAccount driverAccount)
+        public List<ChartData> CalculateSummaryDistancePerVehicle(DriverAccount driverAccount)
         {
             var list = new List<ChartData>();
             var userVehicles = driverAccount.Vehicles;
@@ -69,6 +69,31 @@ namespace FleetManagement.Statistics
                         mileage += trip.Distance;
 
                     list.Add(new ChartData { Name = vehicleName, Value = Math.Round(mileage / 1000, 2) });
+                }
+            }
+
+            return list;
+        }
+
+        public List<ChartData> CalculateSummaryDurationPerVehicle(DriverAccount driverAccount)
+        {
+            var list = new List<ChartData>();
+            var userVehicles = driverAccount.Vehicles;
+
+            if (userVehicles.Count != 0)
+            {
+                foreach (var vehicle in userVehicles)
+                {
+                    var vehicleData = vehicleProvider.GetById(vehicle.Id);
+
+                    var vehicleName = vehicleProvider.GetVehicleName(vehicleData.VIN);
+                    double duration = 0;
+                    var driverTrips = vehicleData.Trips.Where(x => x.DriverAccountId == driverAccount.Id)?.ToList();
+
+                    foreach (var trip in driverTrips)
+                        duration += trip.TravelTime;
+
+                    list.Add(new ChartData { Name = vehicleName, Value = duration });
                 }
             }
 

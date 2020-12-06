@@ -9,6 +9,8 @@ namespace FleetManagement.Statistics
     {
         public DriverStatistics CalculateDriverStatistics(DriverAccount driverAccount);
 
-        public List<ChartData> CalculateSummaryMileagePerVehicle(DriverAccount driverAccount);
+        public List<ChartData> CalculateSummaryDistancePerVehicle(DriverAccount driverAccount);
+
+        public List<ChartData> CalculateSummaryDurationPerVehicle(DriverAccount driverAccount);
     }
 }

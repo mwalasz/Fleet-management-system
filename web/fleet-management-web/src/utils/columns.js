@@ -4,7 +4,7 @@ import {
     formatPrice,
     formatDistance,
     formatSpeed,
-    formatTimeData,
+    formatDuration,
     formatMileage,
 } from './formating';
 
@@ -88,7 +88,7 @@ export const tripsColumns = [
         width: 150,
         sortable: false,
         headerAlign: 'center',
-        renderCell: (params) => formatTimeData(params.data.travelTime),
+        renderCell: (params) => formatDuration(params.data.travelTime),
     },
     {
         field: 'averageSpeed',
