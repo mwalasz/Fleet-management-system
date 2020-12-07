@@ -92,49 +92,47 @@ const Users = ({ user }) => {
     ];
 
     return (
-        <>
-            <ContentWrapper>
-                <ContentHeader>
-                    <Title>
-                        {activeUsers
-                            ? 'Aktywni Użytkownicy'
-                            : 'Nieaktywni Użytkownicy'}
-                    </Title>
-                    <Button
-                        wide
-                        secondary
-                        onClick={() => setModalVisible(!modalVisible)}
-                    >
-                        DODAJ
-                    </Button>
-                </ContentHeader>
-                <ContentBody>
-                    <CheckBox
-                        isUsers
-                        active={activeUsers}
-                        handleChangeActiveness={() => {
-                            setActiveUsers(!activeUsers);
-                            setRefresh(!refresh);
-                        }}
-                    />
-                    <DataGridWrapper>
-                        <DataGrid
-                            loading={loading}
-                            rows={users}
-                            columns={[...ADMIN_USERS_COLUMNS, ...columnsButton]}
-                            pageSize={parseInt(visualViewport.height / 80)}
-                            disableSelectionOnClick
-                            hideFooterRow
-                        />
-                    </DataGridWrapper>
-                </ContentBody>
-                <NewUserModal
-                    isVisible={modalVisible}
-                    handleClose={() => setModalVisible(false)}
-                    setRefresh={() => setRefresh(!refresh)}
+        <ContentWrapper>
+            <ContentHeader>
+                <Title>
+                    {activeUsers
+                        ? 'Aktywni Użytkownicy'
+                        : 'Nieaktywni Użytkownicy'}
+                </Title>
+                <Button
+                    wide
+                    secondary
+                    onClick={() => setModalVisible(!modalVisible)}
+                >
+                    DODAJ
+                </Button>
+            </ContentHeader>
+            <ContentBody>
+                <CheckBox
+                    isUsers
+                    active={activeUsers}
+                    handleChangeActiveness={() => {
+                        setActiveUsers(!activeUsers);
+                        setRefresh(!refresh);
+                    }}
                 />
-            </ContentWrapper>
-        </>
+                <DataGridWrapper>
+                    <DataGrid
+                        loading={loading}
+                        rows={users}
+                        columns={[...ADMIN_USERS_COLUMNS, ...columnsButton]}
+                        pageSize={parseInt(visualViewport.height / 80)}
+                        disableSelectionOnClick
+                        hideFooterRow
+                    />
+                </DataGridWrapper>
+            </ContentBody>
+            <NewUserModal
+                isVisible={modalVisible}
+                handleClose={() => setModalVisible(false)}
+                setRefresh={() => setRefresh(!refresh)}
+            />
+        </ContentWrapper>
     );
 };
 

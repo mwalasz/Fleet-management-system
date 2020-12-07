@@ -55,51 +55,30 @@ const DataWithCharts = ({ user }) => {
 
     useEffect(() => {
         setLoading(true);
-        const vehicleStatsPromise = axios
-            .get(
-                `${API_URL}/statistics/driver/get_data_per_vehicle_chart?mail=${user.email}`,
-                {
-                    withCredentials: true,
-                    headers: {
-                        Authorization: 'Bearer ' + user.token,
-                    },
-                }
-            )
-            .then((res) => {
-                const data = res.data.result;
-
-                if (data) {
-                    setColorPerVehicle(data);
-                    setDataPerVehicle(data);
-                }
-            })
-            .catch((err) => {
-                console.log(
-                    `An error occurred while downloading user's vehicles: ${err}`
-                );
-            });
-
-        const driverStatsPromise = axios
-            .get(`${API_URL}/statistics/driver/get?mail=${user.email}`, {
+        axios
+            .get(`${API_URL}/statistics/driver/get_all?mail=${user.email}`, {
                 withCredentials: true,
                 headers: {
                     Authorization: 'Bearer ' + user.token,
                 },
             })
             .then((res) => {
+                setLoading(false);
                 const data = res.data.result;
 
-                if (data) setData(data);
+                if (data) {
+                    const vehicleData = data.perVehicleData;
+                    setColorPerVehicle(vehicleData);
+                    setDataPerVehicle(vehicleData);
+                    setData(data.driverData);
+                }
             })
             .catch((err) => {
+                setLoading(false);
                 console.log(
                     `An error occurred while downloading user's vehicles: ${err}`
                 );
             });
-
-        Promise.all([vehicleStatsPromise, driverStatsPromise]).then(() =>
-            setLoading(false)
-        );
     }, []);
 
     const formatLabelDistance = (entry) => {

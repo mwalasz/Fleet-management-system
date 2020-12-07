@@ -29,8 +29,6 @@ const Trips = ({ user }) => {
     const [selectedTrip, setSelectedTrip] = useState(null);
 
     useEffect(() => {
-        console.log('user');
-        console.log(user);
         setLoading(true);
         axios
             .get(`${API_URL}/drivers/get_all_trips?mail=${user.email}`, {

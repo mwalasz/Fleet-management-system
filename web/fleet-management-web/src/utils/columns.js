@@ -249,3 +249,29 @@ export const ADMIN_USERS_COLUMNS = [
         },
     },
 ];
+
+export const MANAGER_DRIVERS_COLUMNS = [
+    { field: 'firstName', headerName: 'Imię', width: 230 },
+    { field: 'lastName', headerName: 'Nazwisko', width: 260 },
+    {
+        field: 'phoneNumber',
+        headerName: 'Numer telefonu',
+        type: 'number',
+        width: 130,
+        sortable: false,
+        align: 'center',
+        headerAlign: 'center',
+    },
+    {
+        field: 'email',
+        headerName: 'Mail',
+        width: 320,
+    },
+    {
+        field: 'drivingLicenseNumber',
+        headerName: 'Prawo jazdy',
+        width: 130,
+        align: 'center',
+        headerAlign: 'center',
+    },
+];
