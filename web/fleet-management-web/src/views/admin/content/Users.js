@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import NewUserModal from '../../../components/newitem/newuser/NewUserModal';
 import { DataGrid } from '@material-ui/data-grid';
-import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
-import { API_URL, USER_ROLES } from '../../../utils/constans';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { API_URL } from '../../../utils/constans';
 import { faTrash, faRedo } from '@fortawesome/free-solid-svg-icons';
-import Checkbox from '@material-ui/core/Checkbox';
+import CheckBox from './components/CheckBox';
+import { DataGridWrapper, StyledIcon } from './components/Common';
 import Button from '../../../components/Button';
 import Title from '../../../components/Title';
 import {
@@ -15,6 +14,7 @@ import {
     ContentBody,
     ContentHeader,
 } from '../../../components/PageContents';
+import { ADMIN_USERS_COLUMNS } from '../../../utils/columns';
 
 const Users = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
@@ -71,33 +71,7 @@ const Users = ({ user }) => {
         }
     };
 
-    const columns = [
-        { field: 'firstName', headerName: 'Imię', width: 230 },
-        { field: 'lastName', headerName: 'Nazwisko', width: 260 },
-        {
-            field: 'phoneNumber',
-            headerName: 'Numer telefonu',
-            type: 'number',
-            width: 130,
-            sortable: false,
-            align: 'center',
-            headerAlign: 'center',
-        },
-        {
-            field: 'email',
-            headerName: 'Mail',
-            width: 320,
-        },
-        {
-            field: 'role',
-            headerName: 'Rola',
-            width: 150,
-            renderCell: (params) => {
-                if (params.data.role === 'admin') return USER_ROLES.admin;
-                if (params.data.role === 'driver') return USER_ROLES.driver;
-                if (params.data.role === 'manager') return USER_ROLES.manager;
-            },
-        },
+    const columnsButton = [
         {
             headerAlign: 'center',
             field: 'remove',
@@ -117,11 +91,6 @@ const Users = ({ user }) => {
         },
     ];
 
-    const handleChangeActiveness = () => {
-        setActiveUsers(!activeUsers);
-        setRefresh(!refresh);
-    };
-
     return (
         <>
             <ContentWrapper>
@@ -140,23 +109,19 @@ const Users = ({ user }) => {
                     </Button>
                 </ContentHeader>
                 <ContentBody>
-                    <FilterWrapper>
-                        <Checkbox
-                            color="default"
-                            onChange={handleChangeActiveness}
-                            checked={activeUsers}
-                        />
-                        <Text>
-                            {activeUsers
-                                ? 'Odznacz, aby wyświetlić nieaktywnych użytkowników:'
-                                : 'Zanacz, aby wyświetlić aktywnych użytkowników:'}
-                        </Text>
-                    </FilterWrapper>
+                    <CheckBox
+                        isUsers
+                        active={activeUsers}
+                        handleChangeActiveness={() => {
+                            setActiveUsers(!activeUsers);
+                            setRefresh(!refresh);
+                        }}
+                    />
                     <DataGridWrapper>
                         <DataGrid
                             loading={loading}
                             rows={users}
-                            columns={columns}
+                            columns={[...ADMIN_USERS_COLUMNS, ...columnsButton]}
                             pageSize={parseInt(visualViewport.height / 80)}
                             disableSelectionOnClick
                             hideFooterRow
@@ -172,27 +137,6 @@ const Users = ({ user }) => {
         </>
     );
 };
-
-const StyledIcon = styled(FontAwesomeIcon)`
-    margin: 0px auto;
-    cursor: pointer;
-`;
-
-const Text = styled.text`
-    font-size: ${({ theme }) => theme.font.M};
-    font-weight: ${({ theme }) => theme.font.Regular};
-    transition: all 0.3s;
-    display: inline;
-    margin: 10px;
-`;
-
-const FilterWrapper = styled.div`
-    margin-bottom: 10px;
-`;
-
-const DataGridWrapper = styled.div`
-    height: calc(100vh - 220px);
-`;
 
 const mapStateToProps = (state) => {
     return {

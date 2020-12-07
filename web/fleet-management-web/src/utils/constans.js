@@ -1,6 +1,6 @@
 export const API_URL = 'http://localhost:59657/api';
 
-export const GOOGLE_MAPS_API_KEY = '';
+export const GOOGLE_MAPS_API_KEY = 'AIzaSyDaOHc_qSM6ZE4sP4GMTEgFonWOP478R-U';
 
 export const GOOGLE_MAPS_URL = GOOGLE_MAPS_API_KEY
     ? `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&v=3.exp&libraries=geometry,drawing,places`

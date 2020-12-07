@@ -7,6 +7,7 @@ import {
     formatDuration,
     formatMileage,
 } from './formating';
+import { USER_ROLES } from './constans';
 
 export const refuelingsColumns = [
     {
@@ -183,5 +184,68 @@ export const vehiclesCondensedColumns = [
         sortable: false,
         align: 'center',
         headerAlign: 'center',
+    },
+];
+
+export const ADMIN_COMPANIES_COLUMNS = [
+    { field: 'name', headerName: 'Nazwa', width: 150 },
+    {
+        field: 'description',
+        headerName: 'Opis',
+        width: 260,
+        sortable: false,
+    },
+    {
+        field: 'nip',
+        headerName: 'Numer NIP',
+        width: 130,
+        sortable: false,
+        align: 'center',
+        headerAlign: 'center',
+    },
+    {
+        field: 'mail',
+        headerName: 'Mail',
+        width: 230,
+    },
+    {
+        field: 'phoneNumber',
+        headerName: 'Numer telefonu',
+        type: 'number',
+        width: 130,
+        sortable: false,
+        align: 'center',
+        headerAlign: 'center',
+    },
+    { field: 'address', headerName: 'Adres', width: 290, sortable: false },
+    { field: 'manager', headerName: 'Kierownik', width: 200 },
+];
+
+export const ADMIN_USERS_COLUMNS = [
+    { field: 'firstName', headerName: 'Imię', width: 230 },
+    { field: 'lastName', headerName: 'Nazwisko', width: 260 },
+    {
+        field: 'phoneNumber',
+        headerName: 'Numer telefonu',
+        type: 'number',
+        width: 130,
+        sortable: false,
+        align: 'center',
+        headerAlign: 'center',
+    },
+    {
+        field: 'email',
+        headerName: 'Mail',
+        width: 320,
+    },
+    {
+        field: 'role',
+        headerName: 'Rola',
+        width: 150,
+        renderCell: (params) => {
+            if (params.data.role === 'admin') return USER_ROLES.admin;
+            if (params.data.role === 'driver') return USER_ROLES.driver;
+            if (params.data.role === 'manager') return USER_ROLES.manager;
+        },
     },
 ];
