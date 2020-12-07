@@ -1,5 +1,6 @@
 ﻿using FleetManagement.Entities.Accounts.DriverAccounts;
 using FleetManagement.Statistics;
+using FleetManagement.Statistics.Models;
 using FleetManagement.Statistics.Models.Charts;
 using FleetManagement.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -97,6 +98,34 @@ namespace FleetManagement.Controllers
             var speeds = statistics.CalculateSpeedsPerVehicle(driver);
             
             return Ok(new ChartSummaryDataPerVehicle { Distance = distance, Duration = duration, Speed = speeds });
+        }
+
+        [HttpGet]
+        [Route(DRIVER_STATISTICS_ROUTE)]
+        public IActionResult GetAll([FromQuery] string mail)
+        {
+            var driver = driverAccountProvider.GetByMail(mail);
+
+            if (driver == null)
+                return NotFound("User is not a driver or wrong email!");
+
+            var duration = statistics.CalculateSummaryDurationPerVehicle(driver);
+            var distance = statistics.CalculateSummaryDistancePerVehicle(driver);
+            var speeds = statistics.CalculateSpeedsPerVehicle(driver);
+            var stats = statistics.CalculateDriverStatistics(driver);
+            
+            return Ok(
+                new CombinedDriverStatistics
+                { 
+                    DriverData = stats, 
+                    PerVehicleData = new ChartSummaryDataPerVehicle
+                    {
+                        Distance = distance, 
+                        Duration = duration, 
+                        Speed = speeds 
+                    },
+                }
+            );
         }
     }
 }
