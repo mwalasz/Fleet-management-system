@@ -9,6 +9,7 @@ using FleetManagement.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 
 namespace FleetManagement.Db.Repositories
@@ -81,7 +82,7 @@ namespace FleetManagement.Db.Repositories
             }
             catch (System.Exception e)
             {
-                return BadRequest($"Error while adding new company: {e.Message}");
+                return BadRequest($"Błąd w trakcie dodawania nowego przedsiębiorstwa: {e.Message}");
             }
         }
 
@@ -99,7 +100,7 @@ namespace FleetManagement.Db.Repositories
                 .Where(company => nips.Contains(company.NIP));
 
             if (companies.Count().Equals(0))
-                return NotFound("Nie znaleziono podanych firm.");
+                return NotFound("Nie znaleziono podanych przedsiębiorstw.");
 
             foreach (var company in companies)
             {
@@ -113,6 +114,17 @@ namespace FleetManagement.Db.Repositories
             }
 
             return Ok("Pomyślnie zaktualizowano dostępność podanych użytkowników.");
+        }
+
+        [HttpGet]
+        public IActionResult GetDrivers(string nip)
+        {
+            var company = companyProvider.GetByNip(nip);
+
+            if (company == null)
+                return NotFound("Nie znaleziono przedsiębiorstwa o podanym numerze NIP!");
+
+            return Ok(mapper.Map<Company, CompanyDto>(company).Drivers);
         }
     }
 }

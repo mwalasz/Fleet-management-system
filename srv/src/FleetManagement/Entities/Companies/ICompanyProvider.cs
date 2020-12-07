@@ -5,8 +5,9 @@ namespace FleetManagement.Entities.Companies
 {
     public interface ICompanyProvider : IBaseOperations<Company>
     {
-        bool CheckIfThisNipAlreadyExists(string nip);
-        bool CheckIfThisNameAlreadyExists(string name);
-        bool CheckIfThisMailAlreadyExists(string mail);
+        public Company GetByNip(string nip);
+        public bool CheckIfThisNipAlreadyExists(string nip);
+        public bool CheckIfThisNameAlreadyExists(string name);
+        public bool CheckIfThisMailAlreadyExists(string mail);
     }
 }

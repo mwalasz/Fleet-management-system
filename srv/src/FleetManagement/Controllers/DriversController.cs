@@ -3,6 +3,7 @@ using FleetManagement.Entities.Accounts.DriverAccounts;
 using FleetManagement.Entities.Accounts.DriverAccounts.DTO;
 using FleetManagement.Entities.Accounts.DriverAccounts.Models;
 using FleetManagement.Entities.Accounts.DriverAccounts.Params;
+using FleetManagement.Entities.Companies;
 using FleetManagement.Entities.Companies.Models;
 using FleetManagement.Entities.Trips;
 using FleetManagement.Entities.Trips.Models;
@@ -26,14 +27,16 @@ namespace FleetManagement.Controllers
         private readonly IDriverAccountProvider driverAccountProvider;
         private readonly ITripProvider tripProvider;
         private readonly IVehicleProvider vehicleProvider;
+        private readonly ICompanyProvider companyProvider;
 
         public DriversController(IMapper mapper, IDriverAccountProvider driverAccountProvider,
-            ITripProvider tripProvider, IVehicleProvider vehicleProvider)
+            ITripProvider tripProvider, IVehicleProvider vehicleProvider, ICompanyProvider companyProvider)
         {
             this.mapper = mapper;
             this.driverAccountProvider = driverAccountProvider;
             this.tripProvider = tripProvider;
             this.vehicleProvider = vehicleProvider;
+            this.companyProvider = companyProvider;
         }
 
         [HttpGet]
@@ -108,7 +111,7 @@ namespace FleetManagement.Controllers
                 return Ok(trips.Count() != 0 ? trips.Select(x => mapper.Map<Trip, TripDto>(x)) : new List<TripDto>());
             }
 
-            return NotFound();
+            return NotFound("Nie znaleziono kierowcy o podanym mailu!");
         }
 
         [HttpPut]

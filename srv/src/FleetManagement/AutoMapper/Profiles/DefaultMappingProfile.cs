@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FleetManagement.Authentication.Models.Results;
 using FleetManagement.AutoMapper.ValueResolvers;
+using FleetManagement.AutoMapper.ValueResolvers.Companies;
 using FleetManagement.AutoMapper.ValueResolvers.Drivers;
 using FleetManagement.AutoMapper.ValueResolvers.PowerTrains;
 using FleetManagement.AutoMapper.ValueResolvers.TripDtos;
@@ -41,6 +42,8 @@ namespace FleetManagement.AutoMapper.Profiles
                 .ForMember(dto => dto.Vehicles, mce => mce.MapFrom<DriverDtoVehiclesValueResolver>());
             CreateMap<DriverAccount, DriverTripInfoDto>()
                 .ForMember(dto => dto.Account, mce => mce.MapFrom<DriverTripInfoDtoAccountValueResolver>());
+            CreateMap<DriverAccount, DriverAccountBasicInfoDto>()
+                .ForMember(dto => dto.Account, mce => mce.MapFrom<DriverBasicInfoDtoAccountValueResolver>());
 
             CreateMap<Powertrain, PowertrainDto>()
                 .ForMember(dto => dto.EngineType, mce => mce.MapFrom<PowerTrainDtoEngineTypeValueResolver>())
@@ -70,7 +73,8 @@ namespace FleetManagement.AutoMapper.Profiles
                 .ForMember(dto => dto.Model, mce => mce.MapFrom<VehicleBasicInfoDtoBrandModelValueResolver>());
 
             CreateMap<Company, CompanyDto>()
-                .ForMember(dto => dto.ManagerAccount, mce => mce.MapFrom<CompanyDtoManagerAccountValueResolver>());
+                .ForMember(dto => dto.ManagerAccount, mce => mce.MapFrom<CompanyDtoManagerAccountValueResolver>())
+                .ForMember(dto => dto.Drivers, mce => mce.MapFrom<CompanyDtoDriversValueResolver>());
         }
     }
 }

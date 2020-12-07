@@ -1,8 +1,10 @@
-﻿using FleetManagement.Entities.Accounts.ManagerAccounts.DTO;
+﻿using FleetManagement.Entities.Accounts.DriverAccounts.Models;
+using FleetManagement.Entities.Accounts.ManagerAccounts.DTO;
+using System.Collections.Generic;
 
 namespace FleetManagement.Entities.Companies.Models
 {
-    public class CompanyDto
+    public class CompanyDto : EntityBase
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -11,5 +13,6 @@ namespace FleetManagement.Entities.Companies.Models
         public string Mail { get; set; }
         public string PhoneNumber { get; set; }
         public ManagerAccountDto ManagerAccount { get; set; }
+        public List<DriverAccountBasicInfoDto> Drivers { get; set; }
     }
 }

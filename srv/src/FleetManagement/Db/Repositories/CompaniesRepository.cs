@@ -18,22 +18,28 @@ namespace FleetManagement.Db.Repositories
         public bool CheckIfThisNameAlreadyExists(string name)
         {
             return GetAll()
-                    .Where(x => x.Name == name)
+                    .Where(x => x.Name.Equals(name))
                     .Count() != 0;
         }
 
         public bool CheckIfThisNipAlreadyExists(string nip)
         {
             return GetAll()
-                    .Where(x => x.NIP == nip)
+                    .Where(x => x.NIP.Equals(nip))
                     .Count() != 0;
         }
 
         public bool CheckIfThisMailAlreadyExists(string mail)
         {
             return GetAll()
-                    .Where(x => x.Mail == mail)
+                    .Where(x => x.Mail.Equals(mail))
                     .Count() != 0;
+        }
+
+        public Company GetByNip(string nip)
+        {
+            return GetAll()
+                    .FirstOrDefault(x => x.NIP.Equals(nip));
         }
     }
 }
