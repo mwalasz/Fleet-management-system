@@ -36,6 +36,11 @@ namespace FleetManagement.Entities.Companies.Models
         /// Numer telefonu.
         /// </summary>
         public virtual string PhoneNumber { get; set; }
+
+        /// <summary>
+        /// Określa aktywność firmy.
+        /// </summary>
+        public virtual bool IsActive { get; set; }
         
         /// <summary>
         /// Konto menedżera.
@@ -71,6 +76,8 @@ namespace FleetManagement.Entities.Companies.Models
                 .Unique()
                 .Not.Nullable();
             Map(x => x.PhoneNumber)
+                .Not.Nullable();
+            Map(x => x.IsActive)
                 .Not.Nullable();
             Map(x => x.ManagerAccountId)
                 .Not.Nullable();

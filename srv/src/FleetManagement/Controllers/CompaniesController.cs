@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
+using FleetManagement.Entities.Accounts.DriverAccounts;
 using FleetManagement.Entities.Accounts.ManagerAccounts;
+using FleetManagement.Entities.Accounts.UserAccounts;
 using FleetManagement.Entities.Companies;
 using FleetManagement.Entities.Companies.Models;
 using FleetManagement.Entities.Companies.Params;
 using FleetManagement.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FleetManagement.Db.Repositories
@@ -18,19 +21,25 @@ namespace FleetManagement.Db.Repositories
         private readonly ICompanyProvider companyProvider;
         private readonly IMapper mapper;
         private readonly IManagerAccountProvider managerAccountProvider;
+        private readonly IDriverAccountProvider driverAccountProvider;
+        private readonly IUserAccountProvider userAccountProvider;
 
-        public CompaniesController(ICompanyProvider companyProvider, IMapper mapper, IManagerAccountProvider managerAccountProvider)
+        public CompaniesController(ICompanyProvider companyProvider, IMapper mapper, 
+            IManagerAccountProvider managerAccountProvider, IDriverAccountProvider driverAccountProvider, IUserAccountProvider userAccountProvider)
         {
             this.companyProvider = companyProvider;
             this.mapper = mapper;
             this.managerAccountProvider = managerAccountProvider;
+            this.driverAccountProvider = driverAccountProvider;
+            this.userAccountProvider = userAccountProvider;
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public IEnumerable<CompanyDto> GetAll(bool active)
         {
-            var companies = companyProvider.GetAll();
-            return Ok(companies.Select(c => mapper.Map<Company, CompanyDto>(c)));
+            return companyProvider.GetAll()
+                    .Where(x => x.IsActive == active)
+                    .Select(c => mapper.Map<Company, CompanyDto>(c));
         }
 
         [HttpPost]
@@ -65,6 +74,7 @@ namespace FleetManagement.Db.Repositories
                     NIP = formattedNip,
                     PhoneNumber = newCompanyParam.PhoneNumber,
                     ManagerAccountId = manager.Id,
+                    IsActive = true,
                 });
 
                 return Ok();
@@ -73,6 +83,36 @@ namespace FleetManagement.Db.Repositories
             {
                 return BadRequest($"Error while adding new company: {e.Message}");
             }
+        }
+
+
+        /// <summary>
+        /// Zmienia dostępność konta firmowego oraz jego kierowców.
+        /// </summary>
+        /// <param name="nips"></param>
+        /// <param name="isActive"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public IActionResult ChangeAvailability(IEnumerable<string> nips, bool isActive = false)
+        {
+            var companies = companyProvider.GetAll()
+                .Where(company => nips.Contains(company.NIP));
+
+            if (companies.Count().Equals(0))
+                return NotFound("Nie znaleziono podanych firm.");
+
+            foreach (var company in companies)
+            {
+                var companyManagerId = managerAccountProvider.GetById(company.ManagerAccountId).UserAccountId;
+                var companyDriversIds = company.Drivers.Select(x => x.UserAccountId);
+                var usersToUpdate = companyDriversIds.Append(companyManagerId);
+                userAccountProvider.UpdateAvailability(usersToUpdate, isActive);
+
+                company.IsActive = isActive;
+                companyProvider.Update(company);
+            }
+
+            return Ok("Pomyślnie zaktualizowano dostępność podanych użytkowników.");
         }
     }
 }

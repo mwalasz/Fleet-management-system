@@ -6,6 +6,7 @@ using FleetManagement.Entities.Accounts.UserAccounts.Models;
 using FleetManagement.Settings;
 using Microsoft.Extensions.Options;
 using NHibernate;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FleetManagement.Db.Repositories
@@ -57,6 +58,40 @@ namespace FleetManagement.Db.Repositories
         }
 
         /// <summary>
+        /// Zmienia dostępność konta użytkownika.
+        /// </summary>
+        /// <param name="emails"></param>
+        /// <param name="isActive"></param>
+        /// <returns></returns>
+        public bool UpdateAvailability(IEnumerable<string> emails, bool isActive)
+        {
+            try
+            {
+                var users = GetAll().Where(user => emails.Contains(user.Email));
+
+                return ChangeAvailability(users, isActive);
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool UpdateAvailability(IEnumerable<int> ids, bool isActive)
+        {
+            try
+            {
+                var users = GetAll().Where(user => ids.Contains(user.Id));
+
+                return ChangeAvailability(users, isActive);
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Aktualizuje hasło użytkownika.
         /// </summary>
         /// <param name="mail">Mail identyfikujący użytkownika.</param>
@@ -82,6 +117,23 @@ namespace FleetManagement.Db.Repositories
             {
                 return false;
             }
+        }
+
+
+        private bool ChangeAvailability(IEnumerable<UserAccount> users, bool isActive)
+        {
+            if (!users.Count().Equals(0))
+            {
+                foreach (var user in users)
+                {
+                    user.IsActive = isActive;
+                    Update(user);
+                }
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

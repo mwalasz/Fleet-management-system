@@ -52,11 +52,7 @@ namespace FleetManagement.Controllers
             if (users.Count().Equals(0))
                 return NotFound("Nie znaleziono podanych użytkowników.");
 
-            foreach (var user in users)
-            {
-                user.IsActive = isActive;
-                userAccountProvider.Update(user);
-            }
+            var success = userAccountProvider.UpdateAvailability(emails, isActive);
 
             return Ok("Pomyślnie zaktualizowano dostępność podanych użytkowników.");
         }

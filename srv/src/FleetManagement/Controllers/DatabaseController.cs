@@ -370,6 +370,7 @@ namespace FleetManagement.Controllers
                 new Company()
                 {
                     Id = 1,
+                    IsActive = true,
                     Name = "JakaśFirma",
                     Description = "Transportujemy rzeczy.",
                     Address = "ul. Miejska 1, Warszawa 89-989",
@@ -383,6 +384,7 @@ namespace FleetManagement.Controllers
                 new Company()
                 {
                     Id = 2,
+                    IsActive = true,
                     Name = "Koszmarh",
                     Description = "Kochają studentów.",
                     Address = "Koszmarhowo 13, Kraków 89-989",
