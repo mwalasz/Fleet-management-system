@@ -28,8 +28,8 @@ const Alert = ({
     };
 
     const chooseMessage = () => {
-        if (success) return 'Operacja zakończona pomyślnie!';
-        if (error || warning) return 'Coś poszło nie tak!';
+        if (success) return 'Sukces!';
+        if (error || warning) return 'Błąd!';
         if (warning) return 'Uwaga!';
 
         return '';
@@ -54,7 +54,7 @@ const Alert = ({
                         {title}
                     </>
                 ) : (
-                    chooseMessage()
+                    <strong>{chooseMessage()}</strong>
                 )}
             </MuiAlert>
         </Snackbar>

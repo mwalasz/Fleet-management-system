@@ -15,6 +15,7 @@ import {
 import { ADMIN_COMPANIES_COLUMNS } from '../../../utils/columns';
 import CheckBox from './components/CheckBox';
 import { DataGridWrapper, StyledIcon } from './components/Common';
+import Alert from '../../../components/Alert';
 
 const Companies = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
@@ -22,6 +23,8 @@ const Companies = ({ user }) => {
     const [companies, setCompanies] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [activeCompanies, setActiveCompanies] = useState(true);
+    const [successAlert, setSuccessAlert] = useState(false);
+    const [errorAlert, setErrorAlert] = useState(false);
 
     useEffect(() => {
         setLoading(true);
@@ -71,8 +74,12 @@ const Companies = ({ user }) => {
                 .then((res) => {
                     console.log(res);
                     setRefresh(!refresh);
+                    setSuccessAlert(true);
                 })
-                .catch((err) => console.log(err));
+                .catch((err) => {
+                    console.log(err);
+                    setErrorAlert(true);
+                });
         }
     };
 
@@ -99,6 +106,21 @@ const Companies = ({ user }) => {
     return (
         <>
             <ContentWrapper>
+                <Alert
+                    success
+                    title={
+                        activeCompanies
+                            ? 'Przedsiębiorstwo dezaktywowane.'
+                            : 'Przedsiębiorstwo aktywowane.'
+                    }
+                    visible={successAlert}
+                    makeInvisible={() => setSuccessAlert(false)}
+                />
+                <Alert
+                    error
+                    visible={errorAlert}
+                    makeInvisible={() => setErrorAlert(false)}
+                />
                 <ContentHeader>
                     <Title>
                         {activeCompanies

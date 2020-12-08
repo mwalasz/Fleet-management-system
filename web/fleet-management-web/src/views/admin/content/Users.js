@@ -15,6 +15,7 @@ import {
     ContentHeader,
 } from '../../../components/PageContents';
 import { ADMIN_USERS_COLUMNS } from '../../../utils/columns';
+import Alert from '../../../components/Alert';
 
 const Users = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
@@ -22,6 +23,8 @@ const Users = ({ user }) => {
     const [users, setUsers] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [activeUsers, setActiveUsers] = useState(true);
+    const [successAlert, setSuccessAlert] = useState(false);
+    const [errorAlert, setErrorAlert] = useState(false);
 
     useEffect(() => {
         setLoading(true);
@@ -66,8 +69,12 @@ const Users = ({ user }) => {
                 .then((res) => {
                     console.log(res);
                     setRefresh(!refresh);
+                    setSuccessAlert(true);
                 })
-                .catch((err) => console.log(err));
+                .catch((err) => {
+                    console.log(err);
+                    setErrorAlert(true);
+                });
         }
     };
 
@@ -93,6 +100,21 @@ const Users = ({ user }) => {
 
     return (
         <ContentWrapper>
+            <Alert
+                success
+                title={
+                    activeUsers
+                        ? 'Użytkownik dezaktywowany.'
+                        : 'Użytkownik aktywowany.'
+                }
+                visible={successAlert}
+                makeInvisible={() => setSuccessAlert(false)}
+            />
+            <Alert
+                error
+                visible={errorAlert}
+                makeInvisible={() => setErrorAlert(false)}
+            />
             <ContentHeader>
                 <Title>
                     {activeUsers
