@@ -29,57 +29,67 @@ const Spinner = styled(FontAwesomeIcon)`
     margin: 30px auto;
 `;
 
-const DataWithCharts = ({ user }) => {
-    const [dataPerVehicle, setDataPerVehicle] = useState(false);
-    const [data, setData] = useState(false);
-    const [refresh, setRefresh] = useState(false);
+const CHART_WIDTH = 500;
+const REDUCED_CHART_WIDTH = 400;
+
+const DataWithCharts = ({ user, loadedStatisticsData, reducedSize }) => {
     const [loading, setLoading] = useState(false);
     const [colors, setColors] = useState([]);
+    const [statisticsData, setStatisticsData] = useState(null);
+    const PIE_CHARTS_RADIUS = reducedSize ? 60 : 80;
 
     const setColorPerVehicle = (data) => {
-        const randomizeColor = () => {
-            let hex = '';
-            while (hex.length < 6)
-                hex += Math.random().toString(16).substr(-6).substr(-1);
+        if (data) {
+            const randomizeColor = () => {
+                let hex = '';
+                while (hex.length < 6)
+                    hex += Math.random().toString(16).substr(-6).substr(-1);
 
-            return `#${hex}`;
-        };
+                return `#${hex}`;
+            };
 
-        let numOfItems = data.distance.length;
-        let i = 0;
-        while (i !== numOfItems) {
-            colors[i] = randomizeColor();
-            i++;
+            let numOfItems = data.duration.length;
+            let i = 0;
+            while (i !== numOfItems) {
+                colors[i] = randomizeColor();
+                i++;
+            }
         }
     };
 
     useEffect(() => {
-        setLoading(true);
-        axios
-            .get(`${API_URL}/statistics/driver/get_all?mail=${user.email}`, {
-                withCredentials: true,
-                headers: {
-                    Authorization: 'Bearer ' + user.token,
-                },
-            })
-            .then((res) => {
-                setLoading(false);
-                const data = res.data.result;
+        if (!loadedStatisticsData) {
+            setLoading(true);
+            axios
+                .get(
+                    `${API_URL}/statistics/driver/get_all?mail=${user.email}`,
+                    {
+                        withCredentials: true,
+                        headers: {
+                            Authorization: 'Bearer ' + user.token,
+                        },
+                    }
+                )
+                .then((res) => {
+                    setLoading(false);
+                    const data = res.data.result;
 
-                if (data) {
-                    const vehicleData = data.perVehicleData;
-                    setColorPerVehicle(vehicleData);
-                    setDataPerVehicle(vehicleData);
-                    setData(data.driverData);
-                }
-            })
-            .catch((err) => {
-                setLoading(false);
-                console.log(
-                    `An error occurred while downloading user's vehicles: ${err}`
-                );
-            });
-    }, []);
+                    if (data) {
+                        setColorPerVehicle(data.perVehicleData);
+                        setStatisticsData(data);
+                    }
+                })
+                .catch((err) => {
+                    setLoading(false);
+                    console.log(
+                        `An error occurred while downloading user's vehicles: ${err}`
+                    );
+                });
+        } else {
+            setColorPerVehicle(loadedStatisticsData.perVehicleData);
+            setStatisticsData(loadedStatisticsData);
+        }
+    }, [loadedStatisticsData]);
 
     const formatLabelDistance = (entry) => {
         return `${entry.value} km`;
@@ -92,7 +102,7 @@ const DataWithCharts = ({ user }) => {
     return (
         <>
             {loading && <Spinner icon={faSpinner} spin size={'3x'} />}
-            {!loading && data && (
+            {!loading && statisticsData && statisticsData.driverData && (
                 <Grid
                     container
                     direction="column"
@@ -116,35 +126,36 @@ const DataWithCharts = ({ user }) => {
                         >
                             <StyledGridRow
                                 heading={'Liczba tras'}
-                                text={data.numberOfTrips}
+                                text={statisticsData.driverData.numberOfTrips}
                             />
                             <StyledGridRow
                                 heading={'Dystans'}
-                                text={`${data.totalDistanceInKilometers.toFixed(
+                                text={`${statisticsData.driverData.totalDistanceInKilometers.toFixed(
                                     2
                                 )} km`}
                             />
                             <StyledGridRow
                                 heading={'Czas'}
                                 text={formatDurationWithNoStyling(
-                                    data.totalDurationInSeconds
+                                    statisticsData.driverData
+                                        .totalDurationInSeconds
                                 )}
                             />
                             <StyledGridRow
                                 heading={'Średnia prędkość'}
-                                text={`${data.averageSpeedInKilometersPerHour.toFixed(
+                                text={`${statisticsData.driverData.averageSpeedInKilometersPerHour.toFixed(
                                     2
                                 )} km/h`}
                             />
                             <StyledGridRow
                                 heading={'Maks. prędkość'}
-                                text={`${data.maximumSpeedInKilometersPerHour.toFixed(
+                                text={`${statisticsData.driverData.maximumSpeedInKilometersPerHour.toFixed(
                                     2
                                 )} km/h`}
                             />
                         </Grid>
                     </Grid>
-                    {dataPerVehicle && (
+                    {statisticsData && statisticsData.perVehicleData && (
                         <Grid
                             item
                             container
@@ -152,15 +163,20 @@ const DataWithCharts = ({ user }) => {
                             alignItems="center"
                             direction="row"
                         >
-                            <PieChartGridItem title={'Łączny dystans'}>
+                            <PieChartGridItem
+                                title={'Łączny dystans'}
+                                reducedSize
+                            >
                                 <Pie
-                                    data={dataPerVehicle.distance}
+                                    data={
+                                        statisticsData.perVehicleData.distance
+                                    }
                                     cx="50%"
                                     cy="50%"
-                                    outerRadius={80}
+                                    outerRadius={PIE_CHARTS_RADIUS}
                                     label={formatLabelDistance}
                                 >
-                                    {dataPerVehicle.distance.map(
+                                    {statisticsData.perVehicleData.distance.map(
                                         (entry, index) => (
                                             <Cell
                                                 key={`cell-${index}`}
@@ -170,15 +186,20 @@ const DataWithCharts = ({ user }) => {
                                     )}
                                 </Pie>
                             </PieChartGridItem>
-                            <PieChartGridItem title={'Łączny czas użytku'}>
+                            <PieChartGridItem
+                                title={'Łączny czas użytku'}
+                                reducedSize
+                            >
                                 <Pie
-                                    data={dataPerVehicle.duration}
+                                    data={
+                                        statisticsData.perVehicleData.duration
+                                    }
                                     cx="50%"
                                     cy="50%"
-                                    outerRadius={80}
+                                    outerRadius={PIE_CHARTS_RADIUS}
                                     label={formatLabelDuration}
                                 >
-                                    {dataPerVehicle.duration.map(
+                                    {statisticsData.perVehicleData.duration.map(
                                         (entry, index) => (
                                             <Cell
                                                 key={`cell-${index}`}
@@ -189,8 +210,9 @@ const DataWithCharts = ({ user }) => {
                                 </Pie>
                             </PieChartGridItem>
                             <BarChartGridItem
+                                reducedSize
                                 title={'Porównanie prędkości'}
-                                data={dataPerVehicle.speed}
+                                data={statisticsData.perVehicleData.speed}
                             />
                         </Grid>
                     )}
@@ -200,10 +222,15 @@ const DataWithCharts = ({ user }) => {
     );
 };
 
-const BarChartGridItem = ({ data, title }) => (
+const BarChartGridItem = ({ data, title, reducedSize }) => (
     <Grid item>
         <ChartTitle>{`${title}:`}</ChartTitle>
-        <BarChart width={500} height={250} data={data} maxBarSize={40}>
+        <BarChart
+            width={reducedSize ? REDUCED_CHART_WIDTH : CHART_WIDTH}
+            height={250}
+            data={data}
+            maxBarSize={40}
+        >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis
@@ -228,10 +255,13 @@ const BarChartGridItem = ({ data, title }) => (
     </Grid>
 );
 
-const PieChartGridItem = ({ children, title }) => (
+const PieChartGridItem = ({ children, title, reducedSize }) => (
     <Grid item>
         <ChartTitle>{`${title}:`}</ChartTitle>
-        <PieChart width={500} height={250}>
+        <PieChart
+            width={reducedSize ? REDUCED_CHART_WIDTH : CHART_WIDTH}
+            height={250}
+        >
             {children}
             <Tooltip />
             <Legend />

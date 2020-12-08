@@ -31,7 +31,7 @@ const StyledWrapper = styled.div`
     background-color: white;
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
     transform: translate(${({ isVisible }) => (isVisible ? '0' : '100%')});
-    transition: transform 0.25s ease-in-out;
+    transition: transform 0.35s ease-in-out;
 
     ${({ wide }) =>
         wide &&
@@ -42,6 +42,7 @@ const StyledWrapper = styled.div`
     ${({ ultraWide }) =>
         ultraWide &&
         css`
+            transition: transform 0.25s ease-in-out;
             width: 65vw;
         `}
 `;

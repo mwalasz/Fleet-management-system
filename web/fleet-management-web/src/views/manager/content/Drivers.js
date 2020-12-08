@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import NewUserModal from '../../../components/newitem/newuser/NewUserModal';
 import { DataGrid } from '@material-ui/data-grid';
 import { connect } from 'react-redux';
 import { API_URL } from '../../../utils/constans';
-import {
-    faTrash,
-    faSpinner,
-    faChartBar,
-} from '@fortawesome/free-solid-svg-icons';
+import { faSpinner, faChartBar } from '@fortawesome/free-solid-svg-icons';
 import Button from '../../../components/Button';
 import Title from '../../../components/Title';
 import {
@@ -19,14 +14,18 @@ import {
 import { MANAGER_DRIVERS_COLUMNS } from '../../../utils/columns';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import DriverStatisticsModal from './drivers/DriverStatisticsModal';
 
 const Drivers = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(false);
     const [statisticsLoading, setStatisticsLoading] = useState(false);
     const [statisticsData, setStatisticsData] = useState({});
-    const [drivers, setDrivers] = useState([]);
-    const [selectedDriver, setSelectedDriver] = useState(null);
+    const [driverAccounts, setDriverAccounts] = useState([]);
+    const [selectedDriverMail, setSelectedDriverMail] = useState('');
+    const [selectedDriverDescription, setSelectedDriverDescription] = useState(
+        ''
+    );
     const [companyName, setCompanyName] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -39,17 +38,23 @@ const Drivers = ({ user }) => {
             sortable: false,
             renderCell: (params) => {
                 return statisticsLoading &&
-                    params.data.email === selectedDriver ? (
+                    params.data.email === selectedDriverMail ? (
                     <Spinner icon={faSpinner} spin size={'2x'} />
                 ) : (
                     <StyledIcon
                         size={'lg'}
                         icon={faChartBar}
                         onClick={() => {
-                            setSelectedDriver(params.data.email);
-                            setStatisticsLoading(true);
-                            loadDriverStats(params.data.email);
-                            // setModalVisible(!modalVisible);
+                            setSelectedDriverMail(params.data.email);
+                            setSelectedDriverDescription(
+                                `${params.data.firstName} ${params.data.lastName} [${params.data.email}]`
+                            );
+                            if (params.data.email !== selectedDriverMail) {
+                                setStatisticsLoading(true);
+                                loadDriverStats(params.data.email);
+                            } else {
+                                setModalVisible(true);
+                            }
                         }}
                     />
                 );
@@ -81,7 +86,7 @@ const Drivers = ({ user }) => {
                     });
 
                     setCompanyName(data.name);
-                    setDrivers(drivers);
+                    setDriverAccounts(drivers);
                 }
             })
             .catch((err) => {
@@ -101,11 +106,15 @@ const Drivers = ({ user }) => {
                 },
             })
             .then((res) => {
-                setStatisticsLoading(false);
                 const data = res.data.result;
 
                 if (data) {
+                    console.log(data);
                     setStatisticsData(data);
+                    setTimeout(() => {
+                        setStatisticsLoading(false);
+                        setModalVisible(true);
+                    }, 500);
                 }
             })
             .catch((err) => {
@@ -136,7 +145,7 @@ const Drivers = ({ user }) => {
                 <DataGridWrapper>
                     <DataGrid
                         loading={loading}
-                        rows={drivers}
+                        rows={driverAccounts}
                         columns={[...MANAGER_DRIVERS_COLUMNS, ...columnsButton]}
                         pageSize={parseInt(visualViewport.height / 80)}
                         disableSelectionOnClick
@@ -144,11 +153,15 @@ const Drivers = ({ user }) => {
                     />
                 </DataGridWrapper>
             </ContentBody>
-            {/* <NewUserModal
+            <DriverStatisticsModal
+                key={selectedDriverMail ? 1 : 0}
+                driverDescription={selectedDriverDescription}
+                driverStatistics={statisticsData}
                 isVisible={modalVisible}
-                handleClose={() => setModalVisible(false)}
-                setRefresh={() => setRefresh(!refresh)}
-            /> */}
+                handleClose={() => {
+                    setModalVisible(false);
+                }}
+            />
         </ContentWrapper>
     );
 };
