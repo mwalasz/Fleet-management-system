@@ -15,6 +15,7 @@ import { MANAGER_DRIVERS_COLUMNS } from '../../../utils/columns';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DriverStatisticsModal from './drivers/DriverStatisticsModal';
+import DriverManagementModal from './drivers/DriverManagementModal';
 
 const Drivers = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
@@ -27,7 +28,8 @@ const Drivers = ({ user }) => {
         ''
     );
     const [companyName, setCompanyName] = useState('');
-    const [modalVisible, setModalVisible] = useState(false);
+    const [statsModalVisible, setStatsModalVisible] = useState(false);
+    const [managementModalVisible, setManagementModalVisible] = useState(false);
 
     const columnsButton = [
         {
@@ -53,7 +55,7 @@ const Drivers = ({ user }) => {
                                 setStatisticsLoading(true);
                                 loadDriverStats(params.data.email);
                             } else {
-                                setModalVisible(true);
+                                setStatsModalVisible(true);
                             }
                         }}
                     />
@@ -113,7 +115,7 @@ const Drivers = ({ user }) => {
                     setStatisticsData(data);
                     setTimeout(() => {
                         setStatisticsLoading(false);
-                        setModalVisible(true);
+                        setStatsModalVisible(true);
                     }, 500);
                 }
             })
@@ -134,11 +136,11 @@ const Drivers = ({ user }) => {
                         : 'Kierowcy w przedsiębiorstwie'}
                 </Title>
                 <Button
-                    wide
+                    ultraWide
                     secondary
-                    onClick={() => setModalVisible(!modalVisible)}
+                    onClick={() => setManagementModalVisible(true)}
                 >
-                    DODAJ
+                    zarządzaj kierowcami
                 </Button>
             </ContentHeader>
             <ContentBody>
@@ -157,9 +159,15 @@ const Drivers = ({ user }) => {
                 key={selectedDriverMail ? 1 : 0}
                 driverDescription={selectedDriverDescription}
                 driverStatistics={statisticsData}
-                isVisible={modalVisible}
+                isVisible={statsModalVisible}
                 handleClose={() => {
-                    setModalVisible(false);
+                    setStatsModalVisible(false);
+                }}
+            />
+            <DriverManagementModal
+                isVisible={managementModalVisible}
+                handleClose={() => {
+                    setManagementModalVisible(false);
                 }}
             />
         </ContentWrapper>

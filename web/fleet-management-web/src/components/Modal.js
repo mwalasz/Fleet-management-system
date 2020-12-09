@@ -64,6 +64,7 @@ const Modal = ({
     centeredTitle,
     error,
     isLoading,
+    button,
 }) => {
     return (
         <>
@@ -74,6 +75,7 @@ const Modal = ({
             >
                 <Content>
                     <ExitIcon icon={faTimes} onClick={handleClose} />
+                    {button}
                     <HeadingWrapper>
                         {title && (
                             <Heading big centered={centeredTitle}>
