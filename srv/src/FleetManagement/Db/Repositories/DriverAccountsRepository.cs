@@ -8,9 +8,11 @@ using FleetManagement.Entities.Accounts.UserAccounts;
 using FleetManagement.Entities.Accounts.UserAccounts.Models;
 using FleetManagement.Entities.Companies;
 using FleetManagement.Entities.Companies.Models;
+using FleetManagement.Entities.Vehicles.Models;
 using FleetManagement.Images;
 using FleetManagement.Images.Params;
 using NHibernate;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FleetManagement.Db.Repositories
@@ -110,6 +112,45 @@ namespace FleetManagement.Db.Repositories
             }
 
             return null;
+        }
+
+        public List<DriverAccount> GetUnemployedDrivers()
+        {
+            var unemployedDrivers = GetAll();
+            var companies = companyProvider.GetAll();
+            
+            foreach (var company in companies)
+            {
+                var drivers = company.Drivers;
+
+                if (drivers.Count != 0)
+                    unemployedDrivers = unemployedDrivers.Where(u => drivers.All(x => x.Id != u.Id));
+            }
+
+            return unemployedDrivers.ToList();
+        }
+
+        public List<DriverAccount> GetDriversFromMailList(IEnumerable<string> mails)
+        {
+            var drivers = new List<DriverAccount>();
+
+            foreach (var driverMail in mails)
+                drivers.Add(GetByMail(driverMail));
+
+            return drivers;
+        }
+
+        public List<DriverAccount> RemoveVehiclesFromNewDrivers(List<DriverAccountBasicInfoDto> oldDrivers, List<DriverAccount> newDrivers)
+        {
+            var newOnes = newDrivers.Where(x => !oldDrivers.Any(e => e.Id == x.Id)).ToList();
+
+            foreach (var driver in newOnes)
+            {
+                driver.Vehicles = new List<Vehicle>();
+                Update(driver);
+            }
+
+            return newOnes;
         }
     }
 }

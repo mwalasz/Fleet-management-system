@@ -29,7 +29,6 @@ namespace FleetManagement.Entities.Accounts.DriverAccounts.Models
             Map(x => x.DrivingLicenseNumber)
                 .Not.Nullable();
             HasManyToMany(x => x.Vehicles)
-                .Cascade.All()
                 .Not.LazyLoad();
         }
     }

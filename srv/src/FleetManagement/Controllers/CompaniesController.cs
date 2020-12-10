@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FleetManagement.Entities.Accounts.DriverAccounts;
+using FleetManagement.Entities.Accounts.DriverAccounts.Models;
 using FleetManagement.Entities.Accounts.ManagerAccounts;
 using FleetManagement.Entities.Accounts.UserAccounts;
 using FleetManagement.Entities.Companies;
@@ -8,6 +9,7 @@ using FleetManagement.Entities.Companies.Params;
 using FleetManagement.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Remotion.Linq.Parsing.Structure.IntermediateModel;
 using System.Collections.Generic;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
@@ -125,6 +127,39 @@ namespace FleetManagement.Db.Repositories
                 return NotFound("Nie znaleziono przedsiębiorstwa o podanym numerze NIP!");
 
             return Ok(mapper.Map<Company, CompanyDto>(company).Drivers);
+        }
+
+        [HttpGet]
+        public IActionResult GetEmployedAndUnemployed(string nip)
+        {
+            var company = companyProvider.GetByNip(nip);
+
+            if (company == null)
+                return NotFound("Nie znaleziono przedsiębiorstwa o podanym numerze NIP!");
+
+            var drivers = driverAccountProvider.GetUnemployedDrivers();
+            var unemployed = drivers.Select(x => mapper.Map<DriverAccount, DriverAccountBasicInfoDto>(x)).ToList();
+            var employed = mapper.Map<Company, CompanyDto>(company).Drivers;
+
+            return Ok(new CompanyDrivers() { Employed = employed, Unemployed = unemployed } );
+        }
+
+        [HttpPut]
+        public IActionResult UpdateDrivers([FromBody] UpdateEmployedDrivers updateEmployedDrivers)
+        {
+            var company = companyProvider.GetByNip(updateEmployedDrivers.NIP);
+
+            if (company == null)
+                return NotFound("Nie znaleziono przedsiębiorstwa o podanym numerze NIP!");
+
+            var allFutureDrivers = driverAccountProvider.GetDriversFromMailList(updateEmployedDrivers.DriverMails);
+            var alreadyEmployed = mapper.Map<Company, CompanyDto>(company).Drivers;
+                
+            driverAccountProvider.RemoveVehiclesFromNewDrivers(alreadyEmployed, allFutureDrivers);
+
+            return companyProvider.UpdateDriversList(updateEmployedDrivers.NIP, allFutureDrivers)
+                ? Ok() 
+                : (IActionResult)BadRequest();
         }
     }
 }

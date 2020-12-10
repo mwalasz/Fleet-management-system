@@ -1,7 +1,15 @@
-﻿using FleetManagement.Db.BaseOperations;
+﻿using FleetManagement.Authentication.Policies;
+using FleetManagement.Db.BaseOperations;
+using FleetManagement.Entities.Accounts.DriverAccounts;
+using FleetManagement.Entities.Accounts.DriverAccounts.Models;
+using FleetManagement.Entities.Accounts.UserAccounts;
 using FleetManagement.Entities.Companies;
 using FleetManagement.Entities.Companies.Models;
+using FleetManagement.Entities.Companies.Params;
+using FleetManagement.Entities.Vehicles.Models;
 using NHibernate;
+using NHibernate.Mapping;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FleetManagement.Db.Repositories
@@ -40,6 +48,29 @@ namespace FleetManagement.Db.Repositories
         {
             return GetAll()
                     .FirstOrDefault(x => x.NIP.Equals(nip));
+        }
+        
+        public bool UpdateDriversList(string nip, IEnumerable<DriverAccount> drivers)
+        {
+            var company = GetByNip(nip);
+
+            if (company != null)
+            {
+                try
+                {
+                    var driversToAdd = drivers.ToList();
+                    company.Drivers = driversToAdd;
+                    Update(company);
+
+                    return true;
+                }
+                catch (System.Exception)
+                {
+                    return false;
+                }
+            }
+
+            return false;
         }
     }
 }
