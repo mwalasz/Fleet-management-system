@@ -1,87 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import Modal from '../../../../components/Modal';
 import Button from '../../../../components/Button';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { Grid } from '@material-ui/core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { spreadArray } from '../../../../utils/utils';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import { API_URL } from '../../../../utils/constans';
 import {
-    faArrowAltCircleLeft,
-    faArrowAltCircleRight,
-} from '@fortawesome/free-solid-svg-icons';
+    DRIVER_MANAGEMENT_COLUMNS,
+    DRIVER_MANAGEMENT_COLUMNS_REVERSED,
+} from '../../../../utils/columns';
 
-const DriverManagementModal = ({ isVisible, handleClose }) => {
+const DriverManagementModal = ({
+    user,
+    isVisible,
+    handleClose,
+    managementData,
+    nip,
+}) => {
     const [loading, setLoading] = useState(false);
-    const [employed, setEmployed] = useState([
-        { id: 1, name: 'kier1', mail: 'dupa@dusdfpa.pl' },
-        { id: 2, name: 'kier2', mail: '22dupa@dupa.pl' },
-    ]);
-    const [unemployed, setUnemployed] = useState([
-        { id: 3, name: 'kier3', mail: 'dupqwea@dupa.pl' },
-        { id: 4, name: 'kier4', mail: '22dupa@dupfsda.pl' },
-    ]);
+    const [employed, setEmployed] = useState([]);
+    const [unemployed, setUnemployed] = useState([]);
 
-    const columns = [
-        {
-            headerAlign: 'center',
-            field: 'dupa',
-            headerName: 'Zatrudnij',
-            width: 130,
-            sortable: false,
-            renderCell: (params) => {
-                return (
-                    <StyledArrow
-                        size={'lg'}
-                        icon={faArrowAltCircleLeft}
-                        green
-                    />
-                );
-            },
-        },
-        {
-            headerAlign: 'center',
-            field: 'name',
-            headerName: 'Imię',
-            width: 130,
-            sortable: false,
-        },
-        {
-            headerAlign: 'center',
-            field: 'mail',
-            headerName: 'Mail',
-            width: 130,
-            sortable: false,
-        },
-    ];
+    useEffect(() => {
+        if (managementData !== null) {
+            setEmployed(spreadArray(managementData.employed));
+            setUnemployed(spreadArray(managementData.unemployed));
+            console.log(employed);
+        }
+    }, [isVisible]);
 
-    const reversedColumns = [
-        {
-            headerAlign: 'center',
-            field: 'name',
-            headerName: 'Imię',
-            width: 130,
-            sortable: false,
-        },
-        {
-            headerAlign: 'center',
-            field: 'mail',
-            headerName: 'Mail',
-            width: 130,
-            sortable: false,
-        },
-        {
-            headerAlign: 'center',
-            field: 'dupa',
-            headerName: 'Zwolnij',
-            width: 130,
-            sortable: false,
-            renderCell: (params) => {
-                return (
-                    <StyledArrow size={'lg'} icon={faArrowAltCircleRight} red />
-                );
-            },
-        },
-    ];
+    const handleSave = () => {
+        if (window.confirm(`Czy napewno chcesz zapisać zmiany?`)) {
+            setLoading(!loading);
+            console.log({ nip, driverMails: employed.map((x) => x.email) });
+            axios
+                .put(
+                    `${API_URL}/companies/update_drivers`,
+                    { nip, driverMails: employed.map((x) => x.email) },
+                    {
+                        withCredentials: true,
+                        headers: {
+                            Authorization: 'Bearer ' + user.token,
+                        },
+                    }
+                )
+                .then((res) => {
+                    console.log(res);
+                    setLoading(false);
+                    handleClose();
+                })
+                .catch((err) => {
+                    setLoading(false);
+                    console.log(err);
+                });
+        }
+    };
 
     return (
         <Modal
@@ -91,11 +67,7 @@ const DriverManagementModal = ({ isVisible, handleClose }) => {
             title={`Zarządzanie kierowcami: `}
             wide
             button={
-                <StyledButton
-                    accept
-                    loading
-                    onClick={() => setLoading(!loading)}
-                >
+                <StyledButton accept loading onClick={() => handleSave()}>
                     zapisz
                 </StyledButton>
             }
@@ -112,16 +84,18 @@ const DriverManagementModal = ({ isVisible, handleClose }) => {
                         <StyledHeader>Zatrudnieni:</StyledHeader>
                         <DataGrid
                             rows={employed}
-                            columns={reversedColumns}
+                            columns={DRIVER_MANAGEMENT_COLUMNS_REVERSED}
                             disableSelectionOnClick
                             hideFooterRow
                             onRowClick={(args) => {
-                                setEmployed(
-                                    employed.filter(
-                                        (x) => x.mail !== args.data.mail
-                                    )
-                                );
-                                setUnemployed([...unemployed, args.data]);
+                                if (managementData) {
+                                    setEmployed(
+                                        employed.filter(
+                                            (x) => x.email !== args.data.email
+                                        )
+                                    );
+                                    setUnemployed([...unemployed, args.data]);
+                                }
                             }}
                         />
                     </DataGridWrapper>
@@ -129,17 +103,19 @@ const DriverManagementModal = ({ isVisible, handleClose }) => {
                         <StyledHeader>Niezatrudnieni - dostępni:</StyledHeader>
                         <DataGrid
                             rows={unemployed}
-                            columns={columns}
+                            columns={DRIVER_MANAGEMENT_COLUMNS}
                             disableSelectionOnClick
                             hideFooterRow
                             onRowClick={(args) => {
                                 console.log(args.data);
-                                setEmployed([...employed, args.data]);
-                                setUnemployed(
-                                    unemployed.filter(
-                                        (x) => x.mail !== args.data.mail
-                                    )
-                                );
+                                if (managementData) {
+                                    setEmployed([...employed, args.data]);
+                                    setUnemployed(
+                                        unemployed.filter(
+                                            (x) => x.email !== args.data.email
+                                        )
+                                    );
+                                }
                             }}
                         />
                     </DataGridWrapper>
@@ -148,23 +124,6 @@ const DriverManagementModal = ({ isVisible, handleClose }) => {
         </Modal>
     );
 };
-
-const StyledArrow = styled(FontAwesomeIcon)`
-    margin: 0px auto;
-    color: ${({ theme }) => theme.red};
-
-    ${({ green }) =>
-        green &&
-        css`
-            color: ${({ theme }) => theme.green};
-        `};
-
-    ${({ red }) =>
-        red &&
-        css`
-            color: ${({ theme }) => theme.red};
-        `};
-`;
 
 const StyledButton = styled(Button)`
     position: absolute;
@@ -186,4 +145,9 @@ const DataGridWrapper = styled.div`
     margin: 20px;
 `;
 
-export default DriverManagementModal;
+const mapStateToProps = (state) => {
+    return {
+        user: state.user,
+    };
+};
+export default connect(mapStateToProps)(DriverManagementModal);

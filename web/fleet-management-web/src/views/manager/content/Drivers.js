@@ -16,10 +16,13 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DriverStatisticsModal from './drivers/DriverStatisticsModal';
 import DriverManagementModal from './drivers/DriverManagementModal';
+import { spreadArray } from '../../../utils/utils';
 
 const Drivers = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [managementLoading, setManagementLoading] = useState(false);
+    const [managementData, setManagementData] = useState(null);
     const [statisticsLoading, setStatisticsLoading] = useState(false);
     const [statisticsData, setStatisticsData] = useState({});
     const [driverAccounts, setDriverAccounts] = useState([]);
@@ -27,7 +30,7 @@ const Drivers = ({ user }) => {
     const [selectedDriverDescription, setSelectedDriverDescription] = useState(
         ''
     );
-    const [companyName, setCompanyName] = useState('');
+    const [company, setCompany] = useState(null);
     const [statsModalVisible, setStatsModalVisible] = useState(false);
     const [managementModalVisible, setManagementModalVisible] = useState(false);
 
@@ -79,16 +82,8 @@ const Drivers = ({ user }) => {
 
                 if (data) {
                     console.log('company info', data);
-                    let drivers = [];
-                    data.drivers.forEach((driver) => {
-                        drivers = [
-                            ...drivers,
-                            { ...driver.account, ...driver },
-                        ];
-                    });
-
-                    setCompanyName(data.name);
-                    setDriverAccounts(drivers);
+                    setCompany(data);
+                    setDriverAccounts(spreadArray(data.drivers));
                 }
             })
             .catch((err) => {
@@ -127,18 +122,60 @@ const Drivers = ({ user }) => {
             });
     };
 
+    const loadManagementData = () => {
+        setManagementLoading(true);
+        axios
+            .get(
+                `${API_URL}/companies/get_employed_and_unemployed?nip=${company.nip}`,
+                {
+                    withCredentials: true,
+                    headers: {
+                        Authorization: 'Bearer ' + user.token,
+                    },
+                }
+            )
+            .then((res) => {
+                const data = res.data.result;
+
+                if (data) {
+                    console.log(data);
+                    setManagementData(data);
+                    setTimeout(() => {
+                        setManagementLoading(false);
+                        setManagementModalVisible(true);
+                    }, 500);
+                }
+            })
+            .catch((err) => {
+                setManagementLoading(false);
+                console.log(
+                    `An error occurred while downloading user's vehicles: ${err}`
+                );
+            });
+    };
+
+    const TitleWrapper = styled.div`
+        display: flex;
+        flex-direction: row;
+    `;
+
     return (
         <ContentWrapper>
             <ContentHeader>
-                <Title>
-                    {companyName
-                        ? `Kierowcy jeżdżący dla ${companyName}`
-                        : 'Kierowcy w przedsiębiorstwie'}
-                </Title>
+                <TitleWrapper>
+                    <Title margin>
+                        {company
+                            ? `Kierowcy jeżdżący dla ${company.name}`
+                            : 'Kierowcy w przedsiębiorstwie'}
+                    </Title>
+                    {managementLoading && (
+                        <Spinner icon={faSpinner} spin size={'lg'} />
+                    )}
+                </TitleWrapper>
                 <Button
                     ultraWide
                     secondary
-                    onClick={() => setManagementModalVisible(true)}
+                    onClick={() => loadManagementData()}
                 >
                     zarządzaj kierowcami
                 </Button>
@@ -166,9 +203,12 @@ const Drivers = ({ user }) => {
             />
             <DriverManagementModal
                 isVisible={managementModalVisible}
+                managementData={managementData ? managementData : null}
                 handleClose={() => {
                     setManagementModalVisible(false);
+                    setTimeout(() => setRefresh(!refresh), 500);
                 }}
+                nip={company ? company.nip : ''}
             />
         </ContentWrapper>
     );
@@ -177,8 +217,6 @@ const Drivers = ({ user }) => {
 const Spinner = styled(FontAwesomeIcon)`
     color: ${({ theme }) => theme.primaryColor};
     display: block;
-    width: 200px;
-    height: 200px;
     margin: 30px auto;
 `;
 

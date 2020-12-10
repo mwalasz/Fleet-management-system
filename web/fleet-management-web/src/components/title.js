@@ -8,6 +8,12 @@ const Title = styled.h2`
     display: flex;
     align-items: center;
 
+    ${({ margin }) =>
+        margin &&
+        css`
+            margin-right: 20px;
+        `}
+
     ${({ big }) =>
         big &&
         css`

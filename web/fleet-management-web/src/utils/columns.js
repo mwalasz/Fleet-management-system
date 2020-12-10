@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {
     formatDate,
     formatPrice,
@@ -8,6 +8,11 @@ import {
     formatMileage,
 } from './formating';
 import { USER_ROLES } from './constans';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faArrowAltCircleLeft,
+    faArrowAltCircleRight,
+} from '@fortawesome/free-solid-svg-icons';
 
 export const refuelingsColumns = [
     {
@@ -275,3 +280,76 @@ export const MANAGER_DRIVERS_COLUMNS = [
         headerAlign: 'center',
     },
 ];
+
+export const DRIVER_MANAGEMENT_COLUMNS = [
+    {
+        headerAlign: 'center',
+        field: 'hire',
+        headerName: 'Zatrudnij',
+        width: 100,
+        sortable: false,
+        renderCell: (params) => {
+            return (
+                <StyledArrow size={'lg'} icon={faArrowAltCircleLeft} green />
+            );
+        },
+    },
+    {
+        headerAlign: 'center',
+        field: 'lastName',
+        headerName: 'Nazwisko',
+        width: 130,
+        sortable: false,
+    },
+    {
+        headerAlign: 'center',
+        field: 'email',
+        headerName: 'Mail',
+        width: 200,
+        sortable: false,
+    },
+];
+
+export const DRIVER_MANAGEMENT_COLUMNS_REVERSED = [
+    {
+        headerAlign: 'center',
+        field: 'lastName',
+        headerName: 'Nazwisko',
+        width: 130,
+        sortable: false,
+    },
+    {
+        headerAlign: 'center',
+        field: 'email',
+        headerName: 'Mail',
+        width: 200,
+        sortable: false,
+    },
+    {
+        headerAlign: 'center',
+        field: 'dupa',
+        headerName: 'Zwolnij',
+        width: 80,
+        sortable: false,
+        renderCell: (params) => {
+            return <StyledArrow size={'lg'} icon={faArrowAltCircleRight} red />;
+        },
+    },
+];
+
+const StyledArrow = styled(FontAwesomeIcon)`
+    margin: 0px auto;
+    color: ${({ theme }) => theme.red};
+
+    ${({ green }) =>
+        green &&
+        css`
+            color: ${({ theme }) => theme.green};
+        `};
+
+    ${({ red }) =>
+        red &&
+        css`
+            color: ${({ theme }) => theme.red};
+        `};
+`;
