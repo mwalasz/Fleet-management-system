@@ -327,7 +327,7 @@ export const DRIVER_MANAGEMENT_COLUMNS_REVERSED = [
     },
     {
         headerAlign: 'center',
-        field: 'dupa',
+        field: 'button',
         headerName: 'Zwolnij',
         width: 80,
         sortable: false,
@@ -340,7 +340,7 @@ export const DRIVER_MANAGEMENT_COLUMNS_REVERSED = [
 export const DRIVER_VEHICLES_MANAGEMENT_COLUMNS = [
     {
         headerAlign: 'center',
-        field: 'dupa',
+        field: 'button',
         headerName: 'Dodaj',
         width: 75,
         sortable: false,
@@ -389,7 +389,7 @@ export const DRIVER_VEHICLES_MANAGEMENT_COLUMNS_REVERSED = [
     },
     {
         headerAlign: 'center',
-        field: 'dupa',
+        field: 'button',
         headerName: 'Usuń',
         width: 67,
         sortable: false,
