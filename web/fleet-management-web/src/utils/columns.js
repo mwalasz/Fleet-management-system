@@ -337,6 +337,68 @@ export const DRIVER_MANAGEMENT_COLUMNS_REVERSED = [
     },
 ];
 
+export const DRIVER_VEHICLES_MANAGEMENT_COLUMNS = [
+    {
+        headerAlign: 'center',
+        field: 'dupa',
+        headerName: 'Dodaj',
+        width: 75,
+        sortable: false,
+        renderCell: (params) => {
+            return (
+                <StyledArrow size={'lg'} icon={faArrowAltCircleLeft} green />
+            );
+        },
+    },
+    {
+        field: 'brand',
+        headerName: 'Marka',
+        width: 140,
+    },
+    {
+        field: 'model',
+        headerName: 'Model',
+        width: 110,
+    },
+    {
+        field: 'licensePlate',
+        headerName: 'Tablica',
+        width: 110,
+        align: 'center',
+        headerAlign: 'center',
+    },
+];
+
+export const DRIVER_VEHICLES_MANAGEMENT_COLUMNS_REVERSED = [
+    {
+        field: 'brand',
+        headerName: 'Marka',
+        width: 140,
+    },
+    {
+        field: 'model',
+        headerName: 'Model',
+        width: 110,
+    },
+    {
+        field: 'licensePlate',
+        headerName: 'Tablica',
+        width: 110,
+        align: 'center',
+        headerAlign: 'center',
+    },
+    {
+        headerAlign: 'center',
+        field: 'dupa',
+        headerName: 'Usuń',
+        width: 67,
+        sortable: false,
+        renderCell: (params) => {
+            return <StyledArrow size={'lg'} icon={faArrowAltCircleRight} red />;
+        },
+    },
+];
+
 const StyledArrow = styled(FontAwesomeIcon)`
     margin: 0px auto;
     color: ${({ theme }) => theme.red};

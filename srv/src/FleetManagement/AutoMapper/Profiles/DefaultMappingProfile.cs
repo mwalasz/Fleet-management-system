@@ -74,7 +74,8 @@ namespace FleetManagement.AutoMapper.Profiles
 
             CreateMap<Company, CompanyDto>()
                 .ForMember(dto => dto.ManagerAccount, mce => mce.MapFrom<CompanyDtoManagerAccountValueResolver>())
-                .ForMember(dto => dto.Drivers, mce => mce.MapFrom<CompanyDtoDriversValueResolver>());
+                .ForMember(dto => dto.Drivers, mce => mce.MapFrom<CompanyDtoDriversValueResolver>())
+                .ForMember(dto => dto.Vehicles, mce => mce.MapFrom<CompanyDtoVehiclesValueResolver>());
         }
     }
 }

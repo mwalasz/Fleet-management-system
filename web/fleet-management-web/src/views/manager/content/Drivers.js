@@ -3,7 +3,11 @@ import axios from 'axios';
 import { DataGrid } from '@material-ui/data-grid';
 import { connect } from 'react-redux';
 import { API_URL } from '../../../utils/constans';
-import { faSpinner, faChartBar } from '@fortawesome/free-solid-svg-icons';
+import {
+    faSpinner,
+    faChartBar,
+    faCarSide,
+} from '@fortawesome/free-solid-svg-icons';
 import Button from '../../../components/Button';
 import Title from '../../../components/Title';
 import {
@@ -17,24 +21,58 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DriverStatisticsModal from './drivers/DriverStatisticsModal';
 import DriverManagementModal from './drivers/DriverManagementModal';
 import { spreadArray } from '../../../utils/utils';
+import DriverVehiclesModal from './drivers/DriverVehiclesModal';
 
 const Drivers = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(false);
+
     const [managementLoading, setManagementLoading] = useState(false);
     const [managementData, setManagementData] = useState(null);
+    const [managementModalVisible, setManagementModalVisible] = useState(false);
+
     const [statisticsLoading, setStatisticsLoading] = useState(false);
-    const [statisticsData, setStatisticsData] = useState({});
+    const [statisticsData, setStatisticsData] = useState(null);
+    const [statsModalVisible, setStatsModalVisible] = useState(false);
+
+    const [vehiclesLoading, setVehiclesLoading] = useState(false);
+    const [vehiclesData, setVehiclesData] = useState(null);
+    const [vehiclesModalVisible, setVehiclesModalVisible] = useState(false);
+
     const [driverAccounts, setDriverAccounts] = useState([]);
     const [selectedDriverMail, setSelectedDriverMail] = useState('');
     const [selectedDriverDescription, setSelectedDriverDescription] = useState(
         ''
     );
     const [company, setCompany] = useState(null);
-    const [statsModalVisible, setStatsModalVisible] = useState(false);
-    const [managementModalVisible, setManagementModalVisible] = useState(false);
 
     const columnsButton = [
+        {
+            headerAlign: 'center',
+            field: 'vehicles',
+            headerName: 'Pojazdy',
+            width: 130,
+            sortable: false,
+            renderCell: (params) => {
+                return statisticsLoading &&
+                    params.data.email === selectedDriverMail ? (
+                    <Spinner icon={faSpinner} spin size={'2x'} />
+                ) : (
+                    <StyledIcon
+                        size={'lg'}
+                        icon={faCarSide}
+                        onClick={() => {
+                            setSelectedDriverMail(params.data.email);
+                            setSelectedDriverDescription(
+                                `${params.data.firstName} ${params.data.lastName} [${params.data.email}]`
+                            );
+
+                            loadDriverVehicles(params.data.email);
+                        }}
+                    />
+                );
+            },
+        },
         {
             headerAlign: 'center',
             field: 'open',
@@ -82,6 +120,10 @@ const Drivers = ({ user }) => {
 
                 if (data) {
                     console.log('company info', data);
+                    console.log(data);
+                    data.vehicles.forEach((vehicle) => {
+                        vehicle.id = vehicle.vin;
+                    });
                     setCompany(data);
                     setDriverAccounts(spreadArray(data.drivers));
                 }
@@ -116,6 +158,42 @@ const Drivers = ({ user }) => {
             })
             .catch((err) => {
                 setStatisticsLoading(false);
+                console.log(
+                    `An error occurred while downloading user's vehicles: ${err}`
+                );
+            });
+    };
+
+    const loadDriverVehicles = (driverMail) => {
+        setManagementLoading(true);
+        axios
+            .get(
+                `${API_URL}/drivers/get_assigned_vehicles?mail=${driverMail}`,
+                {
+                    withCredentials: true,
+                    headers: {
+                        Authorization: 'Bearer ' + user.token,
+                    },
+                }
+            )
+            .then((res) => {
+                const data = res.data.result;
+
+                if (data) {
+                    console.log(data);
+                    data.forEach((vehicle) => {
+                        vehicle.id = vehicle.vin;
+                    });
+                    setVehiclesData(data);
+                    // setStatisticsData(data);
+                    setTimeout(() => {
+                        setManagementLoading(false);
+                        setVehiclesModalVisible(true);
+                    }, 500);
+                }
+            })
+            .catch((err) => {
+                setManagementLoading(false);
                 console.log(
                     `An error occurred while downloading user's vehicles: ${err}`
                 );
@@ -209,6 +287,16 @@ const Drivers = ({ user }) => {
                     setTimeout(() => setRefresh(!refresh), 500);
                 }}
                 nip={company ? company.nip : ''}
+            />
+            <DriverVehiclesModal
+                isVisible={vehiclesModalVisible}
+                assignedVehicles={vehiclesData ? vehiclesData : null}
+                availableVehivles={company ? company.vehicles : null}
+                handleClose={() => {
+                    setVehiclesModalVisible(false);
+                    setTimeout(() => setRefresh(!refresh), 500);
+                }}
+                driverToModifyMail={selectedDriverMail}
             />
         </ContentWrapper>
     );

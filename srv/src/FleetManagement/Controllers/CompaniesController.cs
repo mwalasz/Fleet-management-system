@@ -6,6 +6,7 @@ using FleetManagement.Entities.Accounts.UserAccounts;
 using FleetManagement.Entities.Companies;
 using FleetManagement.Entities.Companies.Models;
 using FleetManagement.Entities.Companies.Params;
+using FleetManagement.Entities.Vehicles.Models;
 using FleetManagement.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -127,6 +128,19 @@ namespace FleetManagement.Db.Repositories
                 return NotFound("Nie znaleziono przedsiębiorstwa o podanym numerze NIP!");
 
             return Ok(mapper.Map<Company, CompanyDto>(company).Drivers);
+        }
+
+        [HttpGet]
+        public IActionResult GetVehicles(string nip)
+        {
+            var company = companyProvider.GetByNip(nip);
+
+            if (company == null)
+                return NotFound("Nie znaleziono przedsiębiorstwa o podanym numerze NIP!");
+
+            var vehicles = company.Vehicles;
+
+            return Ok(vehicles.Select(vehicle => mapper.Map<Vehicle, VehicleBasicInfoDto>(vehicle)));
         }
 
         [HttpGet]
