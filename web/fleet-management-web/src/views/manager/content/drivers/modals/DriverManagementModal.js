@@ -1,54 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@material-ui/data-grid';
-import Modal from '../../../../components/Modal';
-import Button from '../../../../components/Button';
+import Modal from '../../../../../components/Modal';
+import Button from '../../../../../components/Button';
 import styled from 'styled-components';
 import { Grid } from '@material-ui/core';
+import { spreadArray } from '../../../../../utils/utils';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { API_URL } from '../../../../utils/constans';
+import { API_URL } from '../../../../../utils/constans';
 import {
-    DRIVER_VEHICLES_MANAGEMENT_COLUMNS,
-    DRIVER_VEHICLES_MANAGEMENT_COLUMNS_REVERSED,
-} from '../../../../utils/columns';
+    DRIVER_MANAGEMENT_COLUMNS,
+    DRIVER_MANAGEMENT_COLUMNS_REVERSED,
+} from '../../../../../utils/columns';
 
-const DriverVehiclesModal = ({
+const DriverManagementModal = ({
     user,
     isVisible,
     handleClose,
-    assignedVehicles,
-    availableVehivles,
-    driverToModifyMail,
+    managementData,
+    nip,
 }) => {
     const [loading, setLoading] = useState(false);
-    const [assigned, setAssigned] = useState([]);
-    const [available, setAvailable] = useState([]);
+    const [employed, setEmployed] = useState([]);
+    const [unemployed, setUnemployed] = useState([]);
 
     useEffect(() => {
-        if (availableVehivles && assignedVehicles) {
-            setAssigned(assignedVehicles);
-            setAvailable(
-                availableVehivles.filter(
-                    (x) => !assignedVehicles.find((y) => y.vin === x.vin)
-                )
-            );
+        if (managementData !== null) {
+            setEmployed(spreadArray(managementData.employed));
+            setUnemployed(spreadArray(managementData.unemployed));
+            console.log(employed);
         }
     }, [isVisible]);
 
     const handleSave = () => {
         if (window.confirm(`Czy napewno chcesz zapisać zmiany?`)) {
             setLoading(!loading);
-            console.log({
-                mail: driverToModifyMail,
-                vehiclesVin: assigned.map((x) => x.vin),
-            });
+            console.log({ nip, driverMails: employed.map((x) => x.email) });
             axios
                 .put(
-                    `${API_URL}/drivers/change_available_vehicles`,
-                    {
-                        mail: driverToModifyMail,
-                        vehiclesVin: assigned.map((x) => x.vin),
-                    },
+                    `${API_URL}/companies/update_drivers`,
+                    { nip, driverMails: employed.map((x) => x.email) },
                     {
                         withCredentials: true,
                         headers: {
@@ -73,7 +64,7 @@ const DriverVehiclesModal = ({
             isLoading={loading}
             isVisible={isVisible}
             handleClose={handleClose}
-            title={`Zarządzanie pojazdami przydzielonymi kierowcy: `}
+            title={`Zarządzanie kierowcami: `}
             wide
             button={
                 <StyledButton accept loading onClick={() => handleSave()}>
@@ -90,40 +81,38 @@ const DriverVehiclesModal = ({
                     spacing={5}
                 >
                     <DataGridWrapper>
-                        <StyledHeader>Przydzielone:</StyledHeader>
+                        <StyledHeader>Zatrudnieni:</StyledHeader>
                         <DataGrid
-                            rows={assigned}
-                            columns={
-                                DRIVER_VEHICLES_MANAGEMENT_COLUMNS_REVERSED
-                            }
+                            rows={employed}
+                            columns={DRIVER_MANAGEMENT_COLUMNS_REVERSED}
                             disableSelectionOnClick
                             hideFooterRow
                             onRowClick={(args) => {
-                                if (assigned) {
-                                    setAssigned(
-                                        assigned.filter(
-                                            (x) => x.vin !== args.data.vin
+                                if (managementData) {
+                                    setEmployed(
+                                        employed.filter(
+                                            (x) => x.email !== args.data.email
                                         )
                                     );
-                                    setAvailable([...available, args.data]);
+                                    setUnemployed([...unemployed, args.data]);
                                 }
                             }}
                         />
                     </DataGridWrapper>
                     <DataGridWrapper>
-                        <StyledHeader>Dostępne:</StyledHeader>
+                        <StyledHeader>Niezatrudnieni - dostępni:</StyledHeader>
                         <DataGrid
-                            rows={available}
-                            columns={DRIVER_VEHICLES_MANAGEMENT_COLUMNS}
+                            rows={unemployed}
+                            columns={DRIVER_MANAGEMENT_COLUMNS}
                             disableSelectionOnClick
                             hideFooterRow
                             onRowClick={(args) => {
                                 console.log(args.data);
-                                if (assigned) {
-                                    setAssigned([...assigned, args.data]);
-                                    setAvailable(
-                                        available.filter(
-                                            (x) => x.vin !== args.data.vin
+                                if (managementData) {
+                                    setEmployed([...employed, args.data]);
+                                    setUnemployed(
+                                        unemployed.filter(
+                                            (x) => x.email !== args.data.email
                                         )
                                     );
                                 }
@@ -161,4 +150,4 @@ const mapStateToProps = (state) => {
         user: state.user,
     };
 };
-export default connect(mapStateToProps)(DriverVehiclesModal);
+export default connect(mapStateToProps)(DriverManagementModal);

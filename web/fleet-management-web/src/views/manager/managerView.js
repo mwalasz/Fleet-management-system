@@ -5,9 +5,9 @@ import Dashboard from '../../components/Dashboard';
 import Content from '../../components/Content';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { ManagerRoutes } from '../../utils/routes';
-import Vehicles from './content/Vehicles';
+import Vehicles from './content/vehicles/Vehicles';
 import Informations from './content/Informations';
-import Drivers from './content/Drivers';
+import Drivers from './content/drivers/Drivers';
 
 const ManagerView = ({ dispatch }) => {
     return (

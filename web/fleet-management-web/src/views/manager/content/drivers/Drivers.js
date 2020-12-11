@@ -2,26 +2,26 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { DataGrid } from '@material-ui/data-grid';
 import { connect } from 'react-redux';
-import { API_URL } from '../../../utils/constans';
+import { API_URL } from '../../../../utils/constans';
 import {
     faSpinner,
     faChartBar,
     faCarSide,
 } from '@fortawesome/free-solid-svg-icons';
-import Button from '../../../components/Button';
-import Title from '../../../components/Title';
+import Button from '../../../../components/Button';
+import Title from '../../../../components/Title';
 import {
     ContentWrapper,
     ContentBody,
     ContentHeader,
-} from '../../../components/PageContents';
-import { MANAGER_DRIVERS_COLUMNS } from '../../../utils/columns';
+} from '../../../../components/PageContents';
+import { MANAGER_DRIVERS_COLUMNS } from '../../../../utils/columns';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import DriverStatisticsModal from './drivers/DriverStatisticsModal';
-import DriverManagementModal from './drivers/DriverManagementModal';
-import { spreadArray } from '../../../utils/utils';
-import DriverVehiclesModal from './drivers/DriverVehiclesModal';
+import DriverStatisticsModal from './modals/DriverStatisticsModal';
+import DriverManagementModal from './modals/DriverManagementModal';
+import { spreadArray } from '../../../../utils/utils';
+import DriverVehiclesModal from './modals/DriverVehiclesModal';
 
 const Drivers = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
