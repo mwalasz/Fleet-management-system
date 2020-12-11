@@ -204,7 +204,6 @@ const Drivers = ({ user }) => {
                         vehicle.id = vehicle.vin;
                     });
                     setVehiclesData(data);
-                    // setStatisticsData(data);
                     setTimeout(() => {
                         setVehiclesLoading(false);
                         setVehiclesModalVisible(true);
@@ -221,34 +220,36 @@ const Drivers = ({ user }) => {
 
     const loadManagementData = () => {
         setManagementLoading(true);
-        axios
-            .get(
-                `${API_URL}/companies/get_employed_and_unemployed?nip=${company.nip}`,
-                {
-                    withCredentials: true,
-                    headers: {
-                        Authorization: 'Bearer ' + user.token,
-                    },
-                }
-            )
-            .then((res) => {
-                const data = res.data.result;
+        if (company) {
+            axios
+                .get(
+                    `${API_URL}/companies/get_employed_and_unemployed?nip=${company.nip}`,
+                    {
+                        withCredentials: true,
+                        headers: {
+                            Authorization: 'Bearer ' + user.token,
+                        },
+                    }
+                )
+                .then((res) => {
+                    const data = res.data.result;
 
-                if (data) {
-                    console.log(data);
-                    setManagementData(data);
-                    setTimeout(() => {
-                        setManagementLoading(false);
-                        setManagementModalVisible(true);
-                    }, 500);
-                }
-            })
-            .catch((err) => {
-                setManagementLoading(false);
-                console.log(
-                    `An error occurred while downloading user's vehicles: ${err}`
-                );
-            });
+                    if (data) {
+                        console.log(data);
+                        setManagementData(data);
+                        setTimeout(() => {
+                            setManagementLoading(false);
+                            setManagementModalVisible(true);
+                        }, 500);
+                    }
+                })
+                .catch((err) => {
+                    setManagementLoading(false);
+                    console.log(
+                        `An error occurred while downloading user's vehicles: ${err}`
+                    );
+                });
+        }
     };
 
     const TitleWrapper = styled.div`
