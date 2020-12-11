@@ -46,6 +46,12 @@ const Drivers = ({ user }) => {
     );
     const [company, setCompany] = useState(null);
 
+    const [lastSelectedOption, setLastSelectedOption] = useState('');
+    const options = {
+        stats: 'stats',
+        vehicles: 'vehicles',
+    };
+
     const columnsButton = [
         {
             headerAlign: 'center',
@@ -54,7 +60,7 @@ const Drivers = ({ user }) => {
             width: 130,
             sortable: false,
             renderCell: (params) => {
-                return statisticsLoading &&
+                return vehiclesLoading &&
                     params.data.email === selectedDriverMail ? (
                     <Spinner icon={faSpinner} spin size={'2x'} />
                 ) : (
@@ -62,12 +68,21 @@ const Drivers = ({ user }) => {
                         size={'lg'}
                         icon={faCarSide}
                         onClick={() => {
+                            setLastSelectedOption(options.vehicles);
                             setSelectedDriverMail(params.data.email);
                             setSelectedDriverDescription(
                                 `${params.data.firstName} ${params.data.lastName} [${params.data.email}]`
                             );
 
-                            loadDriverVehicles(params.data.email);
+                            if (
+                                params.data.email !== selectedDriverMail ||
+                                lastSelectedOption !== options.vehicles
+                            ) {
+                                setVehiclesLoading(true);
+                                loadDriverVehicles(params.data.email);
+                            } else {
+                                setVehiclesModalVisible(true);
+                            }
                         }}
                     />
                 );
@@ -88,11 +103,15 @@ const Drivers = ({ user }) => {
                         size={'lg'}
                         icon={faChartBar}
                         onClick={() => {
+                            setLastSelectedOption(options.stats);
                             setSelectedDriverMail(params.data.email);
                             setSelectedDriverDescription(
                                 `${params.data.firstName} ${params.data.lastName} [${params.data.email}]`
                             );
-                            if (params.data.email !== selectedDriverMail) {
+                            if (
+                                params.data.email !== selectedDriverMail ||
+                                lastSelectedOption !== options.stats
+                            ) {
                                 setStatisticsLoading(true);
                                 loadDriverStats(params.data.email);
                             } else {
@@ -165,7 +184,7 @@ const Drivers = ({ user }) => {
     };
 
     const loadDriverVehicles = (driverMail) => {
-        setManagementLoading(true);
+        setVehiclesLoading(true);
         axios
             .get(
                 `${API_URL}/drivers/get_assigned_vehicles?mail=${driverMail}`,
@@ -187,7 +206,7 @@ const Drivers = ({ user }) => {
                     setVehiclesData(data);
                     // setStatisticsData(data);
                     setTimeout(() => {
-                        setManagementLoading(false);
+                        setVehiclesLoading(false);
                         setVehiclesModalVisible(true);
                     }, 500);
                 }

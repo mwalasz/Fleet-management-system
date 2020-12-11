@@ -4,7 +4,6 @@ import Modal from '../../../../components/Modal';
 import Button from '../../../../components/Button';
 import styled from 'styled-components';
 import { Grid } from '@material-ui/core';
-import { spreadArray } from '../../../../utils/utils';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { API_URL } from '../../../../utils/constans';
