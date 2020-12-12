@@ -15,4 +15,9 @@ namespace FleetManagement.Entities.BrandModels.Models
             Map(x => x.Name);
         }
     }
+
+    public class BrandModelDto : EntityBase
+    {
+        public string Name { get; set; }
+    }
 }

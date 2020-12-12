@@ -15,7 +15,7 @@ namespace FleetManagement.Entities.Powertrains.Models
         /// Ilość cylindrów.
         /// </summary>
         public virtual short NumberOfCylinders { get; set; }
-        
+
         /// <summary>
         /// Moc w koniach mechanicznych.
         /// </summary>

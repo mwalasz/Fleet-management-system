@@ -21,4 +21,10 @@ namespace FleetManagement.Entities.Brands.Models
                 .Not.LazyLoad();
         }
     }
+
+    public class BrandDto : EntityBase
+    {
+        public string Name { get; set; }
+        public IEnumerable<BrandModelDto> Models { get; set; }
+    }
 }

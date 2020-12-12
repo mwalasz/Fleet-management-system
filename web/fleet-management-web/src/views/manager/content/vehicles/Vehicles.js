@@ -27,11 +27,14 @@ import VehicleRefuelingsModal from '../../../../components/vehicleModals/Vehicle
 import { vehiclesCondensedColumns } from '../../../../utils/columns';
 import { Checkbox } from '@material-ui/core';
 import VehicleStatisticsModal from './modals/VehicleStatisticsModal';
+import NewVehicleModal from './modals/NewVehicleModal';
 import DGStyledIcon from '../../../../components/DGStyledIcon';
+import Button from '../../../../components/Button';
 
 const Vehicles = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(false);
+
     const [detailsModalVisible, setDetailsModalVisible] = useState(false);
     const [tripsModalVisible, setTripsModalVisible] = useState(false);
     const [refuelingsModalVisible, setRefuelingsModalVisible] = useState(false);
@@ -39,6 +42,8 @@ const Vehicles = ({ user }) => {
         false
     );
     const [statisticsModalVisible, setStatisticsModalVisible] = useState(false);
+    const [newVehicleModalVisible, setNewVehicleModalVisible] = useState(false);
+
     const [activeVehicles, setActiveVehicles] = useState(true);
     const [vehicles, setVehicles] = useState([]);
     const [selectedVehicle, setSelectedVehicle] = useState(null);
@@ -230,7 +235,16 @@ const Vehicles = ({ user }) => {
     return (
         <ContentWrapper>
             <ContentHeader>
-                <Title>{'Pojazdy w Twoim przedsiębiorstwie'}</Title>
+                <Title>{'Pojazdy w Twoim przedsiębiorstwie'}</Title>{' '}
+                <Button
+                    wide
+                    secondary
+                    onClick={() =>
+                        setNewVehicleModalVisible(!newVehicleModalVisible)
+                    }
+                >
+                    DODAJ
+                </Button>
             </ContentHeader>
             <ContentBody>
                 <FilterWrapper>
@@ -293,6 +307,10 @@ const Vehicles = ({ user }) => {
             <VehicleStatisticsModal
                 isVisible={statisticsModalVisible}
                 handleClose={() => setStatisticsModalVisible(false)}
+            />
+            <NewVehicleModal
+                isVisible={newVehicleModalVisible}
+                handleClose={() => setNewVehicleModalVisible(false)}
             />
         </ContentWrapper>
     );

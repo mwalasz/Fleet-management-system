@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
-using FleetManagement.Entities.Accounts.DriverAccounts;
 using FleetManagement.Entities.Accounts.ManagerAccounts;
+using FleetManagement.Entities.Brands;
+using FleetManagement.Entities.Brands.Models;
 using FleetManagement.Entities.Companies;
+using FleetManagement.Entities.DriveTypes;
+using FleetManagement.Entities.EngineTypes;
 using FleetManagement.Entities.Maintenances.Models;
 using FleetManagement.Entities.Powertrains;
 using FleetManagement.Entities.Powertrains.Models;
@@ -9,6 +12,7 @@ using FleetManagement.Entities.Refuelings.Models;
 using FleetManagement.Entities.Trips.Models;
 using FleetManagement.Entities.Vehicles;
 using FleetManagement.Entities.Vehicles.Models;
+using FleetManagement.Entities.Vehicles.Params;
 using FleetManagement.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,21 +31,27 @@ namespace FleetManagement.Controllers
         private readonly IPowertrainProvider powertrainProvider;
         private readonly IManagerAccountProvider managerAccountProvider;
         private readonly ICompanyProvider companyProvider;
-        private readonly IDriverAccountProvider driverAccountProvider;
+        private readonly IDriveTypeProvider driveTypeProvider;
+        private readonly IEngineTypeProvider engineTypeProvider;
+        private readonly IBrandProvider brandProvider;
 
         public VehiclesController(IMapper mapper,
             IVehicleProvider vehicleProvider, 
             IPowertrainProvider powertrainProvider,
             IManagerAccountProvider managerAccountProvider,
             ICompanyProvider companyProvider,
-            IDriverAccountProvider driverAccountProvider)
+            IDriveTypeProvider driveTypeProvider,
+            IEngineTypeProvider engineTypeProvider,
+            IBrandProvider brandProvider)
         {
             this.mapper = mapper;
             this.vehicleProvider = vehicleProvider;
             this.powertrainProvider = powertrainProvider;
             this.managerAccountProvider = managerAccountProvider;
             this.companyProvider = companyProvider;
-            this.driverAccountProvider = driverAccountProvider;
+            this.driveTypeProvider = driveTypeProvider;
+            this.engineTypeProvider = engineTypeProvider;
+            this.brandProvider = brandProvider;
         }
 
         [HttpGet]
@@ -147,9 +157,41 @@ namespace FleetManagement.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add()
+        public IActionResult Add([FromBody] NewVehicleParams newVehicle)
         {
-            return Ok();
+            var company = managerAccountProvider.GetCompany(newVehicle.CompanyManagerMail);
+            if (company == null)
+                return BadRequest("Kierownik nie zarządza żadnym przedsiębiorstwem!");
+
+            if (vehicleProvider.CheckIfThisLicensePlateAlreadyExists(newVehicle.LicensePlate))
+                return BadRequest("Pojazd o podanym numerze tablicy rejestracyjnej już istnieje!");
+
+            if (vehicleProvider.CheckIfThisVinAlreadyExists(newVehicle.VIN))
+                return BadRequest("Pojazd o podanym numerze VIN już istnieje!");
+
+            return vehicleProvider.AddNewVehicle(newVehicle, company)
+                ? Ok()
+                : (IActionResult)BadRequest("Nie udało się dodać pojazdu");
+        }
+
+        [HttpGet]
+        public IActionResult GetDataForNew()
+        {
+            var availableBrands = brandProvider.GetAll()
+                .Select(x => mapper.Map<Brand, BrandDto>(x));
+
+            var availableEngineTypes = engineTypeProvider.GetAll()
+                .Select(x => x.Name);
+
+            var availableDriveTypes = driveTypeProvider.GetAll()
+                .Select(x => x.Name);
+
+            return Ok(new DataForCreatingNewVehicle() 
+            { 
+                Brands = availableBrands,
+                DriveTypes = availableDriveTypes,
+                EngineTypes = availableEngineTypes
+            });
         }
     }
 }

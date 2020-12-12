@@ -6,6 +6,8 @@ using FleetManagement.Entities.Accounts.ManagerAccounts.Models;
 using FleetManagement.Entities.Accounts.ManagerAccounts.Params;
 using FleetManagement.Entities.Accounts.UserAccounts;
 using FleetManagement.Entities.Accounts.UserAccounts.Models;
+using FleetManagement.Entities.Companies;
+using FleetManagement.Entities.Companies.Models;
 using FleetManagement.Images;
 using FleetManagement.Images.Params;
 using NHibernate;
@@ -17,15 +19,18 @@ namespace FleetManagement.Db.Repositories
     {
         private readonly IHashService hashService;
         private readonly IImagesService imagesService;
+        private readonly ICompanyProvider companyProvider;
         private readonly IUserAccountProvider userAccountProvider;
 
         public ManagerAccountsRepository(ISessionFactory sessionFactory, 
                                          IHashService hashService,
                                          IImagesService imagesService,
+                                         ICompanyProvider companyProvider,
                                          IUserAccountProvider userAccountProvider) : base(sessionFactory)
         {
             this.hashService = hashService;
             this.imagesService = imagesService;
+            this.companyProvider = companyProvider;
             this.userAccountProvider = userAccountProvider;
         }
 
@@ -79,6 +84,17 @@ namespace FleetManagement.Db.Repositories
                 return GetAll()
                     .FirstOrDefault(x => x.UserAccountId == user.Id) ?? null;
             else return null;
+        }
+
+        public Company GetCompany(string mail)
+        {
+            var manager = GetByMail(mail);
+
+            if (manager == null)
+                return null;
+
+            return companyProvider.GetAll()
+                .FirstOrDefault(x => x.ManagerAccountId == manager.Id);
         }
     }
 }

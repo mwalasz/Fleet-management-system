@@ -45,8 +45,7 @@ namespace FleetManagement.Controllers
             if (manager == null)
                 return NotFound("Nie znaleziono podanego kierownika!");
 
-            var company = companyProvider.GetAll()
-                .FirstOrDefault(x => x.ManagerAccountId == manager.Id);
+            var company = managerAccountProvider.GetCompany(mail);
 
             return Ok(mapper.Map<Company, CompanyDto>(company));
         }
