@@ -15,8 +15,14 @@ export const DEFAULT_USER_IMAGE =
 export const phoneNumberRegex = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 export const onlyLettersRegex = /^[^\W\d]+$/;
 
-export const USER_ROLES = {
+export const USER_ROLES_DESCRIPTION = {
     manager: 'Kierownik',
     admin: 'Administrator',
     driver: 'Kierowca',
+};
+
+export const USER_ROLES = {
+    manager: 'manager',
+    admin: 'admin',
+    driver: 'driver',
 };

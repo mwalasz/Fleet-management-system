@@ -4,7 +4,7 @@ import StyledLogout from './StyledLogout';
 import { logoutUser } from '../../redux/actions/authorization_actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { API_URL, DEFAULT_USER_IMAGE, USER_ROLES } from '../../utils/constans';
+import { API_URL, DEFAULT_USER_IMAGE, USER_ROLES_DESCRIPTION } from '../../utils/constans';
 import { connect } from 'react-redux';
 import { useEffect } from 'react';
 import axios from 'axios';
@@ -80,11 +80,11 @@ export default connect(mapStateToProps)(NavigationBar);
 const getRoleText = (role) => {
     switch (role) {
         case 'admin':
-            return USER_ROLES.admin;
+            return USER_ROLES_DESCRIPTION.admin;
         case 'driver':
-            return USER_ROLES.driver;
+            return USER_ROLES_DESCRIPTION.driver;
         case 'manager':
-            return USER_ROLES.manager;
+            return USER_ROLES_DESCRIPTION.manager;
 
         default:
             return '';

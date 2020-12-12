@@ -7,7 +7,7 @@ import {
     formatDuration,
     formatMileage,
 } from './formating';
-import { USER_ROLES } from './constans';
+import { USER_ROLES_DESCRIPTION } from './constans';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faArrowAltCircleLeft,
@@ -53,7 +53,7 @@ export const refuelingsColumns = [
     },
 ];
 
-export const tripsColumns = [
+export const VEHICLE_TRIPS_COLUMNS = [
     {
         field: 'startPlace',
         headerName: 'Miejsce rozpoczęcia',
@@ -248,9 +248,9 @@ export const ADMIN_USERS_COLUMNS = [
         headerName: 'Rola',
         width: 150,
         renderCell: (params) => {
-            if (params.data.role === 'admin') return USER_ROLES.admin;
-            if (params.data.role === 'driver') return USER_ROLES.driver;
-            if (params.data.role === 'manager') return USER_ROLES.manager;
+            if (params.data.role === 'admin') return USER_ROLES_DESCRIPTION.admin;
+            if (params.data.role === 'driver') return USER_ROLES_DESCRIPTION.driver;
+            if (params.data.role === 'manager') return USER_ROLES_DESCRIPTION.manager;
         },
     },
 ];

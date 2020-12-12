@@ -1,26 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
-import Modal from '../../../../../components/Modal';
+import Modal from '../../components/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { DataGrid } from '@material-ui/data-grid';
-import { tripsColumns } from '../../../../../utils/columns';
+import { formatDate, formatPrice } from '../../utils/formating';
+import { refuelingsColumns } from '../../utils/columns';
 
-const VehicleTripsModal = ({
+const VehicleRefuelingsModal = ({
     isVisible,
     handleClose,
     children,
     wide,
     vehicle,
-    user,
 }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
-    const [refresh, setRefresh] = useState(false);
-    const [trips, setTrips] = useState([]);
-
-    useEffect(() => {}, [refresh]);
 
     return (
         <>
@@ -30,27 +26,16 @@ const VehicleTripsModal = ({
                 error={error}
                 isLoading={isLoading}
                 title={
-                    'Twoje trasy pojazdem' +
+                    'Wszystkie tankowania pojazdu' +
                     (vehicle && ` ${vehicle.brand} ${vehicle.model}`)
                 }
-                ultraWide
+                wide
             >
-                {/* <button onClick={() => console.log('user: ', user)}>
-                    Pokaz wycieczki
-                </button> */}
                 <DataGridWrapper>
                     <DataGrid
                         loading={isLoading}
-                        rows={
-                            isVisible
-                                ? vehicle.trips.filter(
-                                      (x) =>
-                                          x.driverAccount.account.email ===
-                                          user.email
-                                  )
-                                : []
-                        }
-                        columns={tripsColumns}
+                        rows={isVisible ? vehicle.refuelings : []}
+                        columns={refuelingsColumns}
                         pageSize={parseInt(visualViewport.height / 80)}
                         disableSelectionOnClick
                         hideFooterRow
@@ -66,9 +51,4 @@ const DataGridWrapper = styled.div`
     margin: 0px auto;
 `;
 
-const mapStateToProps = (state) => {
-    return {
-        user: state.user,
-    };
-};
-export default connect(mapStateToProps)(VehicleTripsModal);
+export default VehicleRefuelingsModal;

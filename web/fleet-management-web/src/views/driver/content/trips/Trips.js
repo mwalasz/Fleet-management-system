@@ -14,7 +14,7 @@ import { DataGrid } from '@material-ui/data-grid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons';
 import TripModal from './TripModal';
-import { tripsColumns } from '../../../../utils/columns';
+import { VEHICLE_TRIPS_COLUMNS } from '../../../../utils/columns';
 
 const StyledIcon = styled(FontAwesomeIcon)`
     margin: 0px auto;
@@ -88,7 +88,7 @@ const Trips = ({ user }) => {
                     <DataGrid
                         loading={loading}
                         rows={trips}
-                        columns={[...tripsColumns, ...columnsButton]}
+                        columns={[...VEHICLE_TRIPS_COLUMNS, ...columnsButton]}
                         pageSize={parseInt(visualViewport.height / 80)}
                         disableSelectionOnClick
                         hideFooterRow

@@ -21,7 +21,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import VehicleInformationModal from './modals/VehicleInformationModal';
 import VehicleMaintenancesModal from './modals/VehicleMaintenancesModal';
-import VehicleTripsModal from './modals/VehicleTripsModal';
+import VehicleTripsModal from '../../../../components/vehicleModals/VehicleTripsModal';
 import VehicleRefuelingsModal from './modals/VehicleRefuelingsModal';
 import { vehiclesCondensedColumns } from '../../../../utils/columns';
 
@@ -157,13 +157,6 @@ const Vehicles = ({ user }) => {
         <ContentWrapper>
             <ContentHeader>
                 <Title>{'Twoje przydzielone pojazdy'}</Title>
-                {/* <Button
-                        wide
-                        secondary
-                        onClick={() => setModalVisible(!modalVisible)}
-                    >
-                        POJAZD
-                    </Button> */}
             </ContentHeader>
             <ContentBody>
                 <DataGridWrapper>

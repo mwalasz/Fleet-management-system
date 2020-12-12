@@ -131,16 +131,29 @@ namespace FleetManagement.Db.Repositories
         }
 
         [HttpGet]
-        public IActionResult GetVehicles(string nip)
+        public IActionResult GetVehicles(string managerMail, bool extended = false)
         {
-            var company = companyProvider.GetByNip(nip);
+            var manager = managerAccountProvider.GetByMail(managerMail);
 
-            if (company == null)
-                return NotFound("Nie znaleziono przedsiębiorstwa o podanym numerze NIP!");
+            if (manager == null)
+                return NotFound("Nie znaleziono podanego kierownika!");
+
+            var company = companyProvider.GetAll()
+                .FirstOrDefault(x => x.ManagerAccountId == manager.Id);
+
+            if (manager == null)
+                return NotFound("Podany manager nie zarządza żadnym przedsiębiorstwem!");
 
             var vehicles = company.Vehicles;
 
-            return Ok(vehicles.Select(vehicle => mapper.Map<Vehicle, VehicleBasicInfoDto>(vehicle)));
+            if (vehicles.Count != 0)
+            {
+                return extended
+                    ? Ok(vehicles.Select(x => mapper.Map<Vehicle, VehicleDto>(x)))
+                    : Ok(vehicles.Select(x => mapper.Map<Vehicle, VehicleBasicInfoDto>(x)));
+            }
+        
+            return Ok(vehicles);
         }
 
         [HttpGet]
