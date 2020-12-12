@@ -1,20 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styled, { css } from 'styled-components';
-import { connect } from 'react-redux';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 import Modal from '../../components/Modal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { DataGrid } from '@material-ui/data-grid';
-import { formatDate, formatPrice } from '../../utils/formating';
 import { refuelingsColumns } from '../../utils/columns';
 
-const VehicleRefuelingsModal = ({
-    isVisible,
-    handleClose,
-    children,
-    wide,
-    vehicle,
-}) => {
+const VehicleRefuelingsModal = ({ isVisible, handleClose, vehicle }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 

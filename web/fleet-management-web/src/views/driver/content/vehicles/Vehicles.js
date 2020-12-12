@@ -22,7 +22,7 @@ import {
 import VehicleInformationModal from './modals/VehicleInformationModal';
 import VehicleMaintenancesModal from './modals/VehicleMaintenancesModal';
 import VehicleTripsModal from '../../../../components/vehicleModals/VehicleTripsModal';
-import VehicleRefuelingsModal from './modals/VehicleRefuelingsModal';
+import VehicleRefuelingsModal from '../../../../components/vehicleModals/VehicleRefuelingsModal';
 import { vehiclesCondensedColumns } from '../../../../utils/columns';
 
 const StyledIcon = styled(FontAwesomeIcon)`
