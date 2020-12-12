@@ -19,6 +19,7 @@ import {
     faTools,
     faTrashAlt,
     faChartBar,
+    faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
 import VehicleInformationModal from '../../../../components/vehicleModals/VehicleInformationModal';
 import VehicleMaintenancesModal from '../../../../components/vehicleModals/VehicleMaintenancesModal';
@@ -30,6 +31,7 @@ import VehicleStatisticsModal from './modals/VehicleStatisticsModal';
 import NewVehicleModal from './modals/NewVehicleModal';
 import DGStyledIcon from '../../../../components/DGStyledIcon';
 import Button from '../../../../components/Button';
+import { Spinner, TitleWrapper } from '../components/common';
 
 const Vehicles = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
@@ -47,6 +49,9 @@ const Vehicles = ({ user }) => {
     const [activeVehicles, setActiveVehicles] = useState(true);
     const [vehicles, setVehicles] = useState([]);
     const [selectedVehicle, setSelectedVehicle] = useState(null);
+    const [dataForNewVehicleLoading, setDataForNewVehicleLoading] = useState(
+        false
+    );
 
     useEffect(() => {
         console.log('user');
@@ -114,6 +119,33 @@ const Vehicles = ({ user }) => {
                     );
                 });
         }
+    };
+
+    const loadDataForNewVehicle = () => {
+        setDataForNewVehicleLoading(true);
+        axios
+            .get(`${API_URL}/vehicles/get_data_for_new`, {
+                withCredentials: true,
+                headers: {
+                    Authorization: 'Bearer ' + user.token,
+                },
+            })
+            .then((res) => {
+                setDataForNewVehicleLoading(false);
+                setNewVehicleModalVisible(!newVehicleModalVisible);
+                const data = res.data.result;
+
+                if (data) {
+                    console.log('res.data.result');
+                    console.log(data);
+                }
+            })
+            .catch((err) => {
+                setDataForNewVehicleLoading(false);
+                console.log(
+                    `An error occurred while downloading user's vehicles: ${err}`
+                );
+            });
     };
 
     const columnsButtons = [
@@ -235,14 +267,13 @@ const Vehicles = ({ user }) => {
     return (
         <ContentWrapper>
             <ContentHeader>
-                <Title>{'Pojazdy w Twoim przedsiębiorstwie'}</Title>{' '}
-                <Button
-                    wide
-                    secondary
-                    onClick={() =>
-                        setNewVehicleModalVisible(!newVehicleModalVisible)
-                    }
-                >
+                <TitleWrapper>
+                    <Title>{'Pojazdy w Twoim przedsiębiorstwie'}</Title>
+                    {dataForNewVehicleLoading && (
+                        <Spinner icon={faSpinner} spin size={'lg'} />
+                    )}
+                </TitleWrapper>
+                <Button wide secondary onClick={() => loadDataForNewVehicle()}>
                     DODAJ
                 </Button>
             </ContentHeader>

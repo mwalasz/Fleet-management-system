@@ -17,12 +17,12 @@ import {
 } from '../../../../components/PageContents';
 import { MANAGER_DRIVERS_COLUMNS } from '../../../../utils/columns';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DriverStatisticsModal from './modals/DriverStatisticsModal';
 import DriverManagementModal from './modals/DriverManagementModal';
 import { spreadArray } from '../../../../utils/utils';
 import DriverVehiclesModal from './modals/DriverVehiclesModal';
 import DGStyledIcon from '../../../../components/DGStyledIcon';
+import { Spinner, TitleWrapper } from '../components/common';
 
 const Drivers = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
@@ -57,7 +57,12 @@ const Drivers = ({ user }) => {
             renderCell: (params) => {
                 return vehiclesLoading &&
                     params.data.email === selectedDriverMail ? (
-                    <Spinner icon={faSpinner} spin size={'2x'} />
+                    <Spinner
+                        icon={faSpinner}
+                        spin
+                        size={'2x'}
+                        style={{ display: 'block', margin: '30px auto' }}
+                    />
                 ) : (
                     <DGStyledIcon
                         size={'lg'}
@@ -84,7 +89,12 @@ const Drivers = ({ user }) => {
             renderCell: (params) => {
                 return statisticsLoading &&
                     params.data.email === selectedDriverMail ? (
-                    <Spinner icon={faSpinner} spin size={'2x'} />
+                    <Spinner
+                        icon={faSpinner}
+                        spin
+                        size={'2x'}
+                        style={{ display: 'block', margin: '30px auto' }}
+                    />
                 ) : (
                     <DGStyledIcon
                         size={'lg'}
@@ -231,11 +241,6 @@ const Drivers = ({ user }) => {
         }
     };
 
-    const TitleWrapper = styled.div`
-        display: flex;
-        flex-direction: row;
-    `;
-
     return (
         <ContentWrapper>
             <ContentHeader>
@@ -300,12 +305,6 @@ const Drivers = ({ user }) => {
         </ContentWrapper>
     );
 };
-
-const Spinner = styled(FontAwesomeIcon)`
-    color: ${({ theme }) => theme.primaryColor};
-    display: block;
-    margin: 30px auto;
-`;
 
 const DataGridWrapper = styled.div`
     height: calc(100vh - 168px);
