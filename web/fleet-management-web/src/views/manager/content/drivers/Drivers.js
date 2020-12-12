@@ -46,12 +46,6 @@ const Drivers = ({ user }) => {
     );
     const [company, setCompany] = useState(null);
 
-    const [lastSelectedOption, setLastSelectedOption] = useState('');
-    const options = {
-        stats: 'stats',
-        vehicles: 'vehicles',
-    };
-
     const columnsButton = [
         {
             headerAlign: 'center',
@@ -68,21 +62,13 @@ const Drivers = ({ user }) => {
                         size={'lg'}
                         icon={faCarSide}
                         onClick={() => {
-                            setLastSelectedOption(options.vehicles);
                             setSelectedDriverMail(params.data.email);
                             setSelectedDriverDescription(
                                 `${params.data.firstName} ${params.data.lastName} [${params.data.email}]`
                             );
 
-                            if (
-                                params.data.email !== selectedDriverMail ||
-                                lastSelectedOption !== options.vehicles
-                            ) {
-                                setVehiclesLoading(true);
-                                loadDriverVehicles(params.data.email);
-                            } else {
-                                setVehiclesModalVisible(true);
-                            }
+                            setVehiclesLoading(true);
+                            loadDriverVehicles(params.data.email);
                         }}
                     />
                 );
@@ -103,20 +89,12 @@ const Drivers = ({ user }) => {
                         size={'lg'}
                         icon={faChartBar}
                         onClick={() => {
-                            setLastSelectedOption(options.stats);
                             setSelectedDriverMail(params.data.email);
                             setSelectedDriverDescription(
                                 `${params.data.firstName} ${params.data.lastName} [${params.data.email}]`
                             );
-                            if (
-                                params.data.email !== selectedDriverMail ||
-                                lastSelectedOption !== options.stats
-                            ) {
-                                setStatisticsLoading(true);
-                                loadDriverStats(params.data.email);
-                            } else {
-                                setStatsModalVisible(true);
-                            }
+                            setStatisticsLoading(true);
+                            loadDriverStats(params.data.email);
                         }}
                     />
                 );
