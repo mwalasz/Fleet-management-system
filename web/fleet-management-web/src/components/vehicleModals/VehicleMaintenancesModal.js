@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Modal from '../../../../../components/Modal';
+import Modal from '../Modal';
 import { DataGrid } from '@material-ui/data-grid';
-import { maintenancesColumns } from '../../../../../utils/columns';
+import { maintenancesColumns } from '../../utils/columns';
 
 const VehicleMaintenancesModal = ({ isVisible, handleClose, vehicle }) => {
     const [isLoading, setIsLoading] = useState(false);

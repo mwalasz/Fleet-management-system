@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
-import Modal from '../../../../../components/Modal';
+import Modal from '../Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faCalendarCheck,
@@ -11,16 +11,16 @@ import {
     faIdCardAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import { API_URL } from '../../../../../utils/constans';
+import { API_URL } from '../../utils/constans';
 import { Grid } from '@material-ui/core';
-import { StyledGrid, StyledGridRow } from '../../../../../components/Grid';
+import { StyledGrid, StyledGridRow } from '../Grid';
 import {
     formatDate,
     formatMileage,
     formatWeight,
     formatEngineType,
     formatDriveType,
-} from '../../../../../utils/formating';
+} from '../../utils/formating';
 
 const VehicleInformationModal = ({
     isVisible,

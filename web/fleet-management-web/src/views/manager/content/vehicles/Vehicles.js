@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_URL } from '../../../../utils/constans';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { connect } from 'react-redux';
-import Button from '../../../../components/Button';
 import Title from '../../../../components/Title';
 import {
     ContentWrapper,
@@ -17,7 +16,6 @@ import {
     faInfoCircle,
     faRoute,
     faTools,
-    faTachometerAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import VehicleInformationModal from '../../../../components/vehicleModals/VehicleInformationModal';
 import VehicleMaintenancesModal from '../../../../components/vehicleModals/VehicleMaintenancesModal';
@@ -158,14 +156,7 @@ const Vehicles = ({ user }) => {
     return (
         <ContentWrapper>
             <ContentHeader>
-                <Title>{'Twoje przydzielone pojazdy'}</Title>
-                {/* <Button
-                        wide
-                        secondary
-                        onClick={() => setModalVisible(!modalVisible)}
-                    >
-                        POJAZD
-                    </Button> */}
+                <Title>{'Pojazdy w Twoim przedsiębiorstwie'}</Title>
             </ContentHeader>
             <ContentBody>
                 <DataGridWrapper>
@@ -213,18 +204,6 @@ const Vehicles = ({ user }) => {
         </ContentWrapper>
     );
 };
-
-const Text = styled.text`
-    font-size: ${({ theme }) => theme.font.M};
-    font-weight: ${({ theme }) => theme.font.Regular};
-    transition: all 0.3s;
-    display: inline;
-    margin: 10px;
-`;
-
-const FilterWrapper = styled.div`
-    margin-bottom: 10px;
-`;
 
 const DataGridWrapper = styled.div`
     height: calc(100vh - 220px);
