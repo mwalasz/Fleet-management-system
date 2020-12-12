@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { API_URL } from '../../../utils/constans';
 import { faTrash, faRedo } from '@fortawesome/free-solid-svg-icons';
 import CheckBox from './components/CheckBox';
-import { DataGridWrapper, StyledIcon } from './components/Common';
+import { DataGridWrapper } from './components/Common';
 import Button from '../../../components/Button';
 import Title from '../../../components/Title';
 import {
@@ -16,6 +16,7 @@ import {
 } from '../../../components/PageContents';
 import { ADMIN_USERS_COLUMNS } from '../../../utils/columns';
 import Alert from '../../../components/Alert';
+import DGStyledIcon from '../../../components/DGStyledIcon';
 
 const Users = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
@@ -87,7 +88,7 @@ const Users = ({ user }) => {
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <StyledIcon
+                    <DGStyledIcon
                         icon={activeUsers ? faTrash : faRedo}
                         onClick={() =>
                             handleUpdateUserAvailability(params.data.email)

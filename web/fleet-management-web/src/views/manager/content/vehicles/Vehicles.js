@@ -18,6 +18,7 @@ import {
     faRoute,
     faTools,
     faTrashAlt,
+    faChartBar,
 } from '@fortawesome/free-solid-svg-icons';
 import VehicleInformationModal from '../../../../components/vehicleModals/VehicleInformationModal';
 import VehicleMaintenancesModal from '../../../../components/vehicleModals/VehicleMaintenancesModal';
@@ -25,11 +26,8 @@ import VehicleTripsModal from '../../../../components/vehicleModals/VehicleTrips
 import VehicleRefuelingsModal from '../../../../components/vehicleModals/VehicleRefuelingsModal';
 import { vehiclesCondensedColumns } from '../../../../utils/columns';
 import { Checkbox } from '@material-ui/core';
-
-const StyledIcon = styled(FontAwesomeIcon)`
-    margin: 0px auto;
-    cursor: pointer;
-`;
+import VehicleStatisticsModal from './modals/VehicleStatisticsModal';
+import DGStyledIcon from '../../../../components/DGStyledIcon';
 
 const Vehicles = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
@@ -40,6 +38,7 @@ const Vehicles = ({ user }) => {
     const [maintenancesModalVisible, setMaintenancesModalVisible] = useState(
         false
     );
+    const [statisticsModalVisible, setStatisticsModalVisible] = useState(false);
     const [activeVehicles, setActiveVehicles] = useState(true);
     const [vehicles, setVehicles] = useState([]);
     const [selectedVehicle, setSelectedVehicle] = useState(null);
@@ -78,15 +77,15 @@ const Vehicles = ({ user }) => {
             });
     }, [refresh]);
 
-    const handleVehicleActiveness = () => {
+    const handleVehicleActiveness = (vehicle) => {
+        const vin = vehicle.vin;
         if (
             window.confirm(
                 `Czy napewno chcesz ${
                     activeVehicles ? 'usunąć' : 'aktywować'
-                } pojazd o numerze vin: ${selectedVehicle.vin}?`
+                } pojazd o numerze vin: ${vin}?`
             )
         ) {
-            const vin = selectedVehicle.vin;
             axios
                 .put(
                     `${API_URL}/vehicles/change_availability?managerMail=${
@@ -116,12 +115,31 @@ const Vehicles = ({ user }) => {
         {
             headerAlign: 'center',
             field: 'open',
+            headerName: 'Statystyki',
+            width: 100,
+            sortable: false,
+            renderCell: (params) => {
+                return (
+                    <DGStyledIcon
+                        icon={faChartBar}
+                        onClick={() => {
+                            console.log(params.data);
+                            setSelectedVehicle(params.data);
+                            setStatisticsModalVisible(!statisticsModalVisible);
+                        }}
+                    />
+                );
+            },
+        },
+        {
+            headerAlign: 'center',
+            field: 'open',
             headerName: 'Szczegóły',
             width: 100,
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <StyledIcon
+                    <DGStyledIcon
                         icon={faInfoCircle}
                         onClick={() => {
                             console.log(params.data);
@@ -140,7 +158,7 @@ const Vehicles = ({ user }) => {
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <StyledIcon
+                    <DGStyledIcon
                         icon={faRoute}
                         onClick={() => {
                             console.log(params.data);
@@ -159,7 +177,7 @@ const Vehicles = ({ user }) => {
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <StyledIcon
+                    <DGStyledIcon
                         icon={faGasPump}
                         onClick={() => {
                             setSelectedVehicle(params.data);
@@ -177,7 +195,7 @@ const Vehicles = ({ user }) => {
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <StyledIcon
+                    <DGStyledIcon
                         icon={faTools}
                         onClick={() => {
                             setSelectedVehicle(params.data);
@@ -197,11 +215,11 @@ const Vehicles = ({ user }) => {
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <StyledIcon
+                    <DGStyledIcon
                         icon={activeVehicles ? faTrashAlt : faRedoAlt}
                         onClick={() => {
                             setSelectedVehicle(params.data);
-                            handleVehicleActiveness();
+                            handleVehicleActiveness(params.data);
                         }}
                     />
                 );
@@ -271,6 +289,10 @@ const Vehicles = ({ user }) => {
                 isVisible={refuelingsModalVisible}
                 handleClose={() => setRefuelingsModalVisible(false)}
                 setRefresh={() => setRefresh(!refresh)}
+            />
+            <VehicleStatisticsModal
+                isVisible={statisticsModalVisible}
+                handleClose={() => setStatisticsModalVisible(false)}
             />
         </ContentWrapper>
     );

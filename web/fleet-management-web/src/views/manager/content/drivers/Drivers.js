@@ -22,6 +22,7 @@ import DriverStatisticsModal from './modals/DriverStatisticsModal';
 import DriverManagementModal from './modals/DriverManagementModal';
 import { spreadArray } from '../../../../utils/utils';
 import DriverVehiclesModal from './modals/DriverVehiclesModal';
+import DGStyledIcon from '../../../../components/DGStyledIcon';
 
 const Drivers = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
@@ -58,7 +59,7 @@ const Drivers = ({ user }) => {
                     params.data.email === selectedDriverMail ? (
                     <Spinner icon={faSpinner} spin size={'2x'} />
                 ) : (
-                    <StyledIcon
+                    <DGStyledIcon
                         size={'lg'}
                         icon={faCarSide}
                         onClick={() => {
@@ -85,7 +86,7 @@ const Drivers = ({ user }) => {
                     params.data.email === selectedDriverMail ? (
                     <Spinner icon={faSpinner} spin size={'2x'} />
                 ) : (
-                    <StyledIcon
+                    <DGStyledIcon
                         size={'lg'}
                         icon={faChartBar}
                         onClick={() => {
@@ -304,11 +305,6 @@ const Spinner = styled(FontAwesomeIcon)`
     color: ${({ theme }) => theme.primaryColor};
     display: block;
     margin: 30px auto;
-`;
-
-const StyledIcon = styled(FontAwesomeIcon)`
-    margin: 0px auto;
-    cursor: pointer;
 `;
 
 const DataGridWrapper = styled.div`

@@ -14,8 +14,9 @@ import {
 } from '../../../components/PageContents';
 import { ADMIN_COMPANIES_COLUMNS } from '../../../utils/columns';
 import CheckBox from './components/CheckBox';
-import { DataGridWrapper, StyledIcon } from './components/Common';
+import { DataGridWrapper } from './components/Common';
 import Alert from '../../../components/Alert';
+import DGStyledIcon from '../../../components/DGStyledIcon';
 
 const Companies = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
@@ -92,7 +93,7 @@ const Companies = ({ user }) => {
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <StyledIcon
+                    <DGStyledIcon
                         icon={activeCompanies ? faTrash : faRedo}
                         onClick={() =>
                             handleUpdateCompanyAvailability(params.data.nip)
