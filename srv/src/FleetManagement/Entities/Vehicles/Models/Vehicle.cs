@@ -6,7 +6,6 @@ using FleetManagement.Entities.Refuelings.Models;
 using FleetManagement.Entities.Trips.Models;
 using FluentNHibernate.Mapping;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace FleetManagement.Entities.Vehicles.Models
@@ -48,6 +47,11 @@ namespace FleetManagement.Entities.Vehicles.Models
         /// Rok produkcji.
         /// </summary>
         public virtual short YearOfProduction { get; set; }
+
+        /// <summary>
+        /// Określa aktywność pojazdu.
+        /// </summary>
+        public virtual bool IsActive { get; set; }
 
         /// <summary>
         /// Data ważności przeglądu technicznego.
@@ -98,6 +102,7 @@ namespace FleetManagement.Entities.Vehicles.Models
                 .Unique()
                 .Not.Nullable();
             Map(x => x.CurbWeight);
+            Map(x => x.IsActive);
             Map(x => x.KmMileage)
                 .Not.Nullable();
             Map(x => x.YearOfProduction)

@@ -14,14 +14,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faGasPump,
     faInfoCircle,
+    faRedoAlt,
     faRoute,
     faTools,
+    faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import VehicleInformationModal from '../../../../components/vehicleModals/VehicleInformationModal';
 import VehicleMaintenancesModal from '../../../../components/vehicleModals/VehicleMaintenancesModal';
 import VehicleTripsModal from '../../../../components/vehicleModals/VehicleTripsModal';
 import VehicleRefuelingsModal from '../../../../components/vehicleModals/VehicleRefuelingsModal';
 import { vehiclesCondensedColumns } from '../../../../utils/columns';
+import { Checkbox } from '@material-ui/core';
 
 const StyledIcon = styled(FontAwesomeIcon)`
     margin: 0px auto;
@@ -37,6 +40,7 @@ const Vehicles = ({ user }) => {
     const [maintenancesModalVisible, setMaintenancesModalVisible] = useState(
         false
     );
+    const [activeVehicles, setActiveVehicles] = useState(true);
     const [vehicles, setVehicles] = useState([]);
     const [selectedVehicle, setSelectedVehicle] = useState(null);
 
@@ -46,7 +50,7 @@ const Vehicles = ({ user }) => {
         setLoading(true);
         axios
             .get(
-                `${API_URL}/companies/get_vehicles?managerMail=${user.email}&extended=true`,
+                `${API_URL}/companies/get_vehicles?managerMail=${user.email}&extended=true&active=${activeVehicles}`,
                 {
                     withCredentials: true,
                     headers: {
@@ -73,6 +77,40 @@ const Vehicles = ({ user }) => {
                 );
             });
     }, [refresh]);
+
+    const handleVehicleActiveness = () => {
+        if (
+            window.confirm(
+                `Czy napewno chcesz ${
+                    activeVehicles ? 'usunąć' : 'aktywować'
+                } pojazd o numerze vin: ${selectedVehicle.vin}?`
+            )
+        ) {
+            const vin = selectedVehicle.vin;
+            axios
+                .put(
+                    `${API_URL}/vehicles/change_availability?managerMail=${
+                        user.email
+                    }&isActive=${!activeVehicles}`,
+                    [vin],
+                    {
+                        withCredentials: true,
+                        headers: {
+                            Authorization: 'Bearer ' + user.token,
+                        },
+                    }
+                )
+                .then((res) => {
+                    setLoading(false);
+                    setRefresh(!refresh);
+                })
+                .catch((err) => {
+                    console.log(
+                        `An error occurred while removing vehicle [${vin}]: ${err}`
+                    );
+                });
+        }
+    };
 
     const columnsButtons = [
         {
@@ -151,6 +189,24 @@ const Vehicles = ({ user }) => {
                 );
             },
         },
+        {
+            headerAlign: 'center',
+            field: 'open',
+            headerName: activeVehicles ? 'Usuń' : 'Aktywuj',
+            width: 100,
+            sortable: false,
+            renderCell: (params) => {
+                return (
+                    <StyledIcon
+                        icon={activeVehicles ? faTrashAlt : faRedoAlt}
+                        onClick={() => {
+                            setSelectedVehicle(params.data);
+                            handleVehicleActiveness();
+                        }}
+                    />
+                );
+            },
+        },
     ];
 
     return (
@@ -159,6 +215,21 @@ const Vehicles = ({ user }) => {
                 <Title>{'Pojazdy w Twoim przedsiębiorstwie'}</Title>
             </ContentHeader>
             <ContentBody>
+                <FilterWrapper>
+                    <Checkbox
+                        color="default"
+                        onChange={() => {
+                            setActiveVehicles(!activeVehicles);
+                            setRefresh(!refresh);
+                        }}
+                        checked={activeVehicles}
+                    />
+                    <Text>
+                        {activeVehicles
+                            ? 'Odznacz, aby wyświetlić nieaktywne pojazdy:'
+                            : 'Zanacz, aby wyświetlić aktywne pojazdy:'}
+                    </Text>
+                </FilterWrapper>
                 <DataGridWrapper>
                     <DataGrid
                         loading={loading}
@@ -168,8 +239,8 @@ const Vehicles = ({ user }) => {
                             ...columnsButtons,
                         ]}
                         pageSize={parseInt(visualViewport.height / 80)}
-                        disableSelectionOnClick
                         hideFooterRow
+                        disableSelectionOnClick
                     />
                 </DataGridWrapper>
             </ContentBody>
@@ -204,6 +275,18 @@ const Vehicles = ({ user }) => {
         </ContentWrapper>
     );
 };
+
+const Text = styled.text`
+    font-size: ${({ theme }) => theme.font.M};
+    font-weight: ${({ theme }) => theme.font.Regular};
+    transition: all 0.3s;
+    display: inline;
+    margin: 10px;
+`;
+
+const FilterWrapper = styled.div`
+    margin-bottom: 10px;
+`;
 
 const DataGridWrapper = styled.div`
     height: calc(100vh - 220px);

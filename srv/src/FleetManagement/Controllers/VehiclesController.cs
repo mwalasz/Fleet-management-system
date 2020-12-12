@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using FleetManagement.Entities.Accounts.DriverAccounts;
+using FleetManagement.Entities.Accounts.ManagerAccounts;
+using FleetManagement.Entities.Companies;
 using FleetManagement.Entities.Maintenances.Models;
 using FleetManagement.Entities.Powertrains;
 using FleetManagement.Entities.Powertrains.Models;
@@ -23,16 +25,22 @@ namespace FleetManagement.Controllers
         private readonly IMapper mapper;
         private readonly IVehicleProvider vehicleProvider;
         private readonly IPowertrainProvider powertrainProvider;
+        private readonly IManagerAccountProvider managerAccountProvider;
+        private readonly ICompanyProvider companyProvider;
         private readonly IDriverAccountProvider driverAccountProvider;
 
         public VehiclesController(IMapper mapper,
             IVehicleProvider vehicleProvider, 
             IPowertrainProvider powertrainProvider,
+            IManagerAccountProvider managerAccountProvider,
+            ICompanyProvider companyProvider,
             IDriverAccountProvider driverAccountProvider)
         {
             this.mapper = mapper;
             this.vehicleProvider = vehicleProvider;
             this.powertrainProvider = powertrainProvider;
+            this.managerAccountProvider = managerAccountProvider;
+            this.companyProvider = companyProvider;
             this.driverAccountProvider = driverAccountProvider;
         }
 
@@ -49,7 +57,7 @@ namespace FleetManagement.Controllers
             var vehicle = vehicleProvider.GetByVinNumber(vin);
 
             if (vehicle == null)
-                return BadRequest("No vehicle with corresponding VIN number!");
+                return BadRequest("Brak pojazdu o podanym numerze VIN!");
 
             var powertrain = powertrainProvider.GetById(vehicle?.Powertrain.Id);
 
@@ -66,7 +74,7 @@ namespace FleetManagement.Controllers
             var vehicle = vehicleProvider.GetByVinNumber(vin);
 
             if (vehicle == null)
-                return BadRequest("No vehicle with corresponding VIN number!");
+                return BadRequest("Brak pojazdu o podanym numerze VIN!");
 
             var refuelings = vehicle.Refuelings.Select(x => mapper.Map<Refueling, RefuelingDto>(x));
 
@@ -79,7 +87,7 @@ namespace FleetManagement.Controllers
             var vehicle = vehicleProvider.GetByVinNumber(vin);
 
             if (vehicle == null)
-                return BadRequest("No vehicle with corresponding VIN number!");
+                return BadRequest("Brak pojazdu o podanym numerze VIN!");
 
             var repairs = vehicle.RepairsAndServices.Select(x => mapper.Map<Maintenance, MaintenanceDto>(x));
 
@@ -92,7 +100,7 @@ namespace FleetManagement.Controllers
             var vehicle = vehicleProvider.GetByVinNumber(vin);
 
             if (vehicle == null)
-                return BadRequest("No vehicle with corresponding VIN number!");
+                return BadRequest("Brak pojazdu o podanym numerze VIN!");
 
             var trips = vehicle.Trips.Select(x => mapper.Map<Trip, TripDto>(x));
 
@@ -105,9 +113,43 @@ namespace FleetManagement.Controllers
             var vehicle = vehicleProvider.GetByVinNumber(vin);
 
             if (vehicle == null)
-                return BadRequest("No vehicle with corresponding VIN number!");
+                return BadRequest("Brak pojazdu o podanym numerze VIN!");
 
             return Ok(mapper.Map<Vehicle, VehicleDto>(vehicle));
+        }
+
+        [HttpPut]
+        public IActionResult ChangeAvailability(IEnumerable<string> vins, string managerMail, bool isActive = false)
+        {
+            var manager = managerAccountProvider.GetByMail(managerMail);
+
+            if (manager == null)
+                return NotFound("Nie znaleziono podanego kierownika!");
+
+            var company = companyProvider.GetAll()
+                .FirstOrDefault(x => x.ManagerAccountId == manager.Id);
+
+            if (manager == null)
+                return NotFound("Podany manager nie zarządza żadnym przedsiębiorstwem!");
+
+            var vehicles = company.Vehicles.Where(x => vins.Contains(x.VIN)).ToList();
+
+            if (vehicles.Count != 0)
+            {
+                foreach (var vehicle in vehicles)
+                {
+                    vehicle.IsActive = isActive;
+                    vehicleProvider.Update(vehicle);
+                }
+            }
+
+            return Ok("Pomyślnie zaktualizowano dostępność podanych pojazdów.");
+        }
+
+        [HttpPost]
+        public IActionResult Add()
+        {
+            return Ok();
         }
     }
 }

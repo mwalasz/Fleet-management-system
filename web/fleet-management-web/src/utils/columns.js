@@ -248,9 +248,12 @@ export const ADMIN_USERS_COLUMNS = [
         headerName: 'Rola',
         width: 150,
         renderCell: (params) => {
-            if (params.data.role === 'admin') return USER_ROLES_DESCRIPTION.admin;
-            if (params.data.role === 'driver') return USER_ROLES_DESCRIPTION.driver;
-            if (params.data.role === 'manager') return USER_ROLES_DESCRIPTION.manager;
+            if (params.data.role === 'admin')
+                return USER_ROLES_DESCRIPTION.admin;
+            if (params.data.role === 'driver')
+                return USER_ROLES_DESCRIPTION.driver;
+            if (params.data.role === 'manager')
+                return USER_ROLES_DESCRIPTION.manager;
         },
     },
 ];

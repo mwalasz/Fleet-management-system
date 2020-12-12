@@ -270,6 +270,7 @@ namespace FleetManagement.Controllers
             {
                 new Vehicle()
                 {
+                    IsActive = true,
                     Brand = brands[0],
                     Model = brandModels[0],
                     KmMileage = 180000,
@@ -286,6 +287,7 @@ namespace FleetManagement.Controllers
                 },
                 new Vehicle()
                 {
+                    IsActive = true,
                     Brand = brands[0],
                     Model = brandModels[1],
                     KmMileage = 5000,

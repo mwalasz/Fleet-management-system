@@ -17,7 +17,9 @@ namespace FleetManagement.AutoMapper.ValueResolvers.Companies
 
         public List<VehicleBasicInfoDto> Resolve(Company source, CompanyDto destination, List<VehicleBasicInfoDto> destMember, ResolutionContext context)
         {
-            return source.Vehicles?.Select(x => mapper.Map<Vehicle, VehicleBasicInfoDto>(x)).ToList() ?? new List<VehicleBasicInfoDto>();
+            return source.Vehicles?
+                .Where(x => x.IsActive == true)
+                .Select(x => mapper.Map<Vehicle, VehicleBasicInfoDto>(x)).ToList() ?? new List<VehicleBasicInfoDto>();
         }
     }
 }

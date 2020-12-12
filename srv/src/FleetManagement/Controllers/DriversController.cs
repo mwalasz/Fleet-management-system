@@ -64,7 +64,7 @@ namespace FleetManagement.Controllers
 
             if (driver != null)
             {
-                var vehicles = driver.Vehicles.ToList();
+                var vehicles = driver.Vehicles.Where(x => x.IsActive == true).ToList();
 
                 if (vehicles.Count != 0)
                 {

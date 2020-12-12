@@ -334,7 +334,7 @@ const StyledIcon = styled(FontAwesomeIcon)`
 `;
 
 const DataGridWrapper = styled.div`
-    height: calc(100vh - 220px);
+    height: calc(100vh - 168px);
 `;
 
 const mapStateToProps = (state) => {

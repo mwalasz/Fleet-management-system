@@ -131,7 +131,7 @@ namespace FleetManagement.Db.Repositories
         }
 
         [HttpGet]
-        public IActionResult GetVehicles(string managerMail, bool extended = false)
+        public IActionResult GetVehicles(string managerMail, bool extended = false, bool active = true)
         {
             var manager = managerAccountProvider.GetByMail(managerMail);
 
@@ -144,7 +144,7 @@ namespace FleetManagement.Db.Repositories
             if (manager == null)
                 return NotFound("Podany manager nie zarządza żadnym przedsiębiorstwem!");
 
-            var vehicles = company.Vehicles;
+            var vehicles = company.Vehicles.Where(x => x.IsActive == active).ToList();
 
             if (vehicles.Count != 0)
             {
