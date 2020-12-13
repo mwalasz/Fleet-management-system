@@ -28,7 +28,7 @@ import VehicleRefuelingsModal from '../../../../components/vehicleModals/Vehicle
 import { vehiclesCondensedColumns } from '../../../../utils/columns';
 import { Checkbox } from '@material-ui/core';
 import VehicleStatisticsModal from './modals/VehicleStatisticsModal';
-import NewVehicleModal from './modals/NewVehicleModal';
+import NewVehicleModal from '../../../../components/newitem/newvehicle/NewVehicleModal';
 import DGStyledIcon from '../../../../components/DGStyledIcon';
 import Button from '../../../../components/Button';
 import { Spinner, TitleWrapper } from '../components/common';
@@ -49,9 +49,11 @@ const Vehicles = ({ user }) => {
     const [activeVehicles, setActiveVehicles] = useState(true);
     const [vehicles, setVehicles] = useState([]);
     const [selectedVehicle, setSelectedVehicle] = useState(null);
+
     const [dataForNewVehicleLoading, setDataForNewVehicleLoading] = useState(
         false
     );
+    const [dataForNewVehicle, setDataForNewVehicle] = useState(null);
 
     useEffect(() => {
         console.log('user');
@@ -121,37 +123,10 @@ const Vehicles = ({ user }) => {
         }
     };
 
-    const loadDataForNewVehicle = () => {
-        setDataForNewVehicleLoading(true);
-        axios
-            .get(`${API_URL}/vehicles/get_data_for_new`, {
-                withCredentials: true,
-                headers: {
-                    Authorization: 'Bearer ' + user.token,
-                },
-            })
-            .then((res) => {
-                setDataForNewVehicleLoading(false);
-                setNewVehicleModalVisible(!newVehicleModalVisible);
-                const data = res.data.result;
-
-                if (data) {
-                    console.log('res.data.result');
-                    console.log(data);
-                }
-            })
-            .catch((err) => {
-                setDataForNewVehicleLoading(false);
-                console.log(
-                    `An error occurred while downloading user's vehicles: ${err}`
-                );
-            });
-    };
-
     const columnsButtons = [
         {
             headerAlign: 'center',
-            field: 'open',
+            field: 'stats',
             headerName: 'Statystyki',
             width: 100,
             sortable: false,
@@ -170,7 +145,7 @@ const Vehicles = ({ user }) => {
         },
         {
             headerAlign: 'center',
-            field: 'open',
+            field: 'more',
             headerName: 'Szczegóły',
             width: 100,
             sortable: false,
@@ -189,7 +164,7 @@ const Vehicles = ({ user }) => {
         },
         {
             headerAlign: 'center',
-            field: 'open',
+            field: 'trips',
             headerName: 'Trasy',
             width: 100,
             sortable: false,
@@ -208,7 +183,7 @@ const Vehicles = ({ user }) => {
         },
         {
             headerAlign: 'center',
-            field: 'open',
+            field: 'refuels',
             headerName: 'Tankowania',
             width: 140,
             sortable: false,
@@ -226,7 +201,7 @@ const Vehicles = ({ user }) => {
         },
         {
             headerAlign: 'center',
-            field: 'open',
+            field: 'services',
             headerName: 'Serwisy',
             width: 100,
             sortable: false,
@@ -246,7 +221,7 @@ const Vehicles = ({ user }) => {
         },
         {
             headerAlign: 'center',
-            field: 'open',
+            field: 'delete',
             headerName: activeVehicles ? 'Usuń' : 'Aktywuj',
             width: 100,
             sortable: false,
@@ -273,7 +248,11 @@ const Vehicles = ({ user }) => {
                         <Spinner icon={faSpinner} spin size={'lg'} />
                     )}
                 </TitleWrapper>
-                <Button wide secondary onClick={() => loadDataForNewVehicle()}>
+                <Button
+                    wide
+                    secondary
+                    onClick={() => setNewVehicleModalVisible(true)}
+                >
                     DODAJ
                 </Button>
             </ContentHeader>
@@ -340,6 +319,7 @@ const Vehicles = ({ user }) => {
                 handleClose={() => setStatisticsModalVisible(false)}
             />
             <NewVehicleModal
+                data={dataForNewVehicle ? setDataForNewVehicle : null}
                 isVisible={newVehicleModalVisible}
                 handleClose={() => setNewVehicleModalVisible(false)}
             />

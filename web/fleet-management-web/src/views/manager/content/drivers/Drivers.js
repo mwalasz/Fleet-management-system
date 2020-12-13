@@ -82,7 +82,7 @@ const Drivers = ({ user }) => {
         },
         {
             headerAlign: 'center',
-            field: 'open',
+            field: 'stats',
             headerName: 'Statystyki',
             width: 130,
             sortable: false,

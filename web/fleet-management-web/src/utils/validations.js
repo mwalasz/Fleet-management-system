@@ -55,3 +55,45 @@ export const NewCompanyValidationSchema = Yup.object().shape({
     phoneNumber: phoneValidation,
     managerMail: mailValidation,
 });
+
+//DODAĆ DATY!!!
+export const NewVehicleValidationSchema = Yup.object().shape({
+    brand: Yup.string().required('Nazwa jest wymagana!'),
+    model: Yup.string().required('Nazwa jest wymagana!'),
+    licensePlate: Yup.string() //only numbers and letters
+        .length(7, 'Numer rejestracji musi zawierać 7 cyfr (XX00000)!')
+        .matches(onlyLettersRegex, 'Dozwolone są tylko cyfry i litery!')
+        .required('Tablica rejestracyjna jest wymagana!'),
+    vin: Yup.string() //only numbers and letters
+        .length(17, 'Numer rejestracji musi zawierać 7 cyfr (XX00000)!')
+        .matches(
+            onlyLettersRegex,
+            "Dozwolone są tylko cyfry i litery oprócz 'I', 'O' oraz 'Q'!"
+        )
+        .required('Tablica rejestracyjna jest wymagana!'),
+    kmMileage: Yup.string() //only numbers
+        .min(1, 'Zbyt krótki przebieg!')
+        .max(9, 'Zbyt długi przebieg!')
+        .required('Przebieg jest wymagany!'),
+    yearOfProduction: Yup.string() //only numbers
+        .length(4, 'To nie jest poprawny rok!')
+        .required('Rok jest wymagany!'),
+    engineCapacity: Yup.string() //only numbers
+        .min(3, 'Zbyt krótka pojemność!')
+        .max(5, 'Zbyt długa pojemność!')
+        .required('Pojemność jest wymagany!'),
+    horsepower: Yup.string() //only numbers
+        .min(1, 'Zbyt krótka moc!')
+        .max(4, 'Zbyt długa moc!')
+        .required('Moc jest wymagana!'),
+    torque: Yup.string() //only numbers
+        .min(1, 'Zbyt krótki moment obrotowy!')
+        .max(4, 'Zbyt długi moment obrotowy!')
+        .required('Moment obrotowy jest wymagany!'),
+    cylinderNumber: Yup.string() //only numbers
+        .min(1, 'Zbyt mała liczba cylindrów!')
+        .max(2, 'Zbyt duża liczba cylindrów!')
+        .required('Liczba cylindrów jest wymagana!'),
+    engineType: Yup.string().required('Typ silnika jest wymagana!'),
+    driveType: Yup.string().required('Typ napędu jest wymagany!'),
+});

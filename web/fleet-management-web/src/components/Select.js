@@ -1,17 +1,23 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import { Input, Select as MaterialUISelect } from '@material-ui/core';
 
-const Select = ({ options, handleChange, value, onClick, handleBlur }) => {
+const Select = ({
+    options,
+    handleChange,
+    value,
+    onClick,
+    handleBlur,
+    short,
+}) => {
     return (
         <StyledSelect
             value={value}
             onChange={handleChange}
             onClick={onClick}
             onBlur={handleBlur}
+            short={short}
         >
             {options.map((option) => (
                 <StyledMenuItem value={option}>{option}</StyledMenuItem>
@@ -31,6 +37,13 @@ const StyledSelect = styled(MaterialUISelect)`
     font-size: ${({ theme }) => theme.font.XS} !important;
     font-weight: ${({ theme }) => theme.font.Regular} !important;
     color: ${({ theme }) => theme.primaryColor} !important;
+
+    ${({ short }) =>
+        short &&
+        css`
+            width: 200px;
+            margin-left: 15px;
+        `}
 
     &:hover {
     }

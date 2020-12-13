@@ -77,7 +77,7 @@ const Vehicles = ({ user }) => {
     const columnsButtons = [
         {
             headerAlign: 'center',
-            field: 'open',
+            field: 'more',
             headerName: 'Szczegóły',
             width: 100,
             sortable: false,
@@ -95,7 +95,7 @@ const Vehicles = ({ user }) => {
         },
         {
             headerAlign: 'center',
-            field: 'open',
+            field: 'trips',
             headerName: 'Trasy',
             width: 100,
             sortable: false,
@@ -113,7 +113,7 @@ const Vehicles = ({ user }) => {
         },
         {
             headerAlign: 'center',
-            field: 'open',
+            field: 'refuels',
             headerName: 'Tankowania',
             width: 140,
             sortable: false,
@@ -131,7 +131,7 @@ const Vehicles = ({ user }) => {
         },
         {
             headerAlign: 'center',
-            field: 'open',
+            field: 'services',
             headerName: 'Serwisy',
             width: 100,
             sortable: false,
