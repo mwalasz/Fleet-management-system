@@ -322,6 +322,7 @@ const Vehicles = ({ user }) => {
                 data={dataForNewVehicle ? setDataForNewVehicle : null}
                 isVisible={newVehicleModalVisible}
                 handleClose={() => setNewVehicleModalVisible(false)}
+                setRefresh={() => setRefresh(!refresh)}
             />
         </ContentWrapper>
     );

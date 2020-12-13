@@ -60,24 +60,24 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
             <Formik
                 innerRef={formRef}
                 initialValues={{
-                    companyManagerMail: '',
                     brand: '',
                     model: '',
                     licensePlate: '',
                     vin: '',
-                    kmMileage: 0,
-                    curbWeight: 0,
-                    yearOfProduction: 0,
+                    kmMileage: '',
+                    curbWeight: '',
+                    yearOfProduction: '',
                     technicalInspectionDate: '2020-12-13T19:30:35.374Z',
                     insuranceInspectionDate: '2020-12-13T19:30:35.374Z',
-                    engineCapacity: 0,
-                    horsepower: 0,
-                    torque: 0,
-                    cylinderNumber: 0,
+                    engineCapacity: '',
+                    horsepower: '',
+                    torque: '',
+                    cylinderNumber: '',
                     engineType: '',
                     driveType: '',
                 }}
                 onSubmit={async (values) => {
+                    setIsLoading(true);
                     formRef.current
                         .validateForm()
                         .then(console.log('validation'));
@@ -85,22 +85,34 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                     setError('');
 
                     const payload = values;
-                    payload.address = `ul. ${values.addressStreet}, ${values.addressCity}`;
-                    delete payload.addressCity;
-                    delete payload.addressStreet;
+                    payload['companyManagerMail'] = user.email;
+                    payload['kmMileage'] = parseFloat(values.kmMileage);
+                    payload['curbWeight'] = parseFloat(values.curbWeight);
+                    payload['yearOfProduction'] = parseFloat(
+                        values.yearOfProduction
+                    );
+                    payload['engineCapacity'] = parseFloat(
+                        values.engineCapacity
+                    );
+                    payload['horsepower'] = parseFloat(values.horsepower);
+                    payload['torque'] = parseFloat(values.torque);
+                    payload['cylinderNumber'] = parseFloat(
+                        values.cylinderNumber
+                    );
 
-                    console.log('payload');
-                    console.log(payload);
+                    console.log('payload', payload);
 
                     await axios
-                        .post(`${API_URL}/companies/add`, payload, {
+                        .post(`${API_URL}/vehicles/add`, payload, {
                             withCredentials: true,
                             headers: {
                                 Authorization: 'Bearer ' + user.token,
                             },
                         })
                         .then((res) => {
+                            setIsLoading(false);
                             const error = res.data.result;
+
                             if (
                                 typeof error === 'string' &&
                                 error.includes('Błąd' || 'Error')
@@ -115,15 +127,15 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                             }
                         })
                         .catch((error) => {
+                            setIsLoading(false);
                             const errorMessage =
                                 error.response.data.responseException
                                     .exceptionMessage;
                             setError(`Błąd: ${errorMessage}`);
                             console.log(
-                                `Błąd w trakcie próby dodania nowej firmy: ${errorMessage}`
+                                `Błąd w trakcie próby dodania nowego pojazdu: ${errorMessage}`
                             );
                         });
-                    setIsLoading(false);
                 }}
                 validationSchema={NewVehicleValidationSchema}
             >
@@ -141,6 +153,7 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                                 display: 'flex',
                                 flexDirection: 'row',
                                 justifyContent: 'space-around',
+                                marginBottom: '20px',
                             }}
                         >
                             <SelectWrapper
@@ -153,7 +166,7 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                                     handleChange={handleChange}
                                     handleBlur={handleBlur}
                                     options={
-                                        data && data.brands && isVisible
+                                        isVisible && data && data.brands
                                             ? data.brands.map((x) => x.name)
                                             : []
                                     }
@@ -178,9 +191,9 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                                     handleChange={handleChange}
                                     handleBlur={handleBlur}
                                     options={
+                                        isVisible &&
                                         data.brands &&
-                                        selectedBrand &&
-                                        isVisible
+                                        selectedBrand
                                             ? selectedBrand.models.map(
                                                   (x) => x.name
                                               )
@@ -197,7 +210,7 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                             style={{
                                 display: 'flex',
                                 flexDirection: 'row',
-                                justifyContent: 'space-around',
+                                justifyContent: 'space-evenly',
                             }}
                         >
                             <SelectWrapper
@@ -210,7 +223,7 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                                     handleChange={handleChange}
                                     handleBlur={handleBlur}
                                     options={
-                                        data.driveTypes && isVisible
+                                        isVisible && data.driveTypes
                                             ? data.driveTypes
                                             : []
                                     }
@@ -230,7 +243,7 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                                     handleChange={handleChange}
                                     handleBlur={handleBlur}
                                     options={
-                                        data.engineTypes && isVisible
+                                        isVisible && data.engineTypes
                                             ? data.engineTypes
                                             : []
                                     }
@@ -243,6 +256,7 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                         </div>
                         <TwoInputsInRowWrapper>
                             <NewItemInput
+                                caps
                                 wide
                                 handleChange={handleChange}
                                 handleBlur={handleBlur}
@@ -254,6 +268,7 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                                 name="licensePlate"
                             />
                             <NewItemInput
+                                caps
                                 wide
                                 handleChange={handleChange}
                                 handleBlur={handleBlur}
@@ -267,6 +282,7 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                         </TwoInputsInRowWrapper>
                         <TwoInputsInRowWrapper>
                             <NewItemInput
+                                wide
                                 handleChange={handleChange}
                                 handleBlur={handleBlur}
                                 errors={errors.kmMileage}
@@ -278,6 +294,7 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                             />
 
                             <NewItemInput
+                                wide
                                 handleChange={handleChange}
                                 handleBlur={handleBlur}
                                 errors={errors.yearOfProduction}
@@ -290,16 +307,18 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                         </TwoInputsInRowWrapper>
                         <TwoInputsInRowWrapper>
                             <NewItemInput
+                                wide
                                 handleChange={handleChange}
                                 handleBlur={handleBlur}
-                                errors={errors.horspower}
-                                touched={touched.horspower}
-                                value={values.horspower}
+                                errors={errors.horsepower}
+                                touched={touched.horsepower}
+                                value={values.horsepower}
                                 placeholder="moc [km]"
                                 type="text"
-                                name="horspower"
+                                name="horsepower"
                             />
                             <NewItemInput
+                                wide
                                 handleChange={handleChange}
                                 handleBlur={handleBlur}
                                 errors={errors.torque}
@@ -310,16 +329,30 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                                 name="torque"
                             />
                         </TwoInputsInRowWrapper>
-                        <NewItemInput
-                            handleChange={handleChange}
-                            handleBlur={handleBlur}
-                            errors={errors.engineCapacity}
-                            touched={touched.engineCapacity}
-                            value={values.engineCapacity}
-                            placeholder="pojemność skokowa [cc]"
-                            type="text"
-                            name="engineCapacity"
-                        />
+                        <TwoInputsInRowWrapper>
+                            <NewItemInput
+                                wide
+                                handleChange={handleChange}
+                                handleBlur={handleBlur}
+                                errors={errors.engineCapacity}
+                                touched={touched.engineCapacity}
+                                value={values.engineCapacity}
+                                placeholder="pojemność skokowa [cc]"
+                                type="text"
+                                name="engineCapacity"
+                            />
+                            <NewItemInput
+                                wide
+                                handleChange={handleChange}
+                                handleBlur={handleBlur}
+                                errors={errors.cylinderNumber}
+                                touched={touched.cylinderNumber}
+                                value={values.cylinderNumber}
+                                placeholder="ilość cylindrów"
+                                type="text"
+                                name="cylinderNumber"
+                            />
+                        </TwoInputsInRowWrapper>
                         <NewItemInput
                             handleChange={handleChange}
                             handleBlur={handleBlur}

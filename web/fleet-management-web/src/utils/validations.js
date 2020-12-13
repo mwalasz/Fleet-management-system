@@ -1,9 +1,14 @@
 import * as Yup from 'yup';
-import { onlyLettersRegex, phoneNumberRegex } from '../utils/constans';
+import {
+    ONLY_DIGITS,
+    ONLY_DIGITS_AND_LETTERS,
+    ONLY_LETTERS,
+    PHONE_NUMBER,
+} from '../utils/regex';
 
 const phoneValidation = Yup.string()
     .required('Numer telefonu jest wymagany!')
-    .matches(phoneNumberRegex, 'Numer telefonu jest nieprawidłowy!')
+    .matches(PHONE_NUMBER, 'Numer telefonu jest nieprawidłowy!')
     .min(9, 'Numer telefonu jest zbyt krótki!')
     .max(9, 'Numer telefonu jest zbyt długi!');
 
@@ -16,12 +21,12 @@ export const newUserValidationSchema = (isDriver) =>
         firstName: Yup.string()
             .min(2, 'Zbyt krótkie imię!')
             .max(20, 'Zbyt długie imię!')
-            .matches(onlyLettersRegex, 'Dozwolone są tylko litery!')
+            .matches(ONLY_LETTERS, 'Dozwolone są tylko litery!')
             .required('Imię jest wymagane!'),
         lastName: Yup.string()
             .min(2, 'Zbyt krótkie nazwisko!')
             .max(20, 'Zbyt długie nazwisko!')
-            .matches(onlyLettersRegex, 'Dozwolone są tylko litery!')
+            .matches(ONLY_LETTERS, 'Dozwolone są tylko litery!')
             .required('Nazwisko jest wymagane!'),
         email: mailValidation,
         phoneNumber: phoneValidation,
@@ -43,7 +48,7 @@ export const NewCompanyValidationSchema = Yup.object().shape({
     description: Yup.string().max(100, 'Zbyt długi opis!').notRequired(),
     addressCity: Yup.string()
         .min(2, 'Zbyt krótka nazwa miejscowości!')
-        .matches(onlyLettersRegex, 'Dozwolone są tylko litery!')
+        .matches(ONLY_LETTERS, 'Dozwolone są tylko litery!')
         .required('Miejscowość jest wymagana!'),
     addressStreet: Yup.string()
         .min(2, 'Zbyt krótka nazwa ulicy!')
@@ -60,40 +65,51 @@ export const NewCompanyValidationSchema = Yup.object().shape({
 export const NewVehicleValidationSchema = Yup.object().shape({
     brand: Yup.string().required('Nazwa jest wymagana!'),
     model: Yup.string().required('Nazwa jest wymagana!'),
-    licensePlate: Yup.string() //only numbers and letters
-        .length(7, 'Numer rejestracji musi zawierać 7 cyfr (XX00000)!')
-        .matches(onlyLettersRegex, 'Dozwolone są tylko cyfry i litery!')
+    licensePlate: Yup.string()
+        .length(7, 'Rejestracja musi zawierać 7 znaków!')
+        .matches(ONLY_DIGITS_AND_LETTERS, 'Dozwolone są tylko cyfry i litery!')
         .required('Tablica rejestracyjna jest wymagana!'),
-    vin: Yup.string() //only numbers and letters
-        .length(17, 'Numer rejestracji musi zawierać 7 cyfr (XX00000)!')
+    vin: Yup.string()
+        .length(17, 'Numer vin musi zawierać 17 znaków!')
         .matches(
-            onlyLettersRegex,
+            ONLY_DIGITS_AND_LETTERS,
             "Dozwolone są tylko cyfry i litery oprócz 'I', 'O' oraz 'Q'!"
         )
         .required('Tablica rejestracyjna jest wymagana!'),
-    kmMileage: Yup.string() //only numbers
+    kmMileage: Yup.string()
+        .matches(ONLY_DIGITS, 'Dozwolone są tylko cyfry!')
         .min(1, 'Zbyt krótki przebieg!')
         .max(9, 'Zbyt długi przebieg!')
         .required('Przebieg jest wymagany!'),
-    yearOfProduction: Yup.string() //only numbers
+    yearOfProduction: Yup.string()
+        .matches(ONLY_DIGITS, 'Dozwolone są tylko cyfry!')
         .length(4, 'To nie jest poprawny rok!')
         .required('Rok jest wymagany!'),
-    engineCapacity: Yup.string() //only numbers
-        .min(3, 'Zbyt krótka pojemność!')
-        .max(5, 'Zbyt długa pojemność!')
-        .required('Pojemność jest wymagany!'),
-    horsepower: Yup.string() //only numbers
-        .min(1, 'Zbyt krótka moc!')
-        .max(4, 'Zbyt długa moc!')
+    engineCapacity: Yup.string()
+        .matches(ONLY_DIGITS, 'Dozwolone są tylko cyfry!')
+        .min(3, 'Za mała pojemność!')
+        .max(5, 'Za duża pojemność!')
+        .required('Pojemność jest wymagana!'),
+    horsepower: Yup.string()
+        .matches(ONLY_DIGITS, 'Dozwolone są tylko cyfry!')
+        .min(1, 'Za mała moc!')
+        .max(4, 'Za duża moc!')
         .required('Moc jest wymagana!'),
-    torque: Yup.string() //only numbers
-        .min(1, 'Zbyt krótki moment obrotowy!')
-        .max(4, 'Zbyt długi moment obrotowy!')
+    torque: Yup.string()
+        .matches(ONLY_DIGITS, 'Dozwolone są tylko cyfry!')
+        .min(1, 'Za mały moment obrotowy!')
+        .max(4, 'Za duży moment obrotowy!')
         .required('Moment obrotowy jest wymagany!'),
-    cylinderNumber: Yup.string() //only numbers
+    cylinderNumber: Yup.string()
+        .matches(ONLY_DIGITS, 'Dozwolone są tylko cyfry!')
         .min(1, 'Zbyt mała liczba cylindrów!')
         .max(2, 'Zbyt duża liczba cylindrów!')
         .required('Liczba cylindrów jest wymagana!'),
-    engineType: Yup.string().required('Typ silnika jest wymagana!'),
+    curbWeight: Yup.string()
+        .matches(ONLY_DIGITS, 'Dozwolone są tylko cyfry!')
+        .min(1, 'Zbyt mała waga!')
+        .max(5, 'Zbyt duża waga!')
+        .required('Waga jest wymagana!'),
+    engineType: Yup.string().required('Typ silnika jest wymagany!'),
     driveType: Yup.string().required('Typ napędu jest wymagany!'),
 });

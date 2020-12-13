@@ -12,9 +12,6 @@ export const DEFAULT_VEHICLE_IMAGE =
 export const DEFAULT_USER_IMAGE =
     'https://cdn4.iconfinder.com/data/icons/instagram-ui-twotone/48/Paul-18-512.png';
 
-export const phoneNumberRegex = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-export const onlyLettersRegex = /^[^\W\d]+$/;
-
 export const USER_ROLES_DESCRIPTION = {
     manager: 'Kierownik',
     admin: 'Administrator',

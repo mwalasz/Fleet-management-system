@@ -16,6 +16,12 @@ const StyledInput = styled(FormInput)`
         css`
             text-transform: capitalize;
         `}
+
+    ${({ caps }) =>
+        caps &&
+        css`
+            text-transform: uppercase;
+        `}
 `;
 
 export const ErrorWrapper = ({ children, errors, touched }) => (
@@ -39,6 +45,7 @@ const NewItemInput = ({
     type,
     name,
     value,
+    caps,
 }) => (
     <ErrorWrapper errors={errors} touched={touched}>
         <StyledInput
@@ -50,6 +57,7 @@ const NewItemInput = ({
             onChange={handleChange}
             onBlur={handleBlur}
             value={value}
+            caps={caps}
         />
     </ErrorWrapper>
 );
