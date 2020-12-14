@@ -35,17 +35,19 @@ export const formatDuration = (time) => {
     return p(formatDurationWithNoStyling(time));
 };
 
+export const formatDateAndTime = (date) => {
+    if (date) return p(moment(date).format('hh:mm, DD.MM.YYYY'));
+
+    return p(errorMessage);
+};
+
 export const formatDate = (date) => {
-    if (date) {
-        return p(moment(date).format('hh:mm, MM.DD.YYYY'));
-    }
+    if (date) return p(moment(date).format('DD.MM.YYYY'));
 
     return p(errorMessage);
 };
 
 export const formatDistance = (distance) => {
-    let toReturn;
-
     if (distance) {
         if (distance < 1000) {
             return p(`${roundTo(0, distance)} m`);

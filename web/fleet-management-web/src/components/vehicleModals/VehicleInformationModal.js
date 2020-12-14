@@ -1,18 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styled, { css } from 'styled-components';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { connect } from 'react-redux';
 import Modal from '../Modal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faCalendarCheck,
-    faSpinner,
     faTachometerAlt,
-    faInfoCircle,
     faIdCardAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios';
-import { API_URL } from '../../utils/constans';
-import { Grid } from '@material-ui/core';
 import { StyledGrid, StyledGridRow } from '../Grid';
 import {
     formatDate,
@@ -22,21 +16,12 @@ import {
     formatDriveType,
 } from '../../utils/formating';
 
-const VehicleInformationModal = ({
-    isVisible,
-    handleClose,
-    children,
-    wide,
-    vehicle,
-    user,
-}) => {
+const VehicleInformationModal = ({ isVisible, handleClose, vehicle }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [refresh, setRefresh] = useState(false);
 
-    useEffect(() => {
-        // setIsLoading(true);
-    }, [refresh]);
+    useEffect(() => {}, [refresh]);
 
     const renderRows = () => {
         if (isVisible) {

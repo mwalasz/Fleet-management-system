@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import {
-    formatDate,
+    formatDateAndTime,
     formatPrice,
     formatDistance,
     formatSpeed,
@@ -26,7 +26,7 @@ export const refuelingsColumns = [
         headerName: 'Data',
         width: 150,
         sortable: false,
-        renderCell: (params) => formatDate(params.data.time),
+        renderCell: (params) => formatDateAndTime(params.data.time),
     },
     {
         field: 'cost',
@@ -64,7 +64,7 @@ export const VEHICLE_TRIPS_COLUMNS = [
         headerName: 'Czas rozpoczęcia',
         width: 150,
         sortable: false,
-        renderCell: (params) => formatDate(params.data.startTime),
+        renderCell: (params) => formatDateAndTime(params.data.startTime),
     },
     {
         field: 'destinationPlace',
@@ -78,7 +78,7 @@ export const VEHICLE_TRIPS_COLUMNS = [
         align: 'center',
         headerAlign: 'center',
         sortable: false,
-        renderCell: (params) => formatDate(params.data.destinationArrivalTime),
+        renderCell: (params) => formatDateAndTime(params.data.destinationArrivalTime),
     },
     {
         field: 'distance',
@@ -129,7 +129,7 @@ export const maintenancesColumns = [
         field: 'date',
         headerName: 'Data',
         width: 150,
-        renderCell: (params) => formatDate(params.data.date),
+        renderCell: (params) => formatDateAndTime(params.data.date),
     },
     {
         field: 'cost',
