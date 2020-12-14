@@ -18,7 +18,6 @@ const VehicleMaintenancesModal = ({
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [addModalVisible, setAddModalVisible] = useState(false);
-    const [addedNewItem, setAddedNewItem] = useState(false);
 
     return (
         <Modal
@@ -54,10 +53,9 @@ const VehicleMaintenancesModal = ({
                 <NewMaintenanceModal
                     vehicle={vehicle}
                     isVisible={addModalVisible}
-                    addedNew={() => setAddedNewItem(true)}
-                    handleCloseNew={() => {
+                    handleCloseNew={(addedNew) => {
                         setAddModalVisible(false);
-                        if (addedNewItem) {
+                        if (addedNew) {
                             handleClose();
                             setRefresh();
                         }

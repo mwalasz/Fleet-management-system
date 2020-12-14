@@ -8,16 +8,9 @@ import { API_URL } from '../../../utils/constans';
 import { NEW_MAINTENANCE_VALIDATION_SCHEMA } from '../../../utils/validations';
 import NewItemInput from '../NewItemInput';
 import NewItemBottomButtons from '../NewItemBottomButtons';
-import { StyledForm, TwoInputsInRowWrapper } from '../FormComponents';
-import SelectWrapper from '../SelectWrapper';
+import { StyledForm } from '../FormComponents';
 
-const NewMaintenanceModal = ({
-    isVisible,
-    handleCloseNew,
-    vehicle,
-    addedNew,
-    user,
-}) => {
+const NewMaintenanceModal = ({ isVisible, handleCloseNew, vehicle, user }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const formRef = useRef(null);
@@ -26,7 +19,7 @@ const NewMaintenanceModal = ({
         <>
             <Modal
                 isVisible={isVisible}
-                handleClose={handleCloseNew}
+                handleClose={() => handleCloseNew(false)}
                 error={error}
                 isLoading={isLoading}
                 title={'Dodaj nowy serwis lub naprawę'}
@@ -75,10 +68,9 @@ const NewMaintenanceModal = ({
                                     console.log('error');
                                     setError(error);
                                 } else {
-                                    addedNew();
                                     formRef.current.resetForm();
                                     setError('');
-                                    setTimeout(handleCloseNew, 1000);
+                                    setTimeout(() => handleCloseNew(true), 500);
                                 }
                             })
                             .catch((error) => {
@@ -174,7 +166,7 @@ const NewMaintenanceModal = ({
                                 resetForm={() => {
                                     formRef.current.resetForm();
                                     setError('');
-                                    handleCloseNew();
+                                    handleCloseNew(false);
                                 }}
                             />
                         </StyledForm>

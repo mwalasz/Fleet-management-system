@@ -10,13 +10,7 @@ import NewItemInput from '../NewItemInput';
 import NewItemBottomButtons from '../NewItemBottomButtons';
 import { StyledForm, TwoInputsInRowWrapper } from '../FormComponents';
 
-const NewRefuelingModal = ({
-    isVisible,
-    handleCloseNew,
-    vehicle,
-    addedNew,
-    user,
-}) => {
+const NewRefuelingModal = ({ isVisible, handleCloseNew, vehicle, user }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const formRef = useRef(null);
@@ -25,7 +19,7 @@ const NewRefuelingModal = ({
         <>
             <Modal
                 isVisible={isVisible}
-                handleClose={handleCloseNew}
+                handleClose={() => handleCloseNew(false)}
                 error={error}
                 isLoading={isLoading}
                 title={'Dodaj nowe tankowanie'}
@@ -37,6 +31,7 @@ const NewRefuelingModal = ({
                         liters: '',
                         odometerMileage: '',
                         placeDescription: '',
+                        time: '',
                     }}
                     onSubmit={async (values) => {
                         formRef.current
@@ -75,10 +70,9 @@ const NewRefuelingModal = ({
                                     console.log('error');
                                     setError(error);
                                 } else {
-                                    addedNew();
                                     formRef.current.resetForm();
                                     setError('');
-                                    setTimeout(handleCloseNew, 1000);
+                                    setTimeout(() => handleCloseNew(true), 500);
                                 }
                             })
                             .catch((error) => {
@@ -164,7 +158,7 @@ const NewRefuelingModal = ({
                                 resetForm={() => {
                                     formRef.current.resetForm();
                                     setError('');
-                                    handleCloseNew();
+                                    handleCloseNew(false);
                                 }}
                             />
                         </StyledForm>
