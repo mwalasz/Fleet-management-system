@@ -5,13 +5,12 @@ import { connect } from 'react-redux';
 import { Formik } from 'formik';
 import axios from 'axios';
 import { API_URL } from '../../../utils/constans';
-import { NEW_MAINTENANCE_VALIDATION_SCHEMA } from '../../../utils/validations';
+import { NEW_REFUELING_VALIDATION_SCHEMA } from '../../../utils/validations';
 import NewItemInput from '../NewItemInput';
 import NewItemBottomButtons from '../NewItemBottomButtons';
 import { StyledForm, TwoInputsInRowWrapper } from '../FormComponents';
-import SelectWrapper from '../SelectWrapper';
 
-const NewMaintenanceModal = ({
+const NewRefuelingModal = ({
     isVisible,
     handleCloseNew,
     vehicle,
@@ -29,16 +28,15 @@ const NewMaintenanceModal = ({
                 handleClose={handleCloseNew}
                 error={error}
                 isLoading={isLoading}
-                title={'Dodaj nowy serwis lub naprawę'}
+                title={'Dodaj nowe tankowanie'}
             >
                 <Formik
                     innerRef={formRef}
                     initialValues={{
                         cost: '',
-                        providerDescription: '',
-                        date: '',
+                        liters: '',
                         odometerMileage: '',
-                        usedParts: '',
+                        placeDescription: '',
                     }}
                     onSubmit={async (values) => {
                         formRef.current
@@ -53,11 +51,12 @@ const NewMaintenanceModal = ({
                             values.odometerMileage
                         );
                         payload['cost'] = parseFloat(values.cost);
+                        payload['liters'] = parseFloat(values.liters);
+                        payload['costPerLiters'] = 0;
                         console.log('payload', payload);
-
                         await axios
                             .post(
-                                `${API_URL}/vehicles/add_maintenance`,
+                                `${API_URL}/vehicles/add_refueling`,
                                 payload,
                                 {
                                     withCredentials: true,
@@ -67,7 +66,8 @@ const NewMaintenanceModal = ({
                                 }
                             )
                             .then((res) => {
-                                const error = res.data.result;
+                                const error = res.data;
+                                console.log('error', error);
                                 if (
                                     typeof error === 'string' &&
                                     error.includes('Błąd' || 'Error')
@@ -90,7 +90,7 @@ const NewMaintenanceModal = ({
                             });
                         setIsLoading(false);
                     }}
-                    validationSchema={NEW_MAINTENANCE_VALIDATION_SCHEMA}
+                    validationSchema={NEW_REFUELING_VALIDATION_SCHEMA}
                 >
                     {({
                         values,
@@ -107,16 +107,16 @@ const NewMaintenanceModal = ({
                                     justifycontent: 'space-around',
                                 }}
                             >
-                                <Text>{'Data wydarzenia:'}</Text>
+                                <Text>{'Data tankowania:'}</Text>
                                 <NewItemInput
                                     handleChange={handleChange}
                                     handleBlur={handleBlur}
-                                    errors={errors.date}
-                                    touched={touched.date}
-                                    value={values.date}
+                                    errors={errors.time}
+                                    touched={touched.time}
+                                    value={values.time}
                                     maxToday
                                     type="datetime-local"
-                                    name="date"
+                                    name="time"
                                 />
                             </div>
                             <NewItemInput
@@ -132,12 +132,12 @@ const NewMaintenanceModal = ({
                             <NewItemInput
                                 handleChange={handleChange}
                                 handleBlur={handleBlur}
-                                errors={errors.usedParts}
-                                touched={touched.usedParts}
-                                value={values.usedParts}
-                                placeholder="użyte części, np: część, część ..."
+                                errors={errors.liters}
+                                touched={touched.liters}
+                                value={values.liters}
+                                placeholder="litry [l]"
                                 type="text"
-                                name="usedParts"
+                                name="liters"
                             />
                             <NewItemInput
                                 handleChange={handleChange}
@@ -152,22 +152,12 @@ const NewMaintenanceModal = ({
                             <NewItemInput
                                 handleChange={handleChange}
                                 handleBlur={handleBlur}
-                                errors={errors.providerDescription}
-                                touched={touched.providerDescription}
-                                value={values.providerDescription}
-                                placeholder="wykonawca"
+                                errors={errors.placeDescription}
+                                touched={touched.placeDescription}
+                                value={values.placeDescription}
+                                placeholder="miejsce tankowania"
                                 type="text"
-                                name="providerDescription"
-                            />
-                            <NewItemInput
-                                handleChange={handleChange}
-                                handleBlur={handleBlur}
-                                errors={errors.description}
-                                touched={touched.description}
-                                value={values.description}
-                                placeholder="opis prac"
-                                type="text"
-                                name="description"
+                                name="placeDescription"
                             />
                             <NewItemBottomButtons
                                 onSubmit={onSubmit}
@@ -198,4 +188,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps)(NewMaintenanceModal);
+export default connect(mapStateToProps)(NewRefuelingModal);

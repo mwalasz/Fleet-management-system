@@ -7,23 +7,36 @@ import {
     ONLY_DECIMALS,
 } from '../utils/regex';
 
-const phoneValidation = Yup.string()
+const PHONE_VALIDATION = Yup.string()
     .required('Numer telefonu jest wymagany!')
     .matches(PHONE_NUMBER, 'Numer telefonu jest nieprawidłowy!')
     .min(9, 'Numer telefonu jest zbyt krótki!')
     .max(9, 'Numer telefonu jest zbyt długi!');
 
-const mailValidation = Yup.string()
+const MAIL_VALIDATION = Yup.string()
     .email('Niepoprawny adres. Spróbuj ponownie.')
     .required('Mail jest wymagany!');
 
-const dateValidation = Yup.date().required('Termin jest wymagany!');
+const DATE_VALIDATION = Yup.date().required('Termin jest wymagany!');
 
-const mileageValidation = Yup.string()
+const MILEAGE_VALIDATION = Yup.string()
     .matches(ONLY_DIGITS, 'Dozwolone są tylko cyfry!')
     .min(1, 'Zbyt krótki przebieg!')
     .max(9, 'Zbyt długi przebieg!')
     .required('Przebieg jest wymagany!');
+
+const DESCRIPTION_VALIDATION_UNREQUIRED = Yup.string()
+    .max(60, 'Zbyt długi opis!')
+    .notRequired();
+
+const DESCRIPTION_VALIDATION = Yup.string()
+    .max(60, 'Zbyt długi opis!')
+    .required('Opis jest wymagany!');
+
+const COST_VALIDATION = Yup.string()
+    .matches(ONLY_DECIMALS, 'Dozwolone są tylko cyfry!')
+    .min(1, 'Zbyt mały koszt!')
+    .required('Koszt jest wymagany!');
 
 export const newUserValidationSchema = (isDriver) =>
     Yup.object().shape({
@@ -37,8 +50,8 @@ export const newUserValidationSchema = (isDriver) =>
             .max(20, 'Zbyt długie nazwisko!')
             .matches(ONLY_LETTERS, 'Dozwolone są tylko litery!')
             .required('Nazwisko jest wymagane!'),
-        email: mailValidation,
-        phoneNumber: phoneValidation,
+        email: MAIL_VALIDATION,
+        phoneNumber: PHONE_VALIDATION,
         drivingLicenseNumber: isDriver
             ? Yup.string()
                   .length(9, 'Numer musi zawierać 9 cyfr!')
@@ -62,12 +75,12 @@ export const NEW_COMPANY_VALIDATION_SCHEMA = Yup.object().shape({
     addressStreet: Yup.string()
         .min(2, 'Zbyt krótka nazwa ulicy!')
         .required('Ulica jest wymagana!'),
-    mail: mailValidation,
+    mail: MAIL_VALIDATION,
     nip: Yup.string()
         .length(10, 'Numer NIP musi zawierać 10 cyfr!')
         .required('Numer NIP  jest wymagany!'),
-    phoneNumber: phoneValidation,
-    managerMail: mailValidation,
+    phoneNumber: PHONE_VALIDATION,
+    managerMail: MAIL_VALIDATION,
 });
 
 export const NEW_VEHICLE_VALIDATION_SCHEMA = Yup.object().shape({
@@ -84,7 +97,7 @@ export const NEW_VEHICLE_VALIDATION_SCHEMA = Yup.object().shape({
             "Dozwolone są tylko cyfry i litery oprócz 'I', 'O' oraz 'Q'!"
         )
         .required('Tablica rejestracyjna jest wymagana!'),
-    kmMileage: mileageValidation,
+    kmMileage: MILEAGE_VALIDATION,
     yearOfProduction: Yup.string()
         .matches(ONLY_DIGITS, 'Dozwolone są tylko cyfry!')
         .length(4, 'To nie jest poprawny rok!')
@@ -116,20 +129,26 @@ export const NEW_VEHICLE_VALIDATION_SCHEMA = Yup.object().shape({
         .required('Waga jest wymagana!'),
     engineType: Yup.string().required('Typ silnika jest wymagany!'),
     driveType: Yup.string().required('Typ napędu jest wymagany!'),
-    technicalInspectionDate: dateValidation,
-    insuranceExpirationDate: dateValidation,
+    technicalInspectionDate: DATE_VALIDATION,
+    insuranceExpirationDate: DATE_VALIDATION,
 });
 
 export const NEW_REFUELING_VALIDATION_SCHEMA = Yup.object().shape({
-    cost: Yup.string()
-        .matches(ONLY_DECIMALS, 'Dozwolone są tylko cyfry!')
-        .min(1, 'Zbyt mały koszt!')
-        .required('Koszt jest wymagany!'),
+    cost: COST_VALIDATION,
     liters: Yup.string()
         .matches(ONLY_DECIMALS, 'Dozwolone są tylko cyfry!')
         .min(1, 'Zbyt mały litraż!')
         .required('Litry są wymagane!'),
-    odometerMileage: mileageValidation,
-    time: dateValidation,
-    placeDescription: Yup.string().max(60, 'Zbyt długi opis!').notRequired(),
+    odometerMileage: MILEAGE_VALIDATION,
+    time: DATE_VALIDATION,
+    placeDescription: DESCRIPTION_VALIDATION_UNREQUIRED,
+});
+
+export const NEW_MAINTENANCE_VALIDATION_SCHEMA = Yup.object().shape({
+    cost: COST_VALIDATION,
+    odometerMileage: MILEAGE_VALIDATION,
+    date: DATE_VALIDATION,
+    usedParts: DESCRIPTION_VALIDATION_UNREQUIRED,
+    providerDescription: DESCRIPTION_VALIDATION,
+    description: DESCRIPTION_VALIDATION_UNREQUIRED,
 });

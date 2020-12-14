@@ -182,14 +182,14 @@ namespace FleetManagement.Controllers
             var vehicle = vehicleProvider.GetByVinNumber(newRefuelingParams.Vin);
 
             if (vehicle == null)
-                return BadRequest("Brak pojazdu o podanym numerze VIN!");
+                return NotFound("Brak pojazdu o podanym numerze VIN!");
 
             if (newRefuelingParams.OdometerMileage > vehicle.KmMileage)
-                return BadRequest("Podany przebieg podczas tankowania jest za duży!");
+                return NotFound("Podany przebieg podczas tankowania jest za duży!");
 
             return vehicleProvider.AddNewRefueling(newRefuelingParams)
                 ? Ok()
-                : (IActionResult)BadRequest("Nie udało się dodać nowego tankowania!");
+                : (IActionResult)NotFound("Nie udało się dodać nowego tankowania!");
         }
 
         [HttpPost]
