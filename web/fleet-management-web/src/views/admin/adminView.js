@@ -4,7 +4,7 @@ import AdminNavigation from './navigation/adminNavigation';
 import Dashboard from '../../components/Dashboard';
 import Content from '../../components/Content';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { AdminRoutes } from '../../utils/routes';
+import { ADMIN_ROUTES } from '../../utils/routes';
 import Companies from './content/Companies';
 import Users from './content/Users';
 
@@ -14,10 +14,15 @@ const AdminView = ({ dispatch }) => {
             <AdminNavigation dispatch={dispatch} />
             <Content>
                 <Switch>
-                    <Route path={AdminRoutes.companies} component={Companies} />
-                    <Route path={AdminRoutes.users} component={Users} />
+                    <Route
+                        path={ADMIN_ROUTES.companies}
+                        component={Companies}
+                    />
+                    <Route path={ADMIN_ROUTES.users} component={Users} />
 
-                    <Route render={() => <Redirect to={AdminRoutes.users} />} />
+                    <Route
+                        render={() => <Redirect to={ADMIN_ROUTES.users} />}
+                    />
                 </Switch>
             </Content>
         </Dashboard>

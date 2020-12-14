@@ -7,7 +7,7 @@ import Vehicles from './content/vehicles/Vehicles';
 import Statistics from './content/statistics/Statistics';
 import Trips from './content/trips/Trips';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { DriverRoutes } from '../../utils/routes';
+import { DRIVER_ROUTES } from '../../utils/routes';
 
 const DriverView = ({ dispatch }) => {
     return (
@@ -15,15 +15,15 @@ const DriverView = ({ dispatch }) => {
             <DriverNavigation dispatch={dispatch} />
             <Content>
                 <Switch>
-                    <Route path={DriverRoutes.vehicles} component={Vehicles} />
+                    <Route path={DRIVER_ROUTES.vehicles} component={Vehicles} />
                     <Route
-                        path={DriverRoutes.statistics}
+                        path={DRIVER_ROUTES.statistics}
                         component={Statistics}
                     />
-                    <Route path={DriverRoutes.trips} component={Trips} />
+                    <Route path={DRIVER_ROUTES.trips} component={Trips} />
 
                     <Route
-                        render={() => <Redirect to={DriverRoutes.vehicles} />}
+                        render={() => <Redirect to={DRIVER_ROUTES.vehicles} />}
                     />
                 </Switch>
             </Content>

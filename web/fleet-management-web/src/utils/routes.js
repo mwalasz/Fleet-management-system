@@ -1,18 +1,18 @@
 const prefix = '/panel';
 
-export const DriverRoutes = {
+export const DRIVER_ROUTES = {
     vehicles: prefix + '/vehicles',
     statistics: prefix + '/statistics',
     trips: prefix + '/trips',
 };
 
-export const ManagerRoutes = {
+export const MANAGER_ROUTES = {
     vehicles: prefix + '/vehicles',
     drivers: prefix + '/drivers',
-    informations: prefix + '/informations',
+    company: prefix + '/company',
 };
 
-export const AdminRoutes = {
+export const ADMIN_ROUTES = {
     users: prefix + '/users',
     companies: prefix + '/companies',
 };

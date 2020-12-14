@@ -4,9 +4,9 @@ import ManagerNavigation from './navigation/managerNavigation';
 import Dashboard from '../../components/Dashboard';
 import Content from '../../components/Content';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { ManagerRoutes } from '../../utils/routes';
+import { MANAGER_ROUTES } from '../../utils/routes';
 import Vehicles from './content/vehicles/Vehicles';
-import Informations from './content/Informations';
+import Company from './content/company/Company';
 import Drivers from './content/drivers/Drivers';
 
 const ManagerView = ({ dispatch }) => {
@@ -15,15 +15,12 @@ const ManagerView = ({ dispatch }) => {
             <ManagerNavigation dispatch={dispatch} />
             <Content>
                 <Switch>
-                    <Route path={ManagerRoutes.vehicles} component={Vehicles} />
-                    <Route
-                        path={ManagerRoutes.informations}
-                        component={Informations}
-                    />
-                    <Route path={ManagerRoutes.drivers} component={Drivers} />
+                    <Route path={MANAGER_ROUTES.vehicles} component={Vehicles} />
+                    <Route path={MANAGER_ROUTES.company} component={Company} />
+                    <Route path={MANAGER_ROUTES.drivers} component={Drivers} />
 
                     <Route
-                        render={() => <Redirect to={ManagerRoutes.vehicles} />}
+                        render={() => <Redirect to={MANAGER_ROUTES.vehicles} />}
                     />
                 </Switch>
             </Content>

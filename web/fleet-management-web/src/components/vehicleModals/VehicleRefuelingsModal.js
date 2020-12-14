@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Modal from '../../components/Modal';
+import Modal from '../Modal';
 import { DataGrid } from '@material-ui/data-grid';
 import { connect } from 'react-redux';
 import { REFUELINGS_COLUMNS } from '../../utils/columns';
