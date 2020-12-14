@@ -14,6 +14,11 @@ namespace FleetManagement.Entities.Refuelings.Models
         /// Miejsce - miejscowość/ulica/stacja.
         /// </summary>
         public virtual string PlaceDescription { get; set; }
+
+        /// <summary>
+        /// Przebieg pojazdu podczas tankowania.
+        /// </summary>
+        public virtual int OdometerMileage { get; set; }
         
         /// <summary>
         /// Koszt.
@@ -38,6 +43,7 @@ namespace FleetManagement.Entities.Refuelings.Models
             Id(x => x.Id);
             Map(x => x.Time);
             Map(x => x.PlaceDescription);
+            Map(x => x.OdometerMileage);
             Map(x => x.Liters)
                 .Not.Nullable();
             Map(x => x.Cost)

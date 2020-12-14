@@ -8,6 +8,7 @@ namespace FleetManagement.Entities.Refuelings.Models
         public string PlaceDescription { get; set; }
         public double Cost { get; set; }
         public double Liters { get; set; }
+        public int OdometerMileage { get; set; }
         public double CostPerLiter { get; set; }
     }
 }

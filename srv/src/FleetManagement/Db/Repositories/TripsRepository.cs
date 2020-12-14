@@ -10,6 +10,7 @@ using FleetManagement.Utils;
 using Microsoft.Extensions.Options;
 using NHibernate;
 using RestSharp;
+using System;
 using System.Linq;
 using System.Text.Json;
 
@@ -66,6 +67,7 @@ namespace FleetManagement.Db.Repositories
                     };
 
                     vehicle.Trips.Add(trip);
+                    vehicle.KmMileage += Convert.ToInt32(trip.Distance);
                     Add(trip);
                     vehicleProvider.Update(vehicle);
 

@@ -6,9 +6,11 @@ using FleetManagement.Entities.Companies;
 using FleetManagement.Entities.DriveTypes;
 using FleetManagement.Entities.EngineTypes;
 using FleetManagement.Entities.Maintenances.Models;
+using FleetManagement.Entities.Maintenances.Params;
 using FleetManagement.Entities.Powertrains;
 using FleetManagement.Entities.Powertrains.Models;
 using FleetManagement.Entities.Refuelings.Models;
+using FleetManagement.Entities.Refuelings.Params;
 using FleetManagement.Entities.Trips.Models;
 using FleetManagement.Entities.Vehicles;
 using FleetManagement.Entities.Vehicles.Models;
@@ -172,6 +174,38 @@ namespace FleetManagement.Controllers
             return vehicleProvider.AddNewVehicle(newVehicle, company)
                 ? Ok()
                 : (IActionResult)BadRequest("Nie udało się dodać pojazdu");
+        }
+
+        [HttpPost]
+        public IActionResult AddRefueling([FromBody] NewRefuelingParams newRefuelingParams)
+        {
+            var vehicle = vehicleProvider.GetByVinNumber(newRefuelingParams.Vin);
+
+            if (vehicle == null)
+                return BadRequest("Brak pojazdu o podanym numerze VIN!");
+
+            if (newRefuelingParams.OdometerMileage > vehicle.KmMileage)
+                return BadRequest("Podany przebieg podczas tankowania jest za duży!");
+
+            return vehicleProvider.AddNewRefueling(newRefuelingParams)
+                ? Ok()
+                : (IActionResult)BadRequest("Nie udało się dodać nowego tankowania!");
+        }
+
+        [HttpPost]
+        public IActionResult AddMaintenance([FromBody] NewMaintenanceParams newMaintenanceParams)
+        {
+            var vehicle = vehicleProvider.GetByVinNumber(newMaintenanceParams.Vin);
+
+            if (vehicle == null)
+                return BadRequest("Brak pojazdu o podanym numerze VIN!");
+
+            if (newMaintenanceParams.OdometerMileage > vehicle.KmMileage)
+                return BadRequest("Podany przebieg w trakcie naprawy jest za duży!");
+
+            return vehicleProvider.AddNewMaintenance(newMaintenanceParams)
+                ? Ok()
+                : (IActionResult)BadRequest("Nie udało się dodać nowego serwisu!");
         }
 
         [HttpGet]

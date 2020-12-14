@@ -1,5 +1,7 @@
 ﻿using FleetManagement.Db.BaseOperations;
 using FleetManagement.Entities.Companies.Models;
+using FleetManagement.Entities.Maintenances.Params;
+using FleetManagement.Entities.Refuelings.Params;
 using FleetManagement.Entities.Vehicles.Models;
 using FleetManagement.Entities.Vehicles.Params;
 using System.Collections.Generic;
@@ -49,5 +51,19 @@ namespace FleetManagement.Entities.Vehicles
         /// </summary>
         /// <returns></returns>
         public bool AddNewVehicle(NewVehicleParams newVehicle, Company company);
+
+        /// <summary>
+        /// Dodaje nowy serwis do pojazdu.
+        /// </summary>
+        /// <param name="newMaintenanceParams"></param>
+        /// <returns></returns>
+        public bool AddNewMaintenance(NewMaintenanceParams newMaintenanceParams);
+        
+        /// <summary>
+        /// Dodaje nowe tankowanie do pojazdu.
+        /// </summary>
+        /// <param name="newRefuelingParams"></param>
+        /// <returns></returns>
+        public bool AddNewRefueling(NewRefuelingParams newRefuelingParams);
     }
 }
