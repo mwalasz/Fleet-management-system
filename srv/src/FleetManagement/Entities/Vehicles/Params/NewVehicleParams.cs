@@ -13,7 +13,7 @@ namespace FleetManagement.Entities.Vehicles.Params
         public int CurbWeight { get; set; }
         public short YearOfProduction { get; set; }
         public DateTime TechnicalInspectionDate { get; set; }
-        public DateTime InsuranceInspectionDate { get; set; }
+        public DateTime InsuranceExpirationDate { get; set; }
 
         //Powertrain:
 

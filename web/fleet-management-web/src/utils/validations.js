@@ -16,6 +16,8 @@ const mailValidation = Yup.string()
     .email('Niepoprawny adres. Spróbuj ponownie.')
     .required('Mail jest wymagany!');
 
+const dateValidation = Yup.date().required('Termin jest wymagany!');
+
 export const newUserValidationSchema = (isDriver) =>
     Yup.object().shape({
         firstName: Yup.string()
@@ -61,7 +63,6 @@ export const NewCompanyValidationSchema = Yup.object().shape({
     managerMail: mailValidation,
 });
 
-//DODAĆ DATY!!!
 export const NewVehicleValidationSchema = Yup.object().shape({
     brand: Yup.string().required('Nazwa jest wymagana!'),
     model: Yup.string().required('Nazwa jest wymagana!'),
@@ -112,4 +113,6 @@ export const NewVehicleValidationSchema = Yup.object().shape({
         .required('Waga jest wymagana!'),
     engineType: Yup.string().required('Typ silnika jest wymagany!'),
     driveType: Yup.string().required('Typ napędu jest wymagany!'),
+    technicalInspectionDate: dateValidation,
+    insuranceExpirationDate: dateValidation,
 });

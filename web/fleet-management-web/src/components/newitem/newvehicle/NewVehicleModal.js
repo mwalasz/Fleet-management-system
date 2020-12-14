@@ -10,7 +10,8 @@ import NewItemInput from '../NewItemInput';
 import NewItemBottomButtons from '../NewItemBottomButtons';
 import { StyledForm, TwoInputsInRowWrapper } from '../FormComponents';
 import SelectWrapper from '../SelectWrapper';
-import Dropzone from '../../dropzone/Dropzone';
+import styled from 'styled-components';
+import { formatDriveType, formatEngineType } from '../../../utils/formating';
 
 const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
     const [isDriver, setIsDriver] = useState(false);
@@ -34,8 +35,12 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                 const data = res.data.result;
 
                 if (data) {
-                    console.log('res.data.result');
-                    console.log(data);
+                    data.driveTypes = data.driveTypes.map((x) =>
+                        formatDriveType(x)
+                    );
+                    data.engineTypes = data.engineTypes.map((x) =>
+                        formatEngineType(x)
+                    );
                     setData(data);
                 }
             })
@@ -67,8 +72,8 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                     kmMileage: '',
                     curbWeight: '',
                     yearOfProduction: '',
-                    technicalInspectionDate: '2020-12-13T19:30:35.374Z',
-                    insuranceInspectionDate: '2020-12-13T19:30:35.374Z',
+                    technicalInspectionDate: '',
+                    insuranceExpirationDate: '',
                     engineCapacity: '',
                     horsepower: '',
                     torque: '',
@@ -372,12 +377,55 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                             }}
                             low
                         />
+                        <TwoInputsInRowWrapper>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                }}
+                            >
+                                <Text>{'Przegląd:'}</Text>
+                                <NewItemInput
+                                    handleChange={handleChange}
+                                    handleBlur={handleBlur}
+                                    errors={errors.technicalInspectionDate}
+                                    touched={touched.technicalInspectionDate}
+                                    value={values.technicalInspectionDate}
+                                    type="date"
+                                    name="technicalInspectionDate"
+                                />
+                            </div>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    justifycontent: 'space-around',
+                                }}
+                            >
+                                <Text>{'Ubezpieczenie:'}</Text>
+                                <NewItemInput
+                                    handleChange={handleChange}
+                                    handleBlur={handleBlur}
+                                    errors={errors.insuranceExpirationDate}
+                                    touched={touched.insuranceExpirationDate}
+                                    value={values.insuranceExpirationDate}
+                                    type="date"
+                                    name="insuranceExpirationDate"
+                                />
+                            </div>
+                        </TwoInputsInRowWrapper>
                     </StyledForm>
                 )}
             </Formik>
         </Modal>
     );
 };
+
+const Text = styled.h3`
+    align-self: flex-start;
+    margin: auto 5px;
+    line-height: 0px;
+    color: ${({ theme }) => theme.primaryColor};
+`;
 
 const mapStateToProps = (state) => {
     return {

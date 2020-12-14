@@ -71,7 +71,7 @@ namespace FleetManagement.Db.Repositories
                     VIN = newVehicle.VIN,
                     LicensePlate = newVehicle.LicensePlate,
                     TechnicalInspectionDate = newVehicle.TechnicalInspectionDate,
-                    InsuranceExpirationDate = newVehicle.InsuranceInspectionDate,
+                    InsuranceExpirationDate = newVehicle.InsuranceExpirationDate,
                     CurbWeight = newVehicle.CurbWeight,
                     KmMileage = newVehicle.KmMileage,
                     RepairsAndServices = new List<Maintenance>(),
