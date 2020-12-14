@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { REFUELINGS_COLUMNS } from '../../utils/columns';
 import NewRefuelingModal from '../newitem/refueling/NewRefuelingModal';
 import { USER_ROLES } from '../../utils/constans';
+import ModalAddButton from '../modal/ModalAddButton';
 
 const VehicleRefuelingsModal = ({
     isVisible,
@@ -30,14 +31,17 @@ const VehicleRefuelingsModal = ({
                     'Wszystkie tankowania pojazdu' +
                     (vehicle && ` ${vehicle.brand} ${vehicle.model}`)
                 }
+                button={
+                    user.role === USER_ROLES.manager && (
+                        <ModalAddButton
+                            accept
+                            onClick={() => setAddModalVisible(true)}
+                        />
+                    )
+                }
                 wide
             >
                 <DataGridWrapper>
-                    {user.role === USER_ROLES.manager && (
-                        <button onClick={() => setAddModalVisible(true)}>
-                            dodaj
-                        </button>
-                    )}
                     <DataGrid
                         loading={isLoading}
                         rows={isVisible ? vehicle.refuelings : []}

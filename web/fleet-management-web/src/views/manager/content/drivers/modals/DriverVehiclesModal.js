@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import Modal from '../../../../../components/Modal';
 import Button from '../../../../../components/Button';
+import ModalAddButton from '../../../../../components/modal/ModalAddButton';
 import styled from 'styled-components';
 import { Grid } from '@material-ui/core';
 import axios from 'axios';
@@ -76,9 +77,12 @@ const DriverVehiclesModal = ({
             title={`Zarządzanie pojazdami przydzielonymi kierowcy: `}
             wide
             button={
-                <StyledButton accept loading onClick={() => handleSave()}>
-                    zapisz
-                </StyledButton>
+                <ModalAddButton
+                    accept
+                    loading
+                    onClick={() => handleSave()}
+                    title={'zapisz'}
+                />
             }
         >
             <div style={{ marginTop: '20px' }}>
@@ -135,13 +139,6 @@ const DriverVehiclesModal = ({
         </Modal>
     );
 };
-
-const StyledButton = styled(Button)`
-    position: absolute;
-    right: 0;
-    top: 0;
-    margin: 65px;
-`;
 
 const StyledHeader = styled.p`
     display: block;

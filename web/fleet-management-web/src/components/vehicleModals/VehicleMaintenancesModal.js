@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { USER_ROLES } from '../../utils/constans';
 import NewMaintenanceModal from '../newitem/maintenance/NewMaintenanceModal';
 import { maintenancesColumns } from '../../utils/columns';
+import ModalAddButton from '../modal/ModalAddButton';
 
 const VehicleMaintenancesModal = ({
     isVisible,
@@ -29,14 +30,17 @@ const VehicleMaintenancesModal = ({
                 'Wszystkie serwisy i naprawy pojazdu' +
                 (vehicle && ` ${vehicle.brand} ${vehicle.model}`)
             }
+            button={
+                user.role === USER_ROLES.manager && (
+                    <ModalAddButton
+                        accept
+                        onClick={() => setAddModalVisible(true)}
+                    />
+                )
+            }
             ultraWide
         >
             <DataGridWrapper>
-                {user.role === USER_ROLES.manager && (
-                    <button onClick={() => setAddModalVisible(true)}>
-                        dodaj
-                    </button>
-                )}
                 <DataGrid
                     loading={isLoading}
                     rows={isVisible ? vehicle.repairsAndServices : []}
