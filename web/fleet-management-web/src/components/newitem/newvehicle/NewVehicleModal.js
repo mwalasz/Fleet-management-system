@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Modal from '../../Modal';
 import { connect } from 'react-redux';
-import { Formik, Form } from 'formik';
+import { Formik } from 'formik';
 import axios from 'axios';
-import { API_URL, USER_ROLES_DESCRIPTION } from '../../../utils/constans';
+import { API_URL } from '../../../utils/constans';
 import Select from '../../Select';
 import { NewVehicleValidationSchema } from '../../../utils/validations';
 import NewItemInput from '../NewItemInput';
@@ -11,10 +11,14 @@ import NewItemBottomButtons from '../NewItemBottomButtons';
 import { StyledForm, TwoInputsInRowWrapper } from '../FormComponents';
 import SelectWrapper from '../SelectWrapper';
 import styled from 'styled-components';
-import { formatDriveType, formatEngineType } from '../../../utils/formating';
+import {
+    formatDriveType,
+    formatEngineType,
+    formatEngineTypeBack,
+    formatDriveTypeBack,
+} from '../../../utils/formating';
 
 const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
-    const [isDriver, setIsDriver] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [data, setData] = useState(null);
@@ -57,12 +61,17 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
     return (
         <Modal
             isVisible={isVisible}
-            handleClose={handleClose}
+            handleClose={() => {
+                formRef.current.resetForm();
+                setError('');
+                handleClose();
+            }}
             title={'Dodaj nowy pojazd: '}
             error={error}
             isLoading={isLoading}
         >
             <Formik
+                key={isVisible ? 1 : 0}
                 innerRef={formRef}
                 initialValues={{
                     brand: '',
@@ -90,22 +99,37 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                     setError('');
 
                     const payload = values;
-                    payload['companyManagerMail'] = user.email;
-                    payload['kmMileage'] = parseFloat(values.kmMileage);
-                    payload['curbWeight'] = parseFloat(values.curbWeight);
-                    payload['yearOfProduction'] = parseFloat(
-                        values.yearOfProduction
-                    );
-                    payload['engineCapacity'] = parseFloat(
-                        values.engineCapacity
-                    );
-                    payload['horsepower'] = parseFloat(values.horsepower);
-                    payload['torque'] = parseFloat(values.torque);
-                    payload['cylinderNumber'] = parseFloat(
-                        values.cylinderNumber
-                    );
+                    try {
+                        payload[
+                            'licensePlate'
+                        ] = values.licensePlate.toString().toUpperCase();
+                        payload['vin'] = values.vin.toString().toUpperCase();
+                        payload['companyManagerMail'] = user.email;
+                        payload['kmMileage'] = parseFloat(values.kmMileage);
+                        payload['curbWeight'] = parseFloat(values.curbWeight);
+                        payload['yearOfProduction'] = parseFloat(
+                            values.yearOfProduction
+                        );
+                        payload['engineCapacity'] = parseFloat(
+                            values.engineCapacity
+                        );
+                        payload['horsepower'] = parseFloat(values.horsepower);
+                        payload['torque'] = parseFloat(values.torque);
+                        payload['cylinderNumber'] = parseFloat(
+                            values.cylinderNumber
+                        );
+                        payload['driveType'] = formatDriveTypeBack(
+                            values.driveType
+                        );
+                        payload['engineType'] = formatEngineTypeBack(
+                            values.engineType
+                        );
 
-                    console.log('payload', payload);
+                        console.log('payload', payload);
+                    } catch (error) {
+                        setIsLoading(false);
+                        console.log('error while creating payload', error);
+                    }
 
                     await axios
                         .post(`${API_URL}/vehicles/add`, payload, {
@@ -368,15 +392,7 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                             type="text"
                             name="curbWeight"
                         />
-                        <NewItemBottomButtons
-                            onSubmit={onSubmit}
-                            resetForm={() => {
-                                formRef.current.resetForm();
-                                setError('');
-                                handleClose();
-                            }}
-                            low
-                        />
+
                         <TwoInputsInRowWrapper>
                             <div
                                 style={{
@@ -391,6 +407,7 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                                     errors={errors.technicalInspectionDate}
                                     touched={touched.technicalInspectionDate}
                                     value={values.technicalInspectionDate}
+                                    minToday
                                     type="date"
                                     name="technicalInspectionDate"
                                 />
@@ -408,11 +425,21 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                                     errors={errors.insuranceExpirationDate}
                                     touched={touched.insuranceExpirationDate}
                                     value={values.insuranceExpirationDate}
+                                    minToday
                                     type="date"
                                     name="insuranceExpirationDate"
                                 />
                             </div>
                         </TwoInputsInRowWrapper>
+                        <NewItemBottomButtons
+                            onSubmit={onSubmit}
+                            resetForm={() => {
+                                formRef.current.resetForm();
+                                setError('');
+                                handleClose();
+                            }}
+                            low
+                        />
                     </StyledForm>
                 )}
             </Formik>

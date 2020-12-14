@@ -98,6 +98,20 @@ export const formatEngineType = (engineType) => {
     }
 };
 
+export const formatEngineTypeBack = (engineType) => {
+    switch (engineType) {
+        case 'benzynowy':
+            return 'Petrol';
+        case 'diesel':
+            return 'Diesel';
+        case 'hybryda':
+            return 'Hybrid';
+
+        default:
+            return errorMessage;
+    }
+};
+
 export const formatDriveType = (driveType) => {
     switch (driveType) {
         case 'RWD':
@@ -106,6 +120,20 @@ export const formatDriveType = (driveType) => {
             return 'przednio-napędowy';
         case '4WD':
             return '4x4';
+
+        default:
+            return errorMessage;
+    }
+};
+
+export const formatDriveTypeBack = (driveType) => {
+    switch (driveType) {
+        case 'tylno-napędowy':
+            return 'RWD';
+        case 'przednio-napędowy':
+            return 'FWD';
+        case '4x4':
+            return '4WD';
 
         default:
             return errorMessage;
