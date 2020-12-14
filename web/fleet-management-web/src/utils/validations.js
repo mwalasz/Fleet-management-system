@@ -4,6 +4,7 @@ import {
     ONLY_DIGITS_AND_LETTERS,
     ONLY_LETTERS,
     PHONE_NUMBER,
+    ONLY_DECIMALS,
 } from '../utils/regex';
 
 const phoneValidation = Yup.string()
@@ -17,6 +18,12 @@ const mailValidation = Yup.string()
     .required('Mail jest wymagany!');
 
 const dateValidation = Yup.date().required('Termin jest wymagany!');
+
+const mileageValidation = Yup.string()
+    .matches(ONLY_DIGITS, 'Dozwolone są tylko cyfry!')
+    .min(1, 'Zbyt krótki przebieg!')
+    .max(9, 'Zbyt długi przebieg!')
+    .required('Przebieg jest wymagany!');
 
 export const newUserValidationSchema = (isDriver) =>
     Yup.object().shape({
@@ -42,7 +49,7 @@ export const newUserValidationSchema = (isDriver) =>
             .required('Hasło jest wymagane!'),
     });
 
-export const NewCompanyValidationSchema = Yup.object().shape({
+export const NEW_COMPANY_VALIDATION_SCHEMA = Yup.object().shape({
     name: Yup.string()
         .min(2, 'Zbyt krótka nazwa!')
         .max(20, 'Zbyt długa nazwa!')
@@ -63,7 +70,7 @@ export const NewCompanyValidationSchema = Yup.object().shape({
     managerMail: mailValidation,
 });
 
-export const NewVehicleValidationSchema = Yup.object().shape({
+export const NEW_VEHICLE_VALIDATION_SCHEMA = Yup.object().shape({
     brand: Yup.string().required('Nazwa jest wymagana!'),
     model: Yup.string().required('Nazwa jest wymagana!'),
     licensePlate: Yup.string()
@@ -77,11 +84,7 @@ export const NewVehicleValidationSchema = Yup.object().shape({
             "Dozwolone są tylko cyfry i litery oprócz 'I', 'O' oraz 'Q'!"
         )
         .required('Tablica rejestracyjna jest wymagana!'),
-    kmMileage: Yup.string()
-        .matches(ONLY_DIGITS, 'Dozwolone są tylko cyfry!')
-        .min(1, 'Zbyt krótki przebieg!')
-        .max(9, 'Zbyt długi przebieg!')
-        .required('Przebieg jest wymagany!'),
+    kmMileage: mileageValidation,
     yearOfProduction: Yup.string()
         .matches(ONLY_DIGITS, 'Dozwolone są tylko cyfry!')
         .length(4, 'To nie jest poprawny rok!')
@@ -115,4 +118,18 @@ export const NewVehicleValidationSchema = Yup.object().shape({
     driveType: Yup.string().required('Typ napędu jest wymagany!'),
     technicalInspectionDate: dateValidation,
     insuranceExpirationDate: dateValidation,
+});
+
+export const NEW_REFUELING_VALIDATION_SCHEMA = Yup.object().shape({
+    cost: Yup.string()
+        .matches(ONLY_DECIMALS, 'Dozwolone są tylko cyfry!')
+        .min(1, 'Zbyt mały koszt!')
+        .required('Koszt jest wymagany!'),
+    liters: Yup.string()
+        .matches(ONLY_DECIMALS, 'Dozwolone są tylko cyfry!')
+        .min(1, 'Zbyt mały litraż!')
+        .required('Litry są wymagane!'),
+    odometerMileage: mileageValidation,
+    time: dateValidation,
+    placeDescription: Yup.string().max(60, 'Zbyt długi opis!').notRequired(),
 });

@@ -2,3 +2,4 @@ export const PHONE_NUMBER = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|
 export const ONLY_LETTERS = /^[^\W\d]+$/;
 export const ONLY_DIGITS = /^\d+$/;
 export const ONLY_DIGITS_AND_LETTERS = /^[a-zA-Z0-9]+$/;
+export const ONLY_DECIMALS = /^\d*\.?\d*$/;

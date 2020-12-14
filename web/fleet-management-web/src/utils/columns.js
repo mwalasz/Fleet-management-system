@@ -14,7 +14,7 @@ import {
     faArrowAltCircleRight,
 } from '@fortawesome/free-solid-svg-icons';
 
-export const refuelingsColumns = [
+export const REFUELINGS_COLUMNS = [
     {
         field: 'placeDescription',
         headerName: 'Miejsce',
@@ -51,6 +51,14 @@ export const refuelingsColumns = [
         headerAlign: 'center',
         renderCell: (params) => formatPrice(params.data.costPerLiter),
     },
+    {
+        field: 'odometerMileage',
+        headerName: 'Przebieg',
+        width: 150,
+        align: 'center',
+        headerAlign: 'center',
+        renderCell: (params) => formatMileage(params.data.odometerMileage),
+    },
 ];
 
 export const VEHICLE_TRIPS_COLUMNS = [
@@ -78,7 +86,8 @@ export const VEHICLE_TRIPS_COLUMNS = [
         align: 'center',
         headerAlign: 'center',
         sortable: false,
-        renderCell: (params) => formatDateAndTime(params.data.destinationArrivalTime),
+        renderCell: (params) =>
+            formatDateAndTime(params.data.destinationArrivalTime),
     },
     {
         field: 'distance',

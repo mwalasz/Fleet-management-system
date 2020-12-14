@@ -2,11 +2,22 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Modal from '../../components/Modal';
 import { DataGrid } from '@material-ui/data-grid';
-import { refuelingsColumns } from '../../utils/columns';
+import { connect } from 'react-redux';
+import { REFUELINGS_COLUMNS } from '../../utils/columns';
+import NewRefuelingModal from '../newitem/refueling/NewRefuelingModal';
+import { USER_ROLES } from '../../utils/constans';
 
-const VehicleRefuelingsModal = ({ isVisible, handleClose, vehicle }) => {
+const VehicleRefuelingsModal = ({
+    isVisible,
+    handleClose,
+    vehicle,
+    setRefresh,
+    user,
+}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [addModalVisible, setAddModalVisible] = useState(false);
+    const [addedNewItem, setAddedNewItem] = useState(false);
 
     return (
         <>
@@ -22,15 +33,34 @@ const VehicleRefuelingsModal = ({ isVisible, handleClose, vehicle }) => {
                 wide
             >
                 <DataGridWrapper>
+                    {user.role === USER_ROLES.manager && (
+                        <button onClick={() => setAddModalVisible(true)}>
+                            dodaj
+                        </button>
+                    )}
                     <DataGrid
                         loading={isLoading}
                         rows={isVisible ? vehicle.refuelings : []}
-                        columns={refuelingsColumns}
+                        columns={REFUELINGS_COLUMNS}
                         pageSize={parseInt(visualViewport.height / 80)}
                         disableSelectionOnClick
                         hideFooterRow
                     />
                 </DataGridWrapper>
+                {user.role === USER_ROLES.manager && (
+                    <NewRefuelingModal
+                        vehicle={vehicle}
+                        isVisible={addModalVisible}
+                        addedNew={() => setAddedNewItem(true)}
+                        handleCloseNew={() => {
+                            setAddModalVisible(false);
+                            if (addedNewItem) {
+                                handleClose();
+                                setRefresh();
+                            }
+                        }}
+                    />
+                )}
             </Modal>
         </>
     );
@@ -41,4 +71,9 @@ const DataGridWrapper = styled.div`
     margin: 0px auto;
 `;
 
-export default VehicleRefuelingsModal;
+const mapStateToProps = (state) => {
+    return {
+        user: state.user,
+    };
+};
+export default connect(mapStateToProps)(VehicleRefuelingsModal);

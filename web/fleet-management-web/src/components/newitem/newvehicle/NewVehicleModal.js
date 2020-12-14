@@ -5,7 +5,7 @@ import { Formik } from 'formik';
 import axios from 'axios';
 import { API_URL } from '../../../utils/constans';
 import Select from '../../Select';
-import { NewVehicleValidationSchema } from '../../../utils/validations';
+import { NEW_VEHICLE_VALIDATION_SCHEMA } from '../../../utils/validations';
 import NewItemInput from '../NewItemInput';
 import NewItemBottomButtons from '../NewItemBottomButtons';
 import { StyledForm, TwoInputsInRowWrapper } from '../FormComponents';
@@ -166,7 +166,7 @@ const NewVehicleModal = ({ isVisible, handleClose, setRefresh, user }) => {
                             );
                         });
                 }}
-                validationSchema={NewVehicleValidationSchema}
+                validationSchema={NEW_VEHICLE_VALIDATION_SCHEMA}
             >
                 {({
                     values,

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
 import axios from 'axios';
 import { API_URL } from '../../../utils/constans';
-import { NewCompanyValidationSchema } from '../../../utils/validations';
+import { NEW_COMPANY_VALIDATION_SCHEMA } from '../../../utils/validations';
 import NewItemInput from '../NewItemInput';
 import NewItemBottomButtons from '../NewItemBottomButtons';
 import Select from '../../Select';
@@ -125,7 +125,7 @@ const NewCompanyModal = ({ isVisible, handleClose, setRefresh, user }) => {
                         });
                     setIsLoading(false);
                 }}
-                validationSchema={NewCompanyValidationSchema}
+                validationSchema={NEW_COMPANY_VALIDATION_SCHEMA}
             >
                 {({
                     values,

@@ -48,6 +48,7 @@ const NewItemInput = (props) => {
         value,
         caps,
         minToday,
+        maxToday,
     } = props;
     return (
         <ErrorWrapper errors={errors} touched={touched}>
@@ -63,6 +64,7 @@ const NewItemInput = (props) => {
                 value={value}
                 caps={caps}
                 min={minToday && getTodayDate()}
+                max={maxToday && getTodayDate()}
             />
         </ErrorWrapper>
     );
