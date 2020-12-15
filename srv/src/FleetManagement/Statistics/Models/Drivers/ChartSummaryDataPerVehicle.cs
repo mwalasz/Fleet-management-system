@@ -1,7 +1,7 @@
 ﻿using FleetManagement.Statistics.Models.Charts.DataModels;
 using System.Collections.Generic;
 
-namespace FleetManagement.Statistics.Models.Charts
+namespace FleetManagement.Statistics.Models.Drivers
 {
     public class ChartSummaryDataPerVehicle
     {

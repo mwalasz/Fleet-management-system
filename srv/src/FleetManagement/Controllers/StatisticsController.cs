@@ -1,7 +1,8 @@
 ﻿using FleetManagement.Entities.Accounts.DriverAccounts;
+using FleetManagement.Entities.Vehicles;
 using FleetManagement.Statistics;
 using FleetManagement.Statistics.Models;
-using FleetManagement.Statistics.Models.Charts;
+using FleetManagement.Statistics.Models.Drivers;
 using FleetManagement.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,11 +20,14 @@ namespace FleetManagement.Controllers
         const string VEHICLE_STATISTICS_ROUTE = "api/[controller]/vehicle/[action]";
 
         private readonly IDriverAccountProvider driverAccountProvider;
+        private readonly IVehicleProvider vehicleProvider;
         private readonly IStatisticsService statistics;
 
-        public StatisticsController(IDriverAccountProvider driverAccountProvider, IStatisticsService statistics)
+        public StatisticsController(IDriverAccountProvider driverAccountProvider, IVehicleProvider vehicleProvider,
+            IStatisticsService statistics)
         {
             this.driverAccountProvider = driverAccountProvider;
+            this.vehicleProvider = vehicleProvider;
             this.statistics = statistics;
         }
 
@@ -35,7 +39,7 @@ namespace FleetManagement.Controllers
             var driver = driverAccountProvider.GetByMail(mail);
 
             if (driver == null)
-                return NotFound("User is not a driver or wrong email!");
+                return NotFound("Użytkownik nie jest kierowcą lub podano niewłaściwy adres email!");
 
             var stats = statistics.CalculateDriverStatistics(driver);
 
@@ -49,7 +53,7 @@ namespace FleetManagement.Controllers
             var driver = driverAccountProvider.GetByMail(mail);
 
             if (driver == null)
-                return NotFound("User is not a driver or wrong email!");
+                return NotFound("Użytkownik nie jest kierowcą lub podano niewłaściwy adres email!");
 
             var stats = statistics.CalculateSummaryDistancePerVehicle(driver);
 
@@ -63,7 +67,7 @@ namespace FleetManagement.Controllers
             var driver = driverAccountProvider.GetByMail(mail);
 
             if (driver == null)
-                return NotFound("User is not a driver or wrong email!");
+                return NotFound("Użytkownik nie jest kierowcą lub podano niewłaściwy adres email!");
 
             var stats = statistics.CalculateSummaryDurationPerVehicle(driver);
 
@@ -77,7 +81,7 @@ namespace FleetManagement.Controllers
             var driver = driverAccountProvider.GetByMail(mail);
 
             if (driver == null)
-                return NotFound("User is not a driver or wrong email!");
+                return NotFound("Użytkownik nie jest kierowcą lub podano niewłaściwy adres email!");
 
             var speeds = statistics.CalculateSpeedsPerVehicle(driver);
             
@@ -91,7 +95,7 @@ namespace FleetManagement.Controllers
             var driver = driverAccountProvider.GetByMail(mail);
 
             if (driver == null)
-                return NotFound("User is not a driver or wrong email!");
+                return NotFound("Użytkownik nie jest kierowcą lub podano niewłaściwy adres email!");
 
             var duration = statistics.CalculateSummaryDurationPerVehicle(driver);
             var distance = statistics.CalculateSummaryDistancePerVehicle(driver);
@@ -107,7 +111,7 @@ namespace FleetManagement.Controllers
             var driver = driverAccountProvider.GetByMail(mail);
 
             if (driver == null)
-                return NotFound("User is not a driver or wrong email!");
+                return NotFound("Użytkownik nie jest kierowcą lub podano niewłaściwy adres email!");
 
             var duration = statistics.CalculateSummaryDurationPerVehicle(driver);
             var distance = statistics.CalculateSummaryDistancePerVehicle(driver);
@@ -126,6 +130,45 @@ namespace FleetManagement.Controllers
                     },
                 }
             );
+        }
+
+        [HttpGet]
+        [Route(VEHICLE_STATISTICS_ROUTE)]
+        public IActionResult GetTotalCosts([FromQuery] string vin)
+        {
+            var vehicle = vehicleProvider.GetByVinNumber(vin);
+
+            if (vehicle == null)
+                return NotFound("Nie znaleziono pojazdu o podanym numerze vin!");
+
+            var stats = statistics.CalculateVehicleSummaryCosts(vehicle);
+            
+            return Ok(stats);
+            //    new CombinedDriverStatistics
+            //    { 
+            //        DriverData = stats, 
+            //        PerVehicleData = new ChartSummaryDataPerVehicle
+            //        {
+            //            Distance = distance, 
+            //            Duration = duration, 
+            //            Speed = speeds 
+            //        },
+            //    }
+            //);
+        }
+
+        [HttpGet]
+        [Route(VEHICLE_STATISTICS_ROUTE)]
+        public IActionResult GetTotal([FromQuery] string vin)
+        {
+            var vehicle = vehicleProvider.GetByVinNumber(vin);
+
+            if (vehicle == null)
+                return NotFound("Nie znaleziono pojazdu o podanym numerze vin!");
+
+            var stats = statistics.CalculateVehicleSummaryStatistics(vehicle);
+            
+            return Ok(stats);
         }
     }
 }

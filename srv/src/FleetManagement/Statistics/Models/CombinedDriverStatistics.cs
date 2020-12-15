@@ -1,4 +1,4 @@
-﻿using FleetManagement.Statistics.Models.Charts;
+﻿using FleetManagement.Statistics.Models.Drivers;
 
 namespace FleetManagement.Statistics.Models
 {
