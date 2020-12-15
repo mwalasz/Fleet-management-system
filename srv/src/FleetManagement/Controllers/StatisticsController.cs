@@ -3,6 +3,7 @@ using FleetManagement.Entities.Vehicles;
 using FleetManagement.Statistics;
 using FleetManagement.Statistics.Models;
 using FleetManagement.Statistics.Models.Drivers;
+using FleetManagement.Statistics.Models.Vehicles;
 using FleetManagement.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -134,7 +135,7 @@ namespace FleetManagement.Controllers
 
         [HttpGet]
         [Route(VEHICLE_STATISTICS_ROUTE)]
-        public IActionResult GetTotalCosts([FromQuery] string vin)
+        public IActionResult GetCosts([FromQuery] string vin)
         {
             var vehicle = vehicleProvider.GetByVinNumber(vin);
 
@@ -144,22 +145,11 @@ namespace FleetManagement.Controllers
             var stats = statistics.CalculateVehicleSummaryCosts(vehicle);
             
             return Ok(stats);
-            //    new CombinedDriverStatistics
-            //    { 
-            //        DriverData = stats, 
-            //        PerVehicleData = new ChartSummaryDataPerVehicle
-            //        {
-            //            Distance = distance, 
-            //            Duration = duration, 
-            //            Speed = speeds 
-            //        },
-            //    }
-            //);
         }
 
         [HttpGet]
         [Route(VEHICLE_STATISTICS_ROUTE)]
-        public IActionResult GetTotal([FromQuery] string vin)
+        public IActionResult GetDriving([FromQuery] string vin)
         {
             var vehicle = vehicleProvider.GetByVinNumber(vin);
 
@@ -169,6 +159,32 @@ namespace FleetManagement.Controllers
             var stats = statistics.CalculateVehicleSummaryStatistics(vehicle);
             
             return Ok(stats);
+        }
+
+        [HttpGet]
+        [Route(VEHICLE_STATISTICS_ROUTE)]
+        public IActionResult GetAllPerVehicle([FromQuery] string vin)
+        {
+            var vehicle = vehicleProvider.GetByVinNumber(vin);
+
+            if (vehicle == null)
+                return NotFound("Nie znaleziono pojazdu o podanym numerze vin!");
+
+            return Ok(
+                new CombinedVehicleStatistics()
+                {
+                   Costs = new CostsData()
+                   {
+                       Data = statistics.CalculateVehicleSummaryCosts(vehicle),
+                       //Charts = 
+                   },
+                   Driving = new DrivingData()
+                   {
+                       Data = statistics.CalculateVehicleSummaryStatistics(vehicle),
+                       //Charts = 
+                   }
+                }
+            );
         }
     }
 }

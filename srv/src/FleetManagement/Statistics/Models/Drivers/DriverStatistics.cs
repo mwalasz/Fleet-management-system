@@ -1,6 +1,6 @@
 ﻿namespace FleetManagement.Statistics.Models.Drivers
 {
-    public class DriverStatistics : DrivingStatistics, IDrivingStatistics
+    public class DriverStatistics : DrivingStatistics
     {
         public DriverStatistics() : base() { }
 

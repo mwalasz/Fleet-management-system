@@ -164,7 +164,6 @@ namespace FleetManagement.Statistics
             return null;
         }
 
-
         private DrivingStatistics CalculateDrivingStatistics(IEnumerable<Trip> trips)
         {
             var tripsCount = trips.ToList().Count;
