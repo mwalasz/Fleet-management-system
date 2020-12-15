@@ -129,18 +129,18 @@ namespace FleetManagement.Statistics
             return list;
         }
 
-        public List<LineChartCostData> GetCostMonthlySummary(Vehicle vehicle)
+        public List<LineChartCostData> GetMonthlyCostSummary(Vehicle vehicle)
         {
             var list = new List<LineChartCostData>();
 
             if (vehicle != null)
             {
-                var refuelingsCost = vehicle.Refuelings.GroupBy(x => new { Month = x.Time.Month, Year = x.Time.Year })
+                var refuelingsCost = vehicle.Refuelings.GroupBy(x => new { x.Time.Month, x.Time.Year })
                     .OrderBy(x => x.Key.Year)
                     .ThenBy(x => x.Key.Month)
                     .ToDictionary(g => $"{g.Key.Month}.{g.Key.Year}", g => g.Sum(x => x.Cost));
 
-                var maintenancesCost = vehicle.RepairsAndServices.GroupBy(x => new { Month = x.Date.Month, Year = x.Date.Year })
+                var maintenancesCost = vehicle.RepairsAndServices.GroupBy(x => new { x.Date.Month, x.Date.Year })
                     .OrderBy(x => x.Key.Year)
                     .ThenBy(x => x.Key.Month)
                     .ToDictionary(g => $"{g.Key.Month}.{g.Key.Year}", g => g.Sum(x => x.Cost));

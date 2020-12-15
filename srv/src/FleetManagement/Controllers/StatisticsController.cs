@@ -182,7 +182,7 @@ namespace FleetManagement.Controllers
                        Charts = new ChartCostData()
                        {
                            Ratio = charts.GetCostRatio(vehicle),
-                           Summary = charts.GetCostMonthlySummary(vehicle)
+                           Summary = charts.GetMonthlyCostSummary(vehicle)
                        }
                    },
                    Driving = new DrivingData()

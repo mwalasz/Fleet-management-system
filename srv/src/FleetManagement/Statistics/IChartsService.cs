@@ -50,7 +50,7 @@ namespace FleetManagement.Statistics
         /// </summary>
         /// <param name="vehicle"></param>
         /// <returns></returns>
-        public List<LineChartCostData> GetCostMonthlySummary(Vehicle vehicle);
+        public List<LineChartCostData> GetMonthlyCostSummary(Vehicle vehicle);
 
         #endregion
 
