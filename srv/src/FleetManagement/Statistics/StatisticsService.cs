@@ -1,14 +1,11 @@
-﻿using FleetManagement.Entities.Accounts.DriverAccounts;
-using FleetManagement.Entities.Accounts.DriverAccounts.Models;
+﻿using FleetManagement.Entities.Accounts.DriverAccounts.Models;
 using FleetManagement.Entities.Trips;
 using FleetManagement.Entities.Trips.Models;
-using FleetManagement.Entities.Vehicles;
 using FleetManagement.Entities.Vehicles.Models;
+using FleetManagement.Extensions;
 using FleetManagement.Statistics.Models;
-using FleetManagement.Statistics.Models.Charts.DataModels;
 using FleetManagement.Statistics.Models.Drivers;
 using FleetManagement.Statistics.Models.Vehicles;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,14 +14,10 @@ namespace FleetManagement.Statistics
     public class StatisticsService : IStatisticsService
     {
         private readonly ITripProvider tripProvider;
-        private readonly IDriverAccountProvider driverAccountProvider;
-        private readonly IVehicleProvider vehicleProvider;
 
-        public StatisticsService(ITripProvider tripProvider, IDriverAccountProvider driverAccountProvider, IVehicleProvider vehicleProvider)
+        public StatisticsService(ITripProvider tripProvider)
         {
             this.tripProvider = tripProvider;
-            this.driverAccountProvider = driverAccountProvider;
-            this.vehicleProvider = vehicleProvider;
         }
 
         public DriverStatistics CalculateDriverDrivingData(DriverAccount driverAccount)
@@ -39,32 +32,18 @@ namespace FleetManagement.Statistics
         {
             if (vehicle != null)
             {
-                double maintenances = 0, refuelings = 0, total = 0;
-                int numOfMaintenances = 0, numOfRefuelings = 0;
-
-                foreach(var refuel in vehicle.Refuelings)
-                {
-                    refuelings += refuel.Cost;
-                    numOfRefuelings++;
-                }
-
-                foreach(var maintenance in vehicle.RepairsAndServices)
-                {
-                    maintenances += maintenance.Cost;
-                    numOfMaintenances++;
-                }
-
-                total += maintenances + refuelings;
+                var maintenances = vehicle.GetCostOfMaintenances();
+                var refuelings = vehicle.GetCostOfRefuelings();
 
                 return new VehicleSummaryCosts() 
                 { 
-                    TotalCost = total,
-                    MaintenancesCost = maintenances,
-                    MaintenancesAverageCost = maintenances / numOfMaintenances,
-                    MaintenancesNumber = numOfMaintenances,
-                    RefuelingsCost = refuelings,
-                    RefuelingsAverageCost = refuelings / numOfRefuelings,
-                    RefuelingsNumber = numOfRefuelings,
+                    TotalCost = maintenances.Cost + refuelings.Cost,
+                    MaintenancesCost = maintenances.Cost,
+                    MaintenancesAverageCost = maintenances.Average,
+                    MaintenancesNumber = maintenances.Count,
+                    RefuelingsCost = refuelings.Cost,
+                    RefuelingsAverageCost = refuelings.Average,
+                    RefuelingsNumber = refuelings.Count,
                 };
             }
 
