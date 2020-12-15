@@ -22,13 +22,16 @@ namespace FleetManagement.Controllers
 
         private readonly IDriverAccountProvider driverAccountProvider;
         private readonly IVehicleProvider vehicleProvider;
+        private readonly IChartsService charts;
         private readonly IStatisticsService statistics;
 
-        public StatisticsController(IDriverAccountProvider driverAccountProvider, IVehicleProvider vehicleProvider,
+        public StatisticsController(IDriverAccountProvider driverAccountProvider, 
+            IVehicleProvider vehicleProvider, IChartsService charts,
             IStatisticsService statistics)
         {
             this.driverAccountProvider = driverAccountProvider;
             this.vehicleProvider = vehicleProvider;
+            this.charts = charts;
             this.statistics = statistics;
         }
 
@@ -42,7 +45,7 @@ namespace FleetManagement.Controllers
             if (driver == null)
                 return NotFound("Użytkownik nie jest kierowcą lub podano niewłaściwy adres email!");
 
-            var stats = statistics.CalculateDriverStatistics(driver);
+            var stats = statistics.CalculateDriverDrivingData(driver);
 
             return Ok(stats);
         }
@@ -56,7 +59,7 @@ namespace FleetManagement.Controllers
             if (driver == null)
                 return NotFound("Użytkownik nie jest kierowcą lub podano niewłaściwy adres email!");
 
-            var stats = statistics.CalculateSummaryDistancePerVehicle(driver);
+            var stats = charts.CalculateSummaryDistancePerVehicle(driver);
 
             return Ok(stats);
         }
@@ -70,7 +73,7 @@ namespace FleetManagement.Controllers
             if (driver == null)
                 return NotFound("Użytkownik nie jest kierowcą lub podano niewłaściwy adres email!");
 
-            var stats = statistics.CalculateSummaryDurationPerVehicle(driver);
+            var stats = charts.CalculateSummaryDurationPerVehicle(driver);
 
             return Ok(stats);
         }
@@ -84,7 +87,7 @@ namespace FleetManagement.Controllers
             if (driver == null)
                 return NotFound("Użytkownik nie jest kierowcą lub podano niewłaściwy adres email!");
 
-            var speeds = statistics.CalculateSpeedsPerVehicle(driver);
+            var speeds = charts.CalculateSpeedsPerVehicle(driver);
             
             return Ok(speeds);
         }
@@ -98,9 +101,9 @@ namespace FleetManagement.Controllers
             if (driver == null)
                 return NotFound("Użytkownik nie jest kierowcą lub podano niewłaściwy adres email!");
 
-            var duration = statistics.CalculateSummaryDurationPerVehicle(driver);
-            var distance = statistics.CalculateSummaryDistancePerVehicle(driver);
-            var speeds = statistics.CalculateSpeedsPerVehicle(driver);
+            var duration = charts.CalculateSummaryDurationPerVehicle(driver);
+            var distance = charts.CalculateSummaryDistancePerVehicle(driver);
+            var speeds = charts.CalculateSpeedsPerVehicle(driver);
             
             return Ok(new ChartSummaryDataPerVehicle { Distance = distance, Duration = duration, Speed = speeds });
         }
@@ -114,10 +117,10 @@ namespace FleetManagement.Controllers
             if (driver == null)
                 return NotFound("Użytkownik nie jest kierowcą lub podano niewłaściwy adres email!");
 
-            var duration = statistics.CalculateSummaryDurationPerVehicle(driver);
-            var distance = statistics.CalculateSummaryDistancePerVehicle(driver);
-            var speeds = statistics.CalculateSpeedsPerVehicle(driver);
-            var stats = statistics.CalculateDriverStatistics(driver);
+            var duration = charts.CalculateSummaryDurationPerVehicle(driver);
+            var distance = charts.CalculateSummaryDistancePerVehicle(driver);
+            var speeds = charts.CalculateSpeedsPerVehicle(driver);
+            var stats = statistics.CalculateDriverDrivingData(driver);
             
             return Ok(
                 new CombinedDriverStatistics
@@ -142,7 +145,7 @@ namespace FleetManagement.Controllers
             if (vehicle == null)
                 return NotFound("Nie znaleziono pojazdu o podanym numerze vin!");
 
-            var stats = statistics.CalculateVehicleSummaryCosts(vehicle);
+            var stats = statistics.CalculateVehicleCostsData(vehicle);
             
             return Ok(stats);
         }
@@ -156,7 +159,7 @@ namespace FleetManagement.Controllers
             if (vehicle == null)
                 return NotFound("Nie znaleziono pojazdu o podanym numerze vin!");
 
-            var stats = statistics.CalculateVehicleSummaryStatistics(vehicle);
+            var stats = statistics.CalculateVehicleDrivingData(vehicle);
             
             return Ok(stats);
         }
@@ -175,12 +178,12 @@ namespace FleetManagement.Controllers
                 {
                    Costs = new CostsData()
                    {
-                       Data = statistics.CalculateVehicleSummaryCosts(vehicle),
+                       Data = statistics.CalculateVehicleCostsData(vehicle),
                        //Charts = 
                    },
                    Driving = new DrivingData()
                    {
-                       Data = statistics.CalculateVehicleSummaryStatistics(vehicle),
+                       Data = statistics.CalculateVehicleDrivingData(vehicle),
                        //Charts = 
                    }
                 }

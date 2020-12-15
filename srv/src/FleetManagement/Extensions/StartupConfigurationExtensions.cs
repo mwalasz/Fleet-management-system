@@ -87,7 +87,8 @@ namespace FleetManagement.Extensions
                        .AddTransient<IEngineTypeProvider, EngineTypesRepository>()
                        .AddTransient<IDriveTypeProvider, DriveTypesRepository>()
                        .AddSingleton<IStatisticsService, StatisticsService>()
-                       .AddSingleton<IImagesService, ImagesService>();
+                       .AddSingleton<IImagesService, ImagesService>()
+                       .AddSingleton<IChartsService, ChartsService>();
 
         /// <summary>
         /// Dodaje usługi do wypełniania bazy danych.
