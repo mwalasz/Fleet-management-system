@@ -198,15 +198,5 @@ namespace FleetManagement.Controllers
                 }
             );
         }
-
-        [HttpGet]
-        [Route(VEHICLE_STATISTICS_ROUTE)]
-        public IActionResult test([FromQuery] string vin)
-        {
-            var vehicle = vehicleProvider.GetByVinNumber(vin);
-            var dupa = charts.GetUsagesPerDriver(vehicle);
-
-            return Ok(dupa);
-        }
     }
 }
