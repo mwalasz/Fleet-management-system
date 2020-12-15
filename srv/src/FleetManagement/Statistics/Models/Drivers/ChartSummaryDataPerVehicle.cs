@@ -1,4 +1,5 @@
 ﻿using FleetManagement.Statistics.Models.Charts.DataModels;
+using FleetManagement.Statistics.Models.Charts.DataModels.BarChart;
 using System.Collections.Generic;
 
 namespace FleetManagement.Statistics.Models.Drivers

@@ -1,6 +1,10 @@
 ﻿using FleetManagement.Entities.Accounts.DriverAccounts.Models;
 using FleetManagement.Entities.Vehicles;
+using FleetManagement.Entities.Vehicles.Models;
+using FleetManagement.Extensions;
 using FleetManagement.Statistics.Models.Charts.DataModels;
+using FleetManagement.Statistics.Models.Charts.DataModels.BarChart;
+using FleetManagement.Statistics.Models.Charts.DataModels.LineChart;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +19,8 @@ namespace FleetManagement.Statistics
         {
             this.vehicleProvider = vehicleProvider;
         }
+
+        #region Driver
 
         public List<BarChartSpeedData> GetSpeedsPerVehicle(DriverAccount driverAccount)
         {
@@ -100,5 +106,66 @@ namespace FleetManagement.Statistics
 
             return list;
         }
+
+        #endregion 
+
+        #region Vehicle
+        
+        #region Costs
+
+        public List<PieChartData> GetCostRatio(Vehicle vehicle)
+        {
+            var list = new List<PieChartData>();
+
+            if (vehicle != null)
+            {
+                var maintenances = vehicle.GetCostOfMaintenances();
+                var refuelings = vehicle.GetCostOfRefuelings();
+
+                list.Add(new PieChartData { Name = "Naprawy", Value = maintenances.Cost });
+                list.Add(new PieChartData { Name = "Tankowania", Value = refuelings.Cost });
+            }
+
+            return list;
+        }
+
+        public List<LineChartCostData> GetCostMonthlySummary(Vehicle vehicle)
+        {
+            var list = new List<LineChartCostData>();
+
+            if (vehicle != null)
+            {
+                var refuelingsCost = vehicle.Refuelings.GroupBy(x => new { Month = x.Time.Month, Year = x.Time.Year })
+                    .OrderBy(x => x.Key.Year)
+                    .ThenBy(x => x.Key.Month)
+                    .ToDictionary(g => $"{g.Key.Month}.{g.Key.Year}", g => g.Sum(x => x.Cost));
+
+                var maintenancesCost = vehicle.RepairsAndServices.GroupBy(x => new { Month = x.Date.Month, Year = x.Date.Year })
+                    .OrderBy(x => x.Key.Year)
+                    .ThenBy(x => x.Key.Month)
+                    .ToDictionary(g => $"{g.Key.Month}.{g.Key.Year}", g => g.Sum(x => x.Cost));
+
+                var totalCost = refuelingsCost.Concat(maintenancesCost)
+                    .GroupBy(x => x.Key)
+                    .ToDictionary(x => x.Key, x => x.Sum(y => y.Value));
+
+                foreach (var month in totalCost)
+                {
+                    list.Add(new LineChartCostData() 
+                    { 
+                        Name = month.Key,
+                        Sum = month.Value,
+                        Maintenances = maintenancesCost.FirstOrDefault(x => x.Key == month.Key).Value,
+                        Fuel = refuelingsCost.FirstOrDefault(x => x.Key == month.Key).Value
+                    });
+                }
+            }
+
+            return list;
+        }
+
+        #endregion 
+
+        #endregion 
     }
 }

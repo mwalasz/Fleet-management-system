@@ -14,7 +14,6 @@ namespace FleetManagement.Statistics
         /// <returns></returns>
         public DriverStatistics CalculateDriverDrivingData(DriverAccount driverAccount);
 
-
         /// <summary>
         /// Oblicza sumaryczne koszty eksploatacji pojazdu.
         /// </summary>

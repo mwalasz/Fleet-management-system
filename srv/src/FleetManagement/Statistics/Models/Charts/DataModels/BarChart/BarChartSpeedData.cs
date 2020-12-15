@@ -1,4 +1,4 @@
-﻿namespace FleetManagement.Statistics.Models.Charts.DataModels
+﻿namespace FleetManagement.Statistics.Models.Charts.DataModels.BarChart
 {
     public class BarChartSpeedData
     {

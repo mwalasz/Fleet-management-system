@@ -179,12 +179,21 @@ namespace FleetManagement.Controllers
                    Costs = new CostsData()
                    {
                        Data = statistics.CalculateVehicleCostsData(vehicle),
-                       //Charts = 
+                       Charts = new ChartCostData()
+                       {
+                           Ratio = charts.GetCostRatio(vehicle),
+                           Summary = charts.GetCostMonthlySummary(vehicle)
+                       }
                    },
                    Driving = new DrivingData()
                    {
                        Data = statistics.CalculateVehicleDrivingData(vehicle),
-                       //Charts = 
+                       Charts = new ChartSummaryDataPerDriver()
+                       {
+                           //Distance = ,
+                           //Duration = ,
+                           //Usages = ,
+                       }
                    }
                 }
             );

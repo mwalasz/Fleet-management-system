@@ -1,9 +1,9 @@
-﻿namespace FleetManagement.Statistics.Models.Charts.DataModels
+﻿namespace FleetManagement.Statistics.Models.Charts.DataModels.LineChart
 {
     /// <summary>
     /// Opisuje dane do wykresu liniowego prezentującego wydatki w danym miesiącu.
     /// </summary>
-    public class LineChartData
+    public class LineChartCostData
     {
         public string Name { get; set; } //month
         public double Sum { get; set; }
