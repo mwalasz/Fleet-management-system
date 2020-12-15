@@ -11,20 +11,20 @@ namespace FleetManagement.Statistics
         /// </summary>
         /// <param name="driverAccount"></param>
         /// <returns></returns>
-        public List<PieChartData> CalculateSummaryDistancePerVehicle(DriverAccount driverAccount);
+        public List<PieChartData> GetSummaryDistancePerVehicle(DriverAccount driverAccount);
 
         /// <summary>
         /// Oblicza dane do wykresu prezentującego sumaryczny czas jazdy każdym pojazdem.
         /// </summary>
         /// <param name="driverAccount"></param>
         /// <returns></returns>
-        public List<PieChartData> CalculateSummaryDurationPerVehicle(DriverAccount driverAccount);
+        public List<PieChartData> GetSummaryDurationPerVehicle(DriverAccount driverAccount);
 
         /// <summary>
         /// Oblicza dane do wykresu prezentującego maksymalne i średnie prędkości dla każdego pojazdu.
         /// </summary>
         /// <param name="driverAccount"></param>
         /// <returns></returns>
-        public List<BarChartSpeedData> CalculateSpeedsPerVehicle(DriverAccount driverAccount);
+        public List<BarChartSpeedData> GetSpeedsPerVehicle(DriverAccount driverAccount);
     }
 }

@@ -59,7 +59,7 @@ namespace FleetManagement.Controllers
             if (driver == null)
                 return NotFound("Użytkownik nie jest kierowcą lub podano niewłaściwy adres email!");
 
-            var stats = charts.CalculateSummaryDistancePerVehicle(driver);
+            var stats = charts.GetSummaryDistancePerVehicle(driver);
 
             return Ok(stats);
         }
@@ -73,7 +73,7 @@ namespace FleetManagement.Controllers
             if (driver == null)
                 return NotFound("Użytkownik nie jest kierowcą lub podano niewłaściwy adres email!");
 
-            var stats = charts.CalculateSummaryDurationPerVehicle(driver);
+            var stats = charts.GetSummaryDurationPerVehicle(driver);
 
             return Ok(stats);
         }
@@ -87,7 +87,7 @@ namespace FleetManagement.Controllers
             if (driver == null)
                 return NotFound("Użytkownik nie jest kierowcą lub podano niewłaściwy adres email!");
 
-            var speeds = charts.CalculateSpeedsPerVehicle(driver);
+            var speeds = charts.GetSpeedsPerVehicle(driver);
             
             return Ok(speeds);
         }
@@ -101,9 +101,9 @@ namespace FleetManagement.Controllers
             if (driver == null)
                 return NotFound("Użytkownik nie jest kierowcą lub podano niewłaściwy adres email!");
 
-            var duration = charts.CalculateSummaryDurationPerVehicle(driver);
-            var distance = charts.CalculateSummaryDistancePerVehicle(driver);
-            var speeds = charts.CalculateSpeedsPerVehicle(driver);
+            var duration = charts.GetSummaryDurationPerVehicle(driver);
+            var distance = charts.GetSummaryDistancePerVehicle(driver);
+            var speeds = charts.GetSpeedsPerVehicle(driver);
             
             return Ok(new ChartSummaryDataPerVehicle { Distance = distance, Duration = duration, Speed = speeds });
         }
@@ -117,9 +117,9 @@ namespace FleetManagement.Controllers
             if (driver == null)
                 return NotFound("Użytkownik nie jest kierowcą lub podano niewłaściwy adres email!");
 
-            var duration = charts.CalculateSummaryDurationPerVehicle(driver);
-            var distance = charts.CalculateSummaryDistancePerVehicle(driver);
-            var speeds = charts.CalculateSpeedsPerVehicle(driver);
+            var duration = charts.GetSummaryDurationPerVehicle(driver);
+            var distance = charts.GetSummaryDistancePerVehicle(driver);
+            var speeds = charts.GetSpeedsPerVehicle(driver);
             var stats = statistics.CalculateDriverDrivingData(driver);
             
             return Ok(

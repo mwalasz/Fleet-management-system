@@ -16,7 +16,7 @@ namespace FleetManagement.Statistics
             this.vehicleProvider = vehicleProvider;
         }
 
-        public List<BarChartSpeedData> CalculateSpeedsPerVehicle(DriverAccount driverAccount)
+        public List<BarChartSpeedData> GetSpeedsPerVehicle(DriverAccount driverAccount)
         {
             var list = new List<BarChartSpeedData>();
             var userVehicles = driverAccount.Vehicles;
@@ -51,7 +51,7 @@ namespace FleetManagement.Statistics
             return list;
         }
 
-        public List<PieChartData> CalculateSummaryDistancePerVehicle(DriverAccount driverAccount)
+        public List<PieChartData> GetSummaryDistancePerVehicle(DriverAccount driverAccount)
         {
             var list = new List<PieChartData>();
             var userVehicles = driverAccount.Vehicles;
@@ -76,7 +76,7 @@ namespace FleetManagement.Statistics
             return list;
         }
 
-        public List<PieChartData> CalculateSummaryDurationPerVehicle(DriverAccount driverAccount)
+        public List<PieChartData> GetSummaryDurationPerVehicle(DriverAccount driverAccount)
         {
             var list = new List<PieChartData>();
             var userVehicles = driverAccount.Vehicles;
