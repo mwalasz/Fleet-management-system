@@ -190,13 +190,23 @@ namespace FleetManagement.Controllers
                        Data = statistics.CalculateVehicleDrivingData(vehicle),
                        Charts = new ChartSummaryDataPerDriver()
                        {
-                           //Distance = ,
-                           //Duration = ,
-                           //Usages = ,
+                           Distance = charts.GetSummaryDistancePerDriver(vehicle),
+                           Duration = charts.GetSummaryDurationPerDriver(vehicle),
+                           Usages = charts.GetUsagesPerDriver(vehicle),
                        }
                    }
                 }
             );
+        }
+
+        [HttpGet]
+        [Route(VEHICLE_STATISTICS_ROUTE)]
+        public IActionResult test([FromQuery] string vin)
+        {
+            var vehicle = vehicleProvider.GetByVinNumber(vin);
+            var dupa = charts.GetUsagesPerDriver(vehicle);
+
+            return Ok(dupa);
         }
     }
 }

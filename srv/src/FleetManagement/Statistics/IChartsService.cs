@@ -56,6 +56,27 @@ namespace FleetManagement.Statistics
 
         #region Driving
 
+        /// <summary>
+        /// Oblicza dane do wykresu prezentującego sumaryczny dystans przejechany przez kierowców pojazdem.
+        /// </summary>
+        /// <param name="vehicle"></param>
+        /// <returns></returns>
+        public List<PieChartData> GetSummaryDistancePerDriver(Vehicle vehicle);
+
+        /// <summary>
+        /// Oblicza dane do wykresu prezentującego sumaryczny czas użytku pojazdu przez kierowców.
+        /// </summary>
+        /// <param name="vehicle"></param>
+        /// <returns></returns>
+        public List<PieChartData> GetSummaryDurationPerDriver(Vehicle vehicle);
+
+        /// <summary>
+        /// Oblicza dane do wykresu prezentujacego ilość użyć danego pojazdu przez kierowców.
+        /// </summary>
+        /// <param name="vehicle"></param>
+        /// <returns></returns>
+        public List<BarChartData> GetUsagesPerDriver(Vehicle vehicle);
+
         #endregion
 
         #endregion

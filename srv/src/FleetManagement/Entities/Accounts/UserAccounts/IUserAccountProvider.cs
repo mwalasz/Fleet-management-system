@@ -9,5 +9,7 @@ namespace FleetManagement.Entities.Accounts.UserAccounts
         public bool UpdateCredentials(string mail, string password);
         public bool UpdateAvailability(IEnumerable<string> emails, bool isActive);
         public bool UpdateAvailability(IEnumerable<int> ids, bool isActive);
+
+        public string GetFullName(int id);
     }
 }

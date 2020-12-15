@@ -1,4 +1,7 @@
-﻿using FleetManagement.Entities.Accounts.DriverAccounts.Models;
+﻿using FleetManagement.Entities.Accounts.DriverAccounts;
+using FleetManagement.Entities.Accounts.DriverAccounts.Models;
+using FleetManagement.Entities.Accounts.UserAccounts;
+using FleetManagement.Entities.Trips.Models;
 using FleetManagement.Entities.Vehicles;
 using FleetManagement.Entities.Vehicles.Models;
 using FleetManagement.Extensions;
@@ -14,10 +17,12 @@ namespace FleetManagement.Statistics
     public class ChartsService : IChartsService
     {
         private readonly IVehicleProvider vehicleProvider;
+        private readonly IUserAccountProvider userAccountProvider;
 
-        public ChartsService(IVehicleProvider vehicleProvider)
+        public ChartsService(IVehicleProvider vehicleProvider, IUserAccountProvider userAccountProvider)
         {
             this.vehicleProvider = vehicleProvider;
+            this.userAccountProvider = userAccountProvider;
         }
 
         #region Driver
@@ -164,8 +169,76 @@ namespace FleetManagement.Statistics
             return list;
         }
 
-        #endregion 
+        #endregion
 
-        #endregion 
+        #region Driving
+
+        public List<PieChartData> GetSummaryDistancePerDriver(Vehicle vehicle)
+        {
+            var list = new List<PieChartData>();
+
+            if (vehicle != null)
+            {
+                var tripPerUser = vehicle.Trips.GroupBy(x => x.DriverAccountId)
+                    .ToDictionary(x => x.Key, x => x.Sum(y => y.Distance));
+
+                AddToPieChartDataList(ref list, tripPerUser);
+            }
+
+            return list;
+        }
+
+        public List<PieChartData> GetSummaryDurationPerDriver(Vehicle vehicle)
+        {
+            var list = new List<PieChartData>();
+
+            if (vehicle != null)
+            {
+                var tripPerUser = vehicle.Trips.GroupBy(x => x.DriverAccountId)
+                    .ToDictionary(x => x.Key, x => x.Sum(y => y.TravelTime));
+
+                AddToPieChartDataList(ref list, tripPerUser);
+            }
+
+            return list;
+        }
+
+        public List<BarChartData> GetUsagesPerDriver(Vehicle vehicle)
+        {
+            var list = new List<BarChartData>();
+
+            if (vehicle != null)
+            {
+                var tripPerUser = vehicle.Trips.GroupBy(x => x.DriverAccountId)
+                    .ToDictionary(x => x.Key, x => x.Count());
+
+                foreach (var trip in tripPerUser)
+                {
+                    list.Add(new BarChartData()
+                    {
+                        Name = userAccountProvider.GetFullName(trip.Key),
+                        Value = trip.Value,
+                    });
+                }
+            }
+
+            return list;
+        }
+
+        private void AddToPieChartDataList(ref List<PieChartData> list, IDictionary<int, double> trips)
+        {
+            foreach (var trip in trips)
+            {
+                list.Add(new PieChartData()
+                {
+                    Name = userAccountProvider.GetFullName(trip.Key),
+                    Value = trip.Value,
+                });
+            }
+        }
+
+        #endregion
+
+        #endregion
     }
 }

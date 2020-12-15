@@ -46,15 +46,16 @@ namespace FleetManagement.Db.Repositories
             }
         }
 
-        /// <summary>
-        /// Zwraca użytkownika o podanym mailu lub null gdy takiego nie ma.
-        /// </summary>
-        /// <param name="email"></param>
-        /// <returns></returns>
         public UserAccount GetByMail(string email)
         {
             return GetAll()
                 .FirstOrDefault(x => x.Email.Equals(email)) ?? null;
+        }
+
+        public string GetFullName(int id)
+        {
+            var user = GetById(id);
+            return $"{user.FirstName} {user.LastName}";
         }
 
         /// <summary>
