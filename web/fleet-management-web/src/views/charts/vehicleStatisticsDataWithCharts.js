@@ -17,12 +17,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Grid } from '@material-ui/core';
-import { StyledGridRow } from '../Grid';
+import { StyledGridRow } from '../../components/Grid';
 import { randomizeColor } from '../../utils/utils';
-import PieChartGridItem from '../charts/PieChartGridItem';
-import ChartTitle from '../charts/ChartTitle';
-import { CHART_WIDTH, REDUCED_CHART_WIDTH } from '../charts/constans';
-import RenderDrivingRows from '../charts/RenderDrivingRows';
+import PieChartGridItem from '../../components/charts/PieChartGridItem';
+import ChartTitle from '../../components/charts/ChartTitle';
+import { CHART_WIDTH, REDUCED_CHART_WIDTH } from '../../components/charts/constans';
+import RenderDrivingRows from '../../components/charts/RenderDrivingRows';
 
 const VehicleStatisticsData = ({
     user,

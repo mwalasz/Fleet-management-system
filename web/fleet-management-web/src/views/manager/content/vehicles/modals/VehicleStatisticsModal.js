@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import VehicleStatisticsData from '../../../../../components/chartViews/VehicleStatisticsData';
+import VehicleStatisticsData from '../../../../charts/vehicleStatisticsDataWithCharts';
 import Modal from '../../../../../components/Modal';
 import Button from '../../../../../components/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
