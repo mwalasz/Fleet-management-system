@@ -3,10 +3,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import { API_URL } from '../../utils/constans';
 import {
-    PieChart,
-    Pie,
     Tooltip,
-    Cell,
     Legend,
     BarChart,
     Bar,
@@ -21,6 +18,9 @@ import styled from 'styled-components';
 import { Grid } from '@material-ui/core';
 import { StyledGrid, StyledGridRow } from '../Grid';
 import { randomizeColor } from '../../utils/utils';
+import PieChartGridItem from '../charts/PieChartGridItem';
+import ChartTitle from '../charts/ChartTitle';
+import { CHART_WIDTH, REDUCED_CHART_WIDTH } from '../charts/constans';
 
 const Spinner = styled(FontAwesomeIcon)`
     color: ${({ theme }) => theme.primaryColor};
@@ -30,14 +30,10 @@ const Spinner = styled(FontAwesomeIcon)`
     margin: 30px auto;
 `;
 
-const CHART_WIDTH = 500;
-const REDUCED_CHART_WIDTH = 400;
-
 const DriverStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
     const [loading, setLoading] = useState(false);
     const [colors, setColors] = useState([]);
     const [statisticsData, setStatisticsData] = useState(null);
-    const PIE_CHARTS_RADIUS = reducedSize ? 60 : 80;
 
     const setColorPerVehicle = (data) => {
         if (data) {
@@ -153,51 +149,19 @@ const DriverStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
                             direction="row"
                         >
                             <PieChartGridItem
-                                title={'Łączny dystans'}
+                                title={'Łączny czas dystans'}
                                 reducedSize
-                            >
-                                <Pie
-                                    data={
-                                        statisticsData.perVehicleData.distance
-                                    }
-                                    cx="50%"
-                                    cy="50%"
-                                    outerRadius={PIE_CHARTS_RADIUS}
-                                    label={formatLabelDistance}
-                                >
-                                    {statisticsData.perVehicleData.distance.map(
-                                        (entry, index) => (
-                                            <Cell
-                                                key={`cell-${index}`}
-                                                fill={colors[index]}
-                                            />
-                                        )
-                                    )}
-                                </Pie>
-                            </PieChartGridItem>
+                                data={statisticsData.perVehicleData.distance}
+                                label={formatLabelDistance}
+                                colors={colors}
+                            />
                             <PieChartGridItem
                                 title={'Łączny czas użytku'}
                                 reducedSize
-                            >
-                                <Pie
-                                    data={
-                                        statisticsData.perVehicleData.duration
-                                    }
-                                    cx="50%"
-                                    cy="50%"
-                                    outerRadius={PIE_CHARTS_RADIUS}
-                                    label={formatLabelDuration}
-                                >
-                                    {statisticsData.perVehicleData.duration.map(
-                                        (entry, index) => (
-                                            <Cell
-                                                key={`cell-${index}`}
-                                                fill={colors[index]}
-                                            />
-                                        )
-                                    )}
-                                </Pie>
-                            </PieChartGridItem>
+                                data={statisticsData.perVehicleData.duration}
+                                label={formatLabelDuration}
+                                colors={colors}
+                            />
                             <BarChartGridItem
                                 reducedSize
                                 title={'Porównanie prędkości'}
@@ -243,25 +207,6 @@ const BarChartGridItem = ({ data, title, reducedSize }) => (
         </BarChart>
     </Grid>
 );
-
-const PieChartGridItem = ({ children, title, reducedSize }) => (
-    <Grid item>
-        <ChartTitle>{`${title}:`}</ChartTitle>
-        <PieChart
-            width={reducedSize ? REDUCED_CHART_WIDTH : CHART_WIDTH}
-            height={250}
-        >
-            {children}
-            <Tooltip />
-            <Legend />
-        </PieChart>
-    </Grid>
-);
-
-const ChartTitle = styled.p`
-    font-size: ${({ theme }) => theme.font.M};
-    font-weight: ${({ theme }) => theme.font.Bold};
-`;
 
 const mapStateToProps = (state) => {
     return {

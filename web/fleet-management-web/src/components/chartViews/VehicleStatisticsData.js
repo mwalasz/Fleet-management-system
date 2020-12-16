@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import {
-    PieChart,
-    Pie,
     Tooltip,
-    Cell,
     Legend,
     BarChart,
     Bar,
@@ -33,7 +30,6 @@ const VehicleStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
     const [drivingData, setDrivingData] = useState(null);
     const [costsData, setCostsData] = useState(null);
     const [isCostActive, setIsCostActive] = useState(false);
-    const PIE_CHARTS_RADIUS = reducedSize ? 60 : 80;
 
     const setColorPerDriver = (data) => {
         if (data) {
@@ -203,66 +199,24 @@ const VehicleStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
                             <PieChartGridItem
                                 title={'Łączny dystans'}
                                 reducedSize
-                            >
-                                <Pie
-                                    data={drivingData.charts.distance}
-                                    cx="50%"
-                                    cy="50%"
-                                    outerRadius={PIE_CHARTS_RADIUS}
-                                    label={formatLabelDistance}
-                                >
-                                    {drivingData.charts.distance.map(
-                                        (entry, index) => (
-                                            <Cell
-                                                key={`cell-${index}`}
-                                                fill={colors[index]}
-                                            />
-                                        )
-                                    )}
-                                </Pie>
-                            </PieChartGridItem>
+                                data={drivingData.charts.distance}
+                                label={formatLabelDistance}
+                                colors={colors}
+                            />
                             <PieChartGridItem
                                 title={'Łączny czas użytku'}
                                 reducedSize
-                            >
-                                <Pie
-                                    data={drivingData.charts.duration}
-                                    cx="50%"
-                                    cy="50%"
-                                    outerRadius={PIE_CHARTS_RADIUS}
-                                    label={formatLabelDuration}
-                                >
-                                    {drivingData.charts.duration.map(
-                                        (entry, index) => (
-                                            <Cell
-                                                key={`cell-${index}`}
-                                                fill={colors[index]}
-                                            />
-                                        )
-                                    )}
-                                </Pie>
-                            </PieChartGridItem>
+                                data={drivingData.charts.duration}
+                                label={formatLabelDuration}
+                                colors={colors}
+                            />
                             <PieChartGridItem
-                                title={'Łączna liczba użyć'}
+                                title={'Łączny czas użytku'}
                                 reducedSize
-                            >
-                                <Pie
-                                    data={drivingData.charts.usages}
-                                    cx="50%"
-                                    cy="50%"
-                                    outerRadius={PIE_CHARTS_RADIUS}
-                                    label={(entry) => entry.value}
-                                >
-                                    {drivingData.charts.duration.map(
-                                        (entry, index) => (
-                                            <Cell
-                                                key={`cell-${index}`}
-                                                fill={colors[index]}
-                                            />
-                                        )
-                                    )}
-                                </Pie>
-                            </PieChartGridItem>
+                                data={drivingData.charts.usages}
+                                label={(entry) => entry.value}
+                                colors={colors}
+                            />
                         </Grid>
                     )}
                 </Grid>
