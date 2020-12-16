@@ -1,5 +1,5 @@
 import React from 'react';
-import VehicleStatisticsData from '../../../../../components/charts/VehicleStatisticsData';
+import VehicleStatisticsData from '../../../../../components/chartViews/VehicleStatisticsData';
 import Modal from '../../../../../components/Modal';
 
 const VehicleStatisticsModal = ({

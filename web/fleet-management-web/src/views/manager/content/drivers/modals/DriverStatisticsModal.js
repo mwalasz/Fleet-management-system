@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from '../../../../../components/Modal';
-import DriverStatisticsData from '../../../../../components/charts/DriverStatisticsData';
+import DriverStatisticsData from '../../../../../components/chartViews/DriverStatisticsData';
 
 const DriverStatisticsModal = ({
     isVisible,

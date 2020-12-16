@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
-import { API_URL } from '../../utils/constans';
 import {
     PieChart,
     Pie,
@@ -14,56 +12,41 @@ import {
     YAxis,
     CartesianGrid,
 } from 'recharts';
-import { formatDurationWithNoStyling } from '../../utils/formating';
+import {
+    formatDurationWithNoStyling,
+    formatPrice,
+} from '../../utils/formating';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Grid } from '@material-ui/core';
 import { StyledGrid, StyledGridRow } from '../Grid';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Button from '../../components/Button';
-
-const Spinner = styled(FontAwesomeIcon)`
-    color: ${({ theme }) => theme.primaryColor};
-    display: block;
-    width: 200px;
-    height: 200px;
-    margin: 30px auto;
-`;
-
-const CHART_WIDTH = 500;
-const REDUCED_CHART_WIDTH = 400;
+import Button from '../Button';
+import { randomizeColor } from '../../utils/utils';
+import PieChartGridItem from '../charts/PieChartGridItem';
+import ChartTitle from '../charts/ChartTitle';
+import { CHART_WIDTH, REDUCED_CHART_WIDTH } from '../charts/constans';
 
 const VehicleStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
-    const [loading, setLoading] = useState(false);
     const [colors, setColors] = useState([]);
-    const [statisticsData, setStatisticsData] = useState(null);
+    const [drivingData, setDrivingData] = useState(null);
+    const [costsData, setCostsData] = useState(null);
     const [isCostActive, setIsCostActive] = useState(false);
     const PIE_CHARTS_RADIUS = reducedSize ? 60 : 80;
 
-    const setColorPerVehicle = (data) => {
+    const setColorPerDriver = (data) => {
         if (data) {
-            const randomizeColor = () => {
-                let hex = '';
-                while (hex.length < 6)
-                    hex += Math.random().toString(16).substr(-6).substr(-1);
-                return `#${hex}`;
-            };
-
-            let numOfItems = data.duration.length;
             let i = 0;
-            while (i !== numOfItems) {
-                colors[i] = randomizeColor();
-                i++;
-            }
+            while (i !== data.duration.length) colors[i++] = randomizeColor();
         }
     };
 
     useEffect(() => {
-        if (!loadedStatisticsData) {
-            console.log('loadedStatisticsData', loadedStatisticsData);
-            // setColorPerVehicle(data.perVehicleData);
-            // setStatisticsData(data);
+        if (loadedStatisticsData) {
+            setColorPerDriver(loadedStatisticsData.driving.charts);
+            setDrivingData(loadedStatisticsData.driving);
+            setCostsData(loadedStatisticsData.costs);
         }
     }, [loadedStatisticsData]);
 
@@ -78,7 +61,7 @@ const VehicleStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
     return (
         <>
             {
-                <div style={{ margin: '20px' }}>
+                <div style={{ marginBottom: '20px' }}>
                     <ButtonGroup
                         color="primary"
                         aria-label="outlined primary button group"
@@ -100,7 +83,7 @@ const VehicleStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
                     </ButtonGroup>
                 </div>
             }
-            {loadedStatisticsData && (
+            {drivingData && costsData && (
                 <Grid
                     container
                     direction="column"
@@ -126,95 +109,82 @@ const VehicleStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
                                 <>
                                     <StyledGridRow
                                         heading={'Sumaryczne koszty obsługi'}
-                                        text={
-                                            loadedStatisticsData.costs.data
-                                                .totalCost
-                                        }
+                                        text={formatPrice(
+                                            costsData.data.totalCost
+                                        )}
                                     />
                                     <StyledGridRow
                                         heading={
                                             'Liczba wszystkich serwisów i napraw'
                                         }
-                                        text={
-                                            loadedStatisticsData.costs.data
-                                                .maintenancesNumber
-                                        }
+                                        text={costsData.data.maintenancesNumber}
                                         noBottomLine
                                     />
                                     <StyledGridRow
                                         heading={
                                             'Średni koszt serwisów i napraw'
                                         }
-                                        text={
-                                            loadedStatisticsData.costs.data
+                                        text={formatPrice(
+                                            costsData.data
                                                 .maintenancesAverageCost
-                                        }
+                                        )}
                                         noBottomLine
                                     />
                                     <StyledGridRow
                                         heading={
                                             'Łączny koszt serwisów i napraw'
                                         }
-                                        text={
-                                            loadedStatisticsData.costs.data
-                                                .maintenancesCost
-                                        }
+                                        text={formatPrice(
+                                            costsData.data.maintenancesCost
+                                        )}
                                     />
                                     <StyledGridRow
                                         heading={'Liczba wszystkich tankowań'}
-                                        text={
-                                            loadedStatisticsData.costs.data
-                                                .refuelingsNumber
-                                        }
+                                        text={costsData.data.refuelingsNumber}
                                         noBottomLine
                                     />
                                     <StyledGridRow
                                         heading={'Średni koszt tankowań'}
-                                        text={
-                                            loadedStatisticsData.costs.data
-                                                .refuelingsAverageCost
-                                        }
+                                        text={formatPrice(
+                                            costsData.data.refuelingsAverageCost
+                                        )}
                                         noBottomLine
                                     />
                                     <StyledGridRow
                                         heading={'Łączny koszt tankowań'}
-                                        text={
-                                            loadedStatisticsData.costs.data
-                                                .refuelingsCost
-                                        }
+                                        text={formatPrice(
+                                            costsData.data.refuelingsCost
+                                        )}
                                     />
                                 </>
                             ) : (
                                 <>
                                     <StyledGridRow
                                         heading={'Liczba tras'}
-                                        text={
-                                            loadedStatisticsData.driving.data
-                                                .numberOfTrips
-                                        }
+                                        text={drivingData.data.numberOfTrips}
                                     />
                                     <StyledGridRow
                                         heading={'Dystans'}
-                                        text={`${loadedStatisticsData.driving.data.totalDistanceInKilometers.toFixed(
+                                        text={`${drivingData.data.totalDistanceInKilometers.toFixed(
                                             2
                                         )} km`}
                                     />
                                     <StyledGridRow
                                         heading={'Czas'}
                                         text={formatDurationWithNoStyling(
-                                            loadedStatisticsData.driving.data
+                                            drivingData.data
                                                 .totalDurationInSeconds
                                         )}
                                     />
                                     <StyledGridRow
                                         heading={'Średnia prędkość'}
-                                        text={`${loadedStatisticsData.driving.data.averageSpeedInKilometersPerHour.toFixed(
+                                        text={`${drivingData.data.averageSpeedInKilometersPerHour.toFixed(
                                             2
                                         )} km/h`}
                                     />
                                     <StyledGridRow
                                         heading={'Maks. prędkość'}
-                                        text={`${loadedStatisticsData.driving.data.maximumSpeedInKilometersPerHour.toFixed(
+                                        text={`${drivingData.data.maximumSpeedInKilometersPerHour.toFixed(
                                             2
                                         )} km/h`}
                                     />
@@ -222,7 +192,7 @@ const VehicleStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
                             )}
                         </Grid>
                     </Grid>
-                    {statisticsData && statisticsData.perVehicleData && (
+                    {isCostActive && loadedStatisticsData && (
                         <Grid
                             item
                             container
@@ -235,15 +205,13 @@ const VehicleStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
                                 reducedSize
                             >
                                 <Pie
-                                    data={
-                                        statisticsData.perVehicleData.distance
-                                    }
+                                    data={drivingData.charts.distance}
                                     cx="50%"
                                     cy="50%"
                                     outerRadius={PIE_CHARTS_RADIUS}
                                     label={formatLabelDistance}
                                 >
-                                    {statisticsData.perVehicleData.distance.map(
+                                    {drivingData.charts.distance.map(
                                         (entry, index) => (
                                             <Cell
                                                 key={`cell-${index}`}
@@ -258,15 +226,13 @@ const VehicleStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
                                 reducedSize
                             >
                                 <Pie
-                                    data={
-                                        statisticsData.perVehicleData.duration
-                                    }
+                                    data={drivingData.charts.duration}
                                     cx="50%"
                                     cy="50%"
                                     outerRadius={PIE_CHARTS_RADIUS}
                                     label={formatLabelDuration}
                                 >
-                                    {statisticsData.perVehicleData.duration.map(
+                                    {drivingData.charts.duration.map(
                                         (entry, index) => (
                                             <Cell
                                                 key={`cell-${index}`}
@@ -276,11 +242,27 @@ const VehicleStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
                                     )}
                                 </Pie>
                             </PieChartGridItem>
-                            <BarChartGridItem
+                            <PieChartGridItem
+                                title={'Łączna liczba użyć'}
                                 reducedSize
-                                title={'Porównanie prędkości'}
-                                data={statisticsData.perVehicleData.speed}
-                            />
+                            >
+                                <Pie
+                                    data={drivingData.charts.usages}
+                                    cx="50%"
+                                    cy="50%"
+                                    outerRadius={PIE_CHARTS_RADIUS}
+                                    label={(entry) => entry.value}
+                                >
+                                    {drivingData.charts.duration.map(
+                                        (entry, index) => (
+                                            <Cell
+                                                key={`cell-${index}`}
+                                                fill={colors[index]}
+                                            />
+                                        )
+                                    )}
+                                </Pie>
+                            </PieChartGridItem>
                         </Grid>
                     )}
                 </Grid>
@@ -321,25 +303,6 @@ const BarChartGridItem = ({ data, title, reducedSize }) => (
         </BarChart>
     </Grid>
 );
-
-const PieChartGridItem = ({ children, title, reducedSize }) => (
-    <Grid item>
-        <ChartTitle>{`${title}:`}</ChartTitle>
-        <PieChart
-            width={reducedSize ? REDUCED_CHART_WIDTH : CHART_WIDTH}
-            height={250}
-        >
-            {children}
-            <Tooltip />
-            <Legend />
-        </PieChart>
-    </Grid>
-);
-
-const ChartTitle = styled.p`
-    font-size: ${({ theme }) => theme.font.M};
-    font-weight: ${({ theme }) => theme.font.Bold};
-`;
 
 const mapStateToProps = (state) => {
     return {

@@ -6,7 +6,7 @@ import {
     ContentBody,
     ContentHeader,
 } from '../../../../components/PageContents';
-import DriverStatisticsData from '../../../../components/charts/DriverStatisticsData';
+import DriverStatisticsData from '../../../../components/chartViews/DriverStatisticsData';
 
 const Statistics = ({ user }) => {
     return (

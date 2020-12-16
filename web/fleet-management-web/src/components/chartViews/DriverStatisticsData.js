@@ -20,6 +20,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Grid } from '@material-ui/core';
 import { StyledGrid, StyledGridRow } from '../Grid';
+import { randomizeColor } from '../../utils/utils';
 
 const Spinner = styled(FontAwesomeIcon)`
     color: ${({ theme }) => theme.primaryColor};
@@ -40,19 +41,8 @@ const DriverStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
 
     const setColorPerVehicle = (data) => {
         if (data) {
-            const randomizeColor = () => {
-                let hex = '';
-                while (hex.length < 6)
-                    hex += Math.random().toString(16).substr(-6).substr(-1);
-                return `#${hex}`;
-            };
-
-            let numOfItems = data.duration.length;
             let i = 0;
-            while (i !== numOfItems) {
-                colors[i] = randomizeColor();
-                i++;
-            }
+            while (i !== data.duration.length) colors[i++] = randomizeColor();
         }
     };
 
