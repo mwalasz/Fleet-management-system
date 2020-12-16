@@ -32,6 +32,7 @@ const Button = styled.button`
     ${({ secondary }) =>
         secondary &&
         css`
+            border: 2px solid ${({ theme }) => theme.primaryColor};
             background: ${({ theme }) => theme.primaryColor};
             padding: 8px 25px;
             &:focus {
@@ -40,6 +41,16 @@ const Button = styled.button`
             &:hover {
                 color: ${({ theme }) => theme.secondColor};
                 background: ${({ theme }) => theme.primaryBackground};
+            }
+        `}
+
+    ${({ selected }) =>
+        selected &&
+        css`
+            background: ${({ theme }) => theme.primaryBackground};
+            padding: 8px 25px;
+            border: 2px solid ${({ theme }) => theme.primaryColor};
+            &:focus {
             }
         `}
 

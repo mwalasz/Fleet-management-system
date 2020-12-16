@@ -20,6 +20,8 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Grid } from '@material-ui/core';
 import { StyledGrid, StyledGridRow } from '../Grid';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Button from '../../components/Button';
 
 const Spinner = styled(FontAwesomeIcon)`
     color: ${({ theme }) => theme.primaryColor};
@@ -36,6 +38,7 @@ const VehicleStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
     const [loading, setLoading] = useState(false);
     const [colors, setColors] = useState([]);
     const [statisticsData, setStatisticsData] = useState(null);
+    const [isCostActive, setIsCostActive] = useState(false);
     const PIE_CHARTS_RADIUS = reducedSize ? 60 : 80;
 
     const setColorPerVehicle = (data) => {
@@ -58,35 +61,9 @@ const VehicleStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
 
     useEffect(() => {
         if (!loadedStatisticsData) {
-            setLoading(true);
-            axios
-                .get(
-                    `${API_URL}/statistics/driver/get_all?mail=${user.email}`,
-                    {
-                        withCredentials: true,
-                        headers: {
-                            Authorization: 'Bearer ' + user.token,
-                        },
-                    }
-                )
-                .then((res) => {
-                    setLoading(false);
-                    const data = res.data.result;
-
-                    if (data) {
-                        setColorPerVehicle(data.perVehicleData);
-                        setStatisticsData(data);
-                    }
-                })
-                .catch((err) => {
-                    setLoading(false);
-                    console.log(
-                        `An error occurred while downloading user's vehicles: ${err}`
-                    );
-                });
-        } else {
-            setColorPerVehicle(loadedStatisticsData.perVehicleData);
-            setStatisticsData(loadedStatisticsData);
+            console.log('loadedStatisticsData', loadedStatisticsData);
+            // setColorPerVehicle(data.perVehicleData);
+            // setStatisticsData(data);
         }
     }, [loadedStatisticsData]);
 
@@ -100,8 +77,30 @@ const VehicleStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
 
     return (
         <>
-            {loading && <Spinner icon={faSpinner} spin size={'3x'} />}
-            {!loading && statisticsData && statisticsData.driverData && (
+            {
+                <div style={{ margin: '20px' }}>
+                    <ButtonGroup
+                        color="primary"
+                        aria-label="outlined primary button group"
+                    >
+                        <Button
+                            selected={isCostActive}
+                            secondary
+                            onClick={() => setIsCostActive(true)}
+                        >
+                            koszty
+                        </Button>
+                        <Button
+                            selected={!isCostActive}
+                            secondary
+                            onClick={() => setIsCostActive(false)}
+                        >
+                            eksploatacja
+                        </Button>
+                    </ButtonGroup>
+                </div>
+            }
+            {loadedStatisticsData && (
                 <Grid
                     container
                     direction="column"
@@ -123,35 +122,104 @@ const VehicleStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
                             justify="space-evenly"
                             alignItems="stretch"
                         >
-                            <StyledGridRow
-                                heading={'Liczba tras'}
-                                text={statisticsData.driverData.numberOfTrips}
-                            />
-                            <StyledGridRow
-                                heading={'Dystans'}
-                                text={`${statisticsData.driverData.totalDistanceInKilometers.toFixed(
-                                    2
-                                )} km`}
-                            />
-                            <StyledGridRow
-                                heading={'Czas'}
-                                text={formatDurationWithNoStyling(
-                                    statisticsData.driverData
-                                        .totalDurationInSeconds
-                                )}
-                            />
-                            <StyledGridRow
-                                heading={'Średnia prędkość'}
-                                text={`${statisticsData.driverData.averageSpeedInKilometersPerHour.toFixed(
-                                    2
-                                )} km/h`}
-                            />
-                            <StyledGridRow
-                                heading={'Maks. prędkość'}
-                                text={`${statisticsData.driverData.maximumSpeedInKilometersPerHour.toFixed(
-                                    2
-                                )} km/h`}
-                            />
+                            {isCostActive ? (
+                                <>
+                                    <StyledGridRow
+                                        heading={'Sumaryczne koszty obsługi'}
+                                        text={
+                                            loadedStatisticsData.costs.data
+                                                .totalCost
+                                        }
+                                    />
+                                    <StyledGridRow
+                                        heading={
+                                            'Liczba wszystkich serwisów i napraw'
+                                        }
+                                        text={
+                                            loadedStatisticsData.costs.data
+                                                .maintenancesNumber
+                                        }
+                                        noBottomLine
+                                    />
+                                    <StyledGridRow
+                                        heading={
+                                            'Średni koszt serwisów i napraw'
+                                        }
+                                        text={
+                                            loadedStatisticsData.costs.data
+                                                .maintenancesAverageCost
+                                        }
+                                        noBottomLine
+                                    />
+                                    <StyledGridRow
+                                        heading={
+                                            'Łączny koszt serwisów i napraw'
+                                        }
+                                        text={
+                                            loadedStatisticsData.costs.data
+                                                .maintenancesCost
+                                        }
+                                    />
+                                    <StyledGridRow
+                                        heading={'Liczba wszystkich tankowań'}
+                                        text={
+                                            loadedStatisticsData.costs.data
+                                                .refuelingsNumber
+                                        }
+                                        noBottomLine
+                                    />
+                                    <StyledGridRow
+                                        heading={'Średni koszt tankowań'}
+                                        text={
+                                            loadedStatisticsData.costs.data
+                                                .refuelingsAverageCost
+                                        }
+                                        noBottomLine
+                                    />
+                                    <StyledGridRow
+                                        heading={'Łączny koszt tankowań'}
+                                        text={
+                                            loadedStatisticsData.costs.data
+                                                .refuelingsCost
+                                        }
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <StyledGridRow
+                                        heading={'Liczba tras'}
+                                        text={
+                                            loadedStatisticsData.driving.data
+                                                .numberOfTrips
+                                        }
+                                    />
+                                    <StyledGridRow
+                                        heading={'Dystans'}
+                                        text={`${loadedStatisticsData.driving.data.totalDistanceInKilometers.toFixed(
+                                            2
+                                        )} km`}
+                                    />
+                                    <StyledGridRow
+                                        heading={'Czas'}
+                                        text={formatDurationWithNoStyling(
+                                            loadedStatisticsData.driving.data
+                                                .totalDurationInSeconds
+                                        )}
+                                    />
+                                    <StyledGridRow
+                                        heading={'Średnia prędkość'}
+                                        text={`${loadedStatisticsData.driving.data.averageSpeedInKilometersPerHour.toFixed(
+                                            2
+                                        )} km/h`}
+                                    />
+                                    <StyledGridRow
+                                        heading={'Maks. prędkość'}
+                                        text={`${loadedStatisticsData.driving.data.maximumSpeedInKilometersPerHour.toFixed(
+                                            2
+                                        )} km/h`}
+                                    />
+                                </>
+                            )}
                         </Grid>
                     </Grid>
                     {statisticsData && statisticsData.perVehicleData && (

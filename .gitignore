@@ -351,3 +351,4 @@ MigrationBackup/
 *.db
 *.cd
 srv/files/
+web/fleet-management-web/.VSCodeCounter/
