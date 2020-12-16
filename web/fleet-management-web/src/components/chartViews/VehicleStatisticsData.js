@@ -25,7 +25,12 @@ import PieChartGridItem from '../charts/PieChartGridItem';
 import ChartTitle from '../charts/ChartTitle';
 import { CHART_WIDTH, REDUCED_CHART_WIDTH } from '../charts/constans';
 
-const VehicleStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
+const VehicleStatisticsData = ({
+    user,
+    loadedStatisticsData,
+    reducedSize,
+    costSelected,
+}) => {
     const [colors, setColors] = useState([]);
     const [drivingData, setDrivingData] = useState(null);
     const [costsData, setCostsData] = useState(null);
@@ -56,29 +61,6 @@ const VehicleStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
 
     return (
         <>
-            {
-                <div style={{ marginBottom: '20px' }}>
-                    <ButtonGroup
-                        color="primary"
-                        aria-label="outlined primary button group"
-                    >
-                        <Button
-                            selected={isCostActive}
-                            secondary
-                            onClick={() => setIsCostActive(true)}
-                        >
-                            koszty
-                        </Button>
-                        <Button
-                            selected={!isCostActive}
-                            secondary
-                            onClick={() => setIsCostActive(false)}
-                        >
-                            eksploatacja
-                        </Button>
-                    </ButtonGroup>
-                </div>
-            }
             {drivingData && costsData && (
                 <Grid
                     container
@@ -101,7 +83,7 @@ const VehicleStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
                             justify="space-evenly"
                             alignItems="stretch"
                         >
-                            {isCostActive ? (
+                            {costSelected ? (
                                 <>
                                     <StyledGridRow
                                         heading={'Sumaryczne koszty obsługi'}
@@ -188,7 +170,7 @@ const VehicleStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
                             )}
                         </Grid>
                     </Grid>
-                    {isCostActive && loadedStatisticsData && (
+                    {!costSelected && loadedStatisticsData && (
                         <Grid
                             item
                             container
@@ -211,7 +193,7 @@ const VehicleStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
                                 colors={colors}
                             />
                             <PieChartGridItem
-                                title={'Łączny czas użytku'}
+                                title={'Łączna liczba użyć'}
                                 reducedSize
                                 data={drivingData.charts.usages}
                                 label={(entry) => entry.value}
