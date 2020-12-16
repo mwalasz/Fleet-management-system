@@ -17,13 +17,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Grid } from '@material-ui/core';
-import { StyledGrid, StyledGridRow } from '../Grid';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Button from '../Button';
+import { StyledGridRow } from '../Grid';
 import { randomizeColor } from '../../utils/utils';
 import PieChartGridItem from '../charts/PieChartGridItem';
 import ChartTitle from '../charts/ChartTitle';
 import { CHART_WIDTH, REDUCED_CHART_WIDTH } from '../charts/constans';
+import RenderDrivingRows from '../charts/RenderDrivingRows';
 
 const VehicleStatisticsData = ({
     user,
@@ -34,7 +33,6 @@ const VehicleStatisticsData = ({
     const [colors, setColors] = useState([]);
     const [drivingData, setDrivingData] = useState(null);
     const [costsData, setCostsData] = useState(null);
-    const [isCostActive, setIsCostActive] = useState(false);
 
     const setColorPerDriver = (data) => {
         if (data) {
@@ -136,37 +134,7 @@ const VehicleStatisticsData = ({
                                     />
                                 </>
                             ) : (
-                                <>
-                                    <StyledGridRow
-                                        heading={'Liczba tras'}
-                                        text={drivingData.data.numberOfTrips}
-                                    />
-                                    <StyledGridRow
-                                        heading={'Dystans'}
-                                        text={`${drivingData.data.totalDistanceInKilometers.toFixed(
-                                            2
-                                        )} km`}
-                                    />
-                                    <StyledGridRow
-                                        heading={'Czas'}
-                                        text={formatDurationWithNoStyling(
-                                            drivingData.data
-                                                .totalDurationInSeconds
-                                        )}
-                                    />
-                                    <StyledGridRow
-                                        heading={'Średnia prędkość'}
-                                        text={`${drivingData.data.averageSpeedInKilometersPerHour.toFixed(
-                                            2
-                                        )} km/h`}
-                                    />
-                                    <StyledGridRow
-                                        heading={'Maks. prędkość'}
-                                        text={`${drivingData.data.maximumSpeedInKilometersPerHour.toFixed(
-                                            2
-                                        )} km/h`}
-                                    />
-                                </>
+                                <RenderDrivingRows data={drivingData.data} />
                             )}
                         </Grid>
                     </Grid>

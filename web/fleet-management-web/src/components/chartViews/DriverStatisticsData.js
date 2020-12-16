@@ -21,6 +21,7 @@ import { randomizeColor } from '../../utils/utils';
 import PieChartGridItem from '../charts/PieChartGridItem';
 import ChartTitle from '../charts/ChartTitle';
 import { CHART_WIDTH, REDUCED_CHART_WIDTH } from '../charts/constans';
+import RenderDrivingRows from '../charts/RenderDrivingRows';
 
 const Spinner = styled(FontAwesomeIcon)`
     color: ${({ theme }) => theme.primaryColor};
@@ -109,34 +110,8 @@ const DriverStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
                             justify="space-evenly"
                             alignItems="stretch"
                         >
-                            <StyledGridRow
-                                heading={'Liczba tras'}
-                                text={statisticsData.driverData.numberOfTrips}
-                            />
-                            <StyledGridRow
-                                heading={'Dystans'}
-                                text={`${statisticsData.driverData.totalDistanceInKilometers.toFixed(
-                                    2
-                                )} km`}
-                            />
-                            <StyledGridRow
-                                heading={'Czas'}
-                                text={formatDurationWithNoStyling(
-                                    statisticsData.driverData
-                                        .totalDurationInSeconds
-                                )}
-                            />
-                            <StyledGridRow
-                                heading={'Średnia prędkość'}
-                                text={`${statisticsData.driverData.averageSpeedInKilometersPerHour.toFixed(
-                                    2
-                                )} km/h`}
-                            />
-                            <StyledGridRow
-                                heading={'Maks. prędkość'}
-                                text={`${statisticsData.driverData.maximumSpeedInKilometersPerHour.toFixed(
-                                    2
-                                )} km/h`}
+                            <RenderDrivingRows
+                                data={statisticsData.driverData}
                             />
                         </Grid>
                     </Grid>
