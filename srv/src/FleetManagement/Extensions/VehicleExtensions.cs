@@ -15,7 +15,7 @@ namespace FleetManagement.Extensions
                 count++;
             }
 
-            return new CostAndCount() { Cost = cost, Average = cost / count, Count = count };
+            return new CostAndCount() { Cost = cost, Average = CalcAverage(cost, count), Count = count };
         }
 
         public static CostAndCount GetCostOfRefuelings(this Vehicle vehicle)
@@ -29,7 +29,12 @@ namespace FleetManagement.Extensions
                 count++;
             }
 
-            return new CostAndCount() { Cost = cost, Average = cost / count, Count = count };
+            return new CostAndCount() { Cost = cost, Average = CalcAverage(cost, count), Count = count };
+        }
+
+        private static double CalcAverage(double cost, double count)
+        {
+            return count >= 1 ? cost / count : 0;
         }
 
         public class CostAndCount
