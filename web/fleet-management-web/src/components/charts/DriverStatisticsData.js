@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { API_URL } from '../../../../../utils/constans';
+import { API_URL } from '../../utils/constans';
 import {
     PieChart,
     Pie,
@@ -14,12 +14,12 @@ import {
     YAxis,
     CartesianGrid,
 } from 'recharts';
-import { formatDurationWithNoStyling } from '../../../../../utils/formating';
+import { formatDurationWithNoStyling } from '../../utils/formating';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Grid } from '@material-ui/core';
-import { StyledGrid, StyledGridRow } from '../../../../../components/Grid';
+import { StyledGrid, StyledGridRow } from '../Grid';
 
 const Spinner = styled(FontAwesomeIcon)`
     color: ${({ theme }) => theme.primaryColor};
@@ -32,7 +32,7 @@ const Spinner = styled(FontAwesomeIcon)`
 const CHART_WIDTH = 500;
 const REDUCED_CHART_WIDTH = 400;
 
-const DataWithCharts = ({ user, loadedStatisticsData, reducedSize }) => {
+const DriverStatisticsData = ({ user, loadedStatisticsData, reducedSize }) => {
     const [loading, setLoading] = useState(false);
     const [colors, setColors] = useState([]);
     const [statisticsData, setStatisticsData] = useState(null);
@@ -44,7 +44,6 @@ const DataWithCharts = ({ user, loadedStatisticsData, reducedSize }) => {
                 let hex = '';
                 while (hex.length < 6)
                     hex += Math.random().toString(16).substr(-6).substr(-1);
-
                 return `#${hex}`;
             };
 
@@ -279,4 +278,4 @@ const mapStateToProps = (state) => {
         user: state.user,
     };
 };
-export default connect(mapStateToProps)(DataWithCharts);
+export default connect(mapStateToProps)(DriverStatisticsData);

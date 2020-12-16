@@ -1,25 +1,28 @@
 import React from 'react';
+import VehicleStatisticsData from '../../../../../components/charts/VehicleStatisticsData';
 import Modal from '../../../../../components/Modal';
-// import DataWithCharts from '../../../../driver/content/statistics/charts/DataWithCharts';
 
-const VehicleStatisticsModal = ({ isVisible, handleClose }) => {
+const VehicleStatisticsModal = ({
+    isVisible,
+    handleClose,
+    vehicleStatistics,
+    vehicleDescription,
+}) => {
     return (
         <Modal
             isVisible={isVisible}
             handleClose={handleClose}
             title={`Statystyki pojazdu:`}
-            // title={`Statystyki pojazdu:  ${driverDescription || ''}`}
+            title={`Statystyki pojazdu:  ${vehicleDescription || ''}`}
             ultraWide
         >
-            <p>statystyki pojazdu</p>
-            {/* {driverStatistics && (
+            {vehicleStatistics && (
                 <div style={{ marginTop: '70px' }}>
-                    <DataWithCharts
-                        loadedStatisticsData={driverStatistics}
-                        reducedSize
+                    <VehicleStatisticsData
+                        loadedStatisticsData={vehicleStatistics}
                     />
                 </div>
-            )} */}
+            )}
         </Modal>
     );
 };

@@ -6,7 +6,7 @@ import {
     ContentBody,
     ContentHeader,
 } from '../../../../components/PageContents';
-import DataWithCharts from './charts/DataWithCharts';
+import DriverStatisticsData from '../../../../components/charts/DriverStatisticsData';
 
 const Statistics = ({ user }) => {
     return (
@@ -15,7 +15,7 @@ const Statistics = ({ user }) => {
                 <Title>{'Twoje statystki'}</Title>
             </ContentHeader>
             <ContentBody>
-                <DataWithCharts />
+                <DriverStatisticsData />
             </ContentBody>
         </ContentWrapper>
     );

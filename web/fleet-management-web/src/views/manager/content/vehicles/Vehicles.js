@@ -43,7 +43,6 @@ const Vehicles = ({ user }) => {
     const [maintenancesModalVisible, setMaintenancesModalVisible] = useState(
         false
     );
-    const [statisticsModalVisible, setStatisticsModalVisible] = useState(false);
     const [newVehicleModalVisible, setNewVehicleModalVisible] = useState(false);
 
     const [activeVehicles, setActiveVehicles] = useState(true);
@@ -54,6 +53,10 @@ const Vehicles = ({ user }) => {
         false
     );
     const [dataForNewVehicle, setDataForNewVehicle] = useState(null);
+
+    const [statisticsModalVisible, setStatisticsModalVisible] = useState(false);
+    const [statisticsLoading, setStatisticsLoading] = useState(false);
+    const [statistics, setStatistics] = useState(null);
 
     useEffect(() => {
         console.log('user');
@@ -123,6 +126,38 @@ const Vehicles = ({ user }) => {
         }
     };
 
+    const loadVehicleStatistics = (vin) => {
+        setStatisticsLoading(true);
+        axios
+            .get(
+                `${API_URL}/statistics/vehicle/get_all_per_vehicle?vin=${vin}`,
+                {
+                    withCredentials: true,
+                    headers: {
+                        Authorization: 'Bearer ' + user.token,
+                    },
+                }
+            )
+            .then((res) => {
+                const data = res.data.result;
+
+                if (data) {
+                    console.log(data);
+                    setStatistics(data);
+                    setTimeout(() => {
+                        setStatisticsLoading(false);
+                        setStatisticsModalVisible(true);
+                    }, 500);
+                }
+            })
+            .catch((err) => {
+                setStatisticsLoading(false);
+                console.log(
+                    `An error occurred while downloading user's vehicles: ${err}`
+                );
+            });
+    };
+
     const columnsButtons = [
         {
             headerAlign: 'center',
@@ -131,13 +166,23 @@ const Vehicles = ({ user }) => {
             width: 100,
             sortable: false,
             renderCell: (params) => {
-                return (
+                return statisticsLoading &&
+                    selectedVehicle &&
+                    params.data.vin === selectedVehicle.vin ? (
+                    <Spinner
+                        icon={faSpinner}
+                        spin
+                        size={'2x'}
+                        style={{ display: 'block', margin: '30px auto' }}
+                    />
+                ) : (
                     <DGStyledIcon
                         icon={faChartBar}
                         onClick={() => {
                             console.log(params.data);
                             setSelectedVehicle(params.data);
-                            setStatisticsModalVisible(!statisticsModalVisible);
+                            setStatisticsLoading(true);
+                            loadVehicleStatistics(params.data.vin);
                         }}
                     />
                 );
@@ -239,6 +284,12 @@ const Vehicles = ({ user }) => {
         },
     ];
 
+    const getVehicleName = () => {
+        return selectedVehicle
+            ? `${selectedVehicle.brand} ${selectedVehicle.model}`
+            : '';
+    };
+
     return (
         <ContentWrapper>
             <ContentHeader>
@@ -317,6 +368,8 @@ const Vehicles = ({ user }) => {
             <VehicleStatisticsModal
                 isVisible={statisticsModalVisible}
                 handleClose={() => setStatisticsModalVisible(false)}
+                vehicleStatistics={statistics}
+                vehicleDescription={getVehicleName()}
             />
             <NewVehicleModal
                 data={dataForNewVehicle ? setDataForNewVehicle : null}

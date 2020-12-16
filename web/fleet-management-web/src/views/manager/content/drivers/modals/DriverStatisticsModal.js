@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from '../../../../../components/Modal';
-import DataWithCharts from '../../../../driver/content/statistics/charts/DataWithCharts';
+import DriverStatisticsData from '../../../../../components/charts/DriverStatisticsData';
 
 const DriverStatisticsModal = ({
     isVisible,
@@ -17,7 +17,7 @@ const DriverStatisticsModal = ({
         >
             {driverStatistics && (
                 <div style={{ marginTop: '70px' }}>
-                    <DataWithCharts
+                    <DriverStatisticsData
                         loadedStatisticsData={driverStatistics}
                         reducedSize
                     />
