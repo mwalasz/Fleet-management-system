@@ -21,7 +21,6 @@ const PieChartGridItem = ({ title, reducedSize, data, label, colors }) => (
                     <Cell key={`cell-${index}`} fill={colors[index]} />
                 ))}
             </Pie>
-            <Tooltip />
             <Legend />
         </PieChart>
     </Grid>

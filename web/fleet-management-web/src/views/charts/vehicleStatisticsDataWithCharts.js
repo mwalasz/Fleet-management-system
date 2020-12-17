@@ -7,10 +7,13 @@ import {
     Bar,
     XAxis,
     YAxis,
+    LineChart,
+    Line,
     CartesianGrid,
 } from 'recharts';
 import {
     formatDurationWithNoStyling,
+    formatPriceWithNoStyling,
     formatPrice,
 } from '../../utils/formating';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -21,7 +24,10 @@ import { StyledGridRow } from '../../components/Grid';
 import { randomizeColor } from '../../utils/utils';
 import PieChartGridItem from '../../components/charts/PieChartGridItem';
 import ChartTitle from '../../components/charts/ChartTitle';
-import { CHART_WIDTH, REDUCED_CHART_WIDTH } from '../../components/charts/constans';
+import {
+    CHART_WIDTH,
+    REDUCED_CHART_WIDTH,
+} from '../../components/charts/constans';
 import RenderDrivingRows from '../../components/charts/RenderDrivingRows';
 
 const VehicleStatisticsData = ({
@@ -55,6 +61,10 @@ const VehicleStatisticsData = ({
 
     const formatLabelDuration = (entry) => {
         return formatDurationWithNoStyling(entry.value);
+    };
+
+    const formatLabelPrice = (entry) => {
+        return formatPriceWithNoStyling(entry.value);
     };
 
     return (
@@ -138,7 +148,31 @@ const VehicleStatisticsData = ({
                             )}
                         </Grid>
                     </Grid>
-                    {!costSelected && loadedStatisticsData && (
+                    {loadedStatisticsData && costSelected ? (
+                        <Grid
+                            item
+                            container
+                            justify="space-around"
+                            alignItems="center"
+                            direction="row"
+                        >
+                            <BarChartGridItem
+                                title={'Miesięczny podział kosztów'}
+                                reducedSize
+                                data={costsData.charts.summary}
+                                colors={colors}
+                            />
+                            <PieChartGridItem
+                                title={
+                                    'Stosunek kwoty wydanej na paliwo i eksploatację'
+                                }
+                                reducedSize
+                                data={costsData.charts.ratio}
+                                label={formatLabelPrice}
+                                colors={colors}
+                            />
+                        </Grid>
+                    ) : (
                         <Grid
                             item
                             container
@@ -175,35 +209,32 @@ const VehicleStatisticsData = ({
     );
 };
 
-const BarChartGridItem = ({ data, title, reducedSize }) => (
+const BarChartGridItem = ({ title, reducedSize, data, label, colors }) => (
     <Grid item>
         <ChartTitle>{`${title}:`}</ChartTitle>
         <BarChart
-            width={reducedSize ? REDUCED_CHART_WIDTH : CHART_WIDTH}
+            width={reducedSize ? REDUCED_CHART_WIDTH * 2 : CHART_WIDTH * 2}
             height={250}
             data={data}
-            maxBarSize={40}
         >
-            <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
-            <YAxis
-                label={{
-                    value: 'V [km/h]',
-                    angle: 270,
-                    position: 'insideLeft',
-                    offset: 10,
-                }}
-            />
-            <Tooltip />
+            <YAxis />
+            <CartesianGrid strokeDasharray="3 3" />
+            <Tooltip formatter={formatPriceWithNoStyling} />
             <Legend
                 formatter={(value, entry, index) => {
-                    if (value === 'averageSpeed') return 'Średnia prędkość';
-                    else if (value === 'maxSpeed') return 'Maksymalna';
+                    if (value === 'maintenances') return 'Naprawy';
+                    else if (value === 'fuel') return 'Tankowania';
                     else return 'Błąd!';
                 }}
             />
-            <Bar dataKey="averageSpeed" fill="#858383" />
-            <Bar dataKey="maxSpeed" fill="#3676b5" />
+            <Bar type="monotone" dataKey="maintenances" fill={colors[0]} />
+            <Bar
+                type="monotone"
+                dataKey="fuel"
+                fill={colors[1]}
+                label="paliwo"
+            />
         </BarChart>
     </Grid>
 );

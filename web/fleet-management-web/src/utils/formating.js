@@ -66,9 +66,11 @@ export const formatSpeed = (speed) => {
 };
 
 export const formatPrice = (price) => {
-    const toReturn = price != null ? `${roundTo(2, price)} zł` : errorMessage;
+    return p(formatPriceWithNoStyling(price));
+};
 
-    return p(toReturn);
+export const formatPriceWithNoStyling = (price) => {
+    return price != null ? `${roundTo(2, price)} zł` : errorMessage;
 };
 
 export const formatMileage = (mileage) => {

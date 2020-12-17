@@ -7,11 +7,11 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 const SelectCategoryButtons = ({ selected, select, deselect }) => (
     <div style={{ position: 'absolute', right: 0, top: 0, margin: '65px' }}>
         <ButtonGroup color="primary" aria-label="outlined primary button group">
-            <Button selected={selected} secondary onClick={select}>
-                koszty
-            </Button>
             <Button selected={!selected} secondary onClick={deselect}>
                 eksploatacja
+            </Button>
+            <Button selected={selected} secondary onClick={select}>
+                koszty
             </Button>
         </ButtonGroup>
     </div>
