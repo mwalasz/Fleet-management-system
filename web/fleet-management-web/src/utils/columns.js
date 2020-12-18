@@ -165,7 +165,7 @@ export const maintenancesColumns = [
     },
 ];
 
-export const vehiclesCondensedColumns = [
+export const VEHICLES_CONDENSED_COLUMNS = [
     {
         field: 'brand',
         headerName: 'Marka',

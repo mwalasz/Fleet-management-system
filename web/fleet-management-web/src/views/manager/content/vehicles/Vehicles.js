@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_URL } from '../../../../utils/constans';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
 import Title from '../../../../components/Title';
 import {
@@ -20,18 +20,87 @@ import {
     faTrashAlt,
     faChartBar,
     faSpinner,
+    faExclamationTriangle,
+    faExclamationCircle,
+    faCheckCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import VehicleInformationModal from '../../../../components/vehicleModals/VehicleInformationModal';
 import VehicleMaintenancesModal from '../../../../components/vehicleModals/VehicleMaintenancesModal';
 import VehicleTripsModal from '../../../../components/vehicleModals/VehicleTripsModal';
 import VehicleRefuelingsModal from '../../../../components/vehicleModals/VehicleRefuelingsModal';
-import { vehiclesCondensedColumns } from '../../../../utils/columns';
+import { VEHICLES_CONDENSED_COLUMNS } from '../../../../utils/columns';
 import { Checkbox } from '@material-ui/core';
 import VehicleStatisticsModal from './modals/VehicleStatisticsModal';
+import { withStyles } from '@material-ui/core/styles';
 import NewVehicleModal from '../../../../components/newitem/newvehicle/NewVehicleModal';
 import DGStyledIcon from '../../../../components/DGStyledIcon';
 import Button from '../../../../components/Button';
 import { Spinner, TitleWrapper } from '../components/common';
+import Tooltip from '@material-ui/core/Tooltip';
+import moment from 'moment';
+
+const HtmlTooltip = withStyles((theme) => ({
+    tooltip: {
+        backgroundColor: '#0D77BB',
+        fontSize: theme.typography.pxToRem(15),
+        border: '3px solid rgb(54,118,181)',
+        maxWidth: '300px',
+        textAlign: 'center',
+    },
+}))(Tooltip);
+
+const DateStatusIcon = ({ warning, error, dateType }) => {
+    return (
+        <HtmlTooltip
+            enterDelay={200}
+            leaveDelay={200}
+            style={{ fontSize: '20px' }}
+            title={
+                (warning && `Zbliża się ważna data - ${dateType}!`) ||
+                (error && `Minęła ważna data - ${dateType}!`) ||
+                'Wszystko w terminie!'
+            }
+        >
+            <p
+                style={{
+                    whitespace: 'nowrap',
+                    overflow: 'hidden',
+                    textoverflow: 'ellipsis',
+                    fontSize: '16px',
+                }}
+            >
+                <StyledStatusIcon
+                    warning={warning}
+                    error={error}
+                    icon={
+                        (warning && faExclamationTriangle) ||
+                        (error && faExclamationCircle) ||
+                        faCheckCircle
+                    }
+                />
+            </p>
+        </HtmlTooltip>
+    );
+};
+
+const StyledStatusIcon = styled(FontAwesomeIcon)`
+    color: ${({ theme }) => theme.green};
+    white-space: 'nowrap';
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    ${({ warning }) =>
+        warning &&
+        css`
+            color: ${({ theme }) => theme.yellow};
+        `};
+
+    ${({ error }) =>
+        error &&
+        css`
+            color: ${({ theme }) => theme.red};
+        `};
+`;
 
 const Vehicles = ({ user }) => {
     const [refresh, setRefresh] = useState(false);
@@ -156,6 +225,43 @@ const Vehicles = ({ user }) => {
                     `An error occurred while downloading user's vehicles: ${err}`
                 );
             });
+    };
+
+    const checkDate = (dateToCheck) => {
+        const difference = moment(dateToCheck).diff(moment.now(), 'days');
+
+        if (difference < 0 || difference < 0) return 'error';
+        else if (difference <= 14 || difference <= 14) return 'warning';
+        return 'ok';
+    };
+
+    const statusColumn = {
+        field: 'more',
+        width: 50,
+        sortable: true,
+        renderHeader: () => {
+            return <span style={{ color: 'white' }}>status</span>;
+        },
+        renderCell: (params) => {
+            const insurance = checkDate(params.data.insuranceExpirationDate);
+            const inspection = checkDate(params.data.technicalInspectionDate);
+
+            return (
+                <DateStatusIcon
+                    error={insurance === 'error' || inspection === 'error'}
+                    warning={
+                        insurance === 'warning' || inspection === ' warning'
+                    }
+                    dateType={
+                        insurance !== 'ok'
+                            ? 'opłata ubezpieczenia'
+                            : inspection !== 'ok'
+                            ? 'wykonanie przeglądu'
+                            : ''
+                    }
+                />
+            );
+        },
     };
 
     const columnsButtons = [
@@ -328,7 +434,8 @@ const Vehicles = ({ user }) => {
                         loading={loading}
                         rows={vehicles}
                         columns={[
-                            ...vehiclesCondensedColumns,
+                            statusColumn,
+                            ...VEHICLES_CONDENSED_COLUMNS,
                             ...columnsButtons,
                         ]}
                         pageSize={parseInt(visualViewport.height / 80)}

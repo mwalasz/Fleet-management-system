@@ -21,7 +21,7 @@ import VehicleInformationModal from '../../../../components/vehicleModals/Vehicl
 import VehicleMaintenancesModal from '../../../../components/vehicleModals/VehicleMaintenancesModal';
 import VehicleTripsModal from '../../../../components/vehicleModals/VehicleTripsModal';
 import VehicleRefuelingsModal from '../../../../components/vehicleModals/VehicleRefuelingsModal';
-import { vehiclesCondensedColumns } from '../../../../utils/columns';
+import { VEHICLES_CONDENSED_COLUMNS } from '../../../../utils/columns';
 
 const StyledIcon = styled(FontAwesomeIcon)`
     margin: 0px auto;
@@ -162,7 +162,7 @@ const Vehicles = ({ user }) => {
                         loading={loading}
                         rows={vehicles}
                         columns={[
-                            ...vehiclesCondensedColumns,
+                            ...VEHICLES_CONDENSED_COLUMNS,
                             ...columnsButtons,
                         ]}
                         pageSize={parseInt(visualViewport.height / 80)}
