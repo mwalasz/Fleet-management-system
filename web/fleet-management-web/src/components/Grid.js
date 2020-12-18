@@ -2,7 +2,13 @@ import styled, { css } from 'styled-components';
 import { Grid } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export const StyledGridRow = ({ heading, text, icon, noBottomLine }) => (
+export const StyledGridRow = ({
+    heading,
+    text,
+    icon,
+    noBottomLine,
+    dateValidationInfo,
+}) => (
     <StyledRow
         icon={icon}
         container
@@ -11,6 +17,8 @@ export const StyledGridRow = ({ heading, text, icon, noBottomLine }) => (
         justify={icon ? 'center' : 'space-between'}
         alignItems="center"
         noBottomLine={noBottomLine}
+        warning={dateValidationInfo === 'warning'}
+        error={dateValidationInfo === 'error'}
     >
         {icon ? (
             <StyledIcon icon={icon} size="s" />
@@ -43,6 +51,18 @@ const StyledRow = styled(Grid)`
         css`
             padding: 15px 20px;
             background-color: ${({ theme }) => theme.primaryBackground};
+        `}
+
+    ${({ warning }) =>
+        warning &&
+        css`
+            background-color: ${({ theme }) => theme.yellow};
+        `}
+
+    ${({ error }) =>
+        error &&
+        css`
+            background-color: ${({ theme }) => theme.red};
         `}
 
     ${({ noBottomLine }) =>

@@ -15,8 +15,10 @@ import {
     formatEngineType,
     formatDriveType,
 } from '../../utils/formating';
+import { checkVehicleDate } from '../../utils/utils';
+import { USER_ROLES } from '../../utils/constans';
 
-const VehicleInformationModal = ({ isVisible, handleClose, vehicle }) => {
+const VehicleInformationModal = ({ isVisible, handleClose, vehicle, user }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [refresh, setRefresh] = useState(false);
@@ -43,6 +45,13 @@ const VehicleInformationModal = ({ isVisible, handleClose, vehicle }) => {
                 driveType,
             } = powertrain;
 
+            const insuranceDateStatus = checkVehicleDate(
+                insuranceExpirationDate
+            );
+            const inspectionDateStatus = checkVehicleDate(
+                technicalInspectionDate
+            );
+            const isManager = user.role === USER_ROLES.manager;
             return (
                 <>
                     <StyledGridRow icon={faIdCardAlt} />
@@ -62,11 +71,19 @@ const VehicleInformationModal = ({ isVisible, handleClose, vehicle }) => {
                     <StyledGridRow icon={faCalendarCheck} />
                     <StyledGridRow
                         heading={'ważność ubezpieczenia'}
-                        text={formatDate(insuranceExpirationDate)}
+                        text={formatDate(
+                            insuranceExpirationDate,
+                            insuranceDateStatus !== 'ok' && isManager
+                        )}
+                        dateValidationInfo={isManager && insuranceDateStatus}
                     />
                     <StyledGridRow
                         heading={'ważność badań technicznych'}
-                        text={formatDate(technicalInspectionDate)}
+                        text={formatDate(
+                            technicalInspectionDate,
+                            inspectionDateStatus !== 'ok' && isManager
+                        )}
+                        dateValidationInfo={isManager && inspectionDateStatus}
                     />
                     <StyledGridRow icon={faTachometerAlt} />
                     <StyledGridRow

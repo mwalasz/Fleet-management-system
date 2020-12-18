@@ -1,5 +1,6 @@
 import moment from 'moment';
 import styled from 'styled-components';
+import { getTimeLeftToDate } from './utils';
 
 const errorMessage = 'Błąd!';
 
@@ -41,8 +42,16 @@ export const formatDateAndTime = (date) => {
     return p(errorMessage);
 };
 
-export const formatDate = (date) => {
-    if (date) return p(moment(date).format('DD.MM.YYYY'));
+export const formatDate = (date, dateToCompare = false) => {
+    if (date) {
+        const formattedDate = moment(date).format('DD.MM.YYYY');
+
+        return p(
+            dateToCompare
+                ? `${formattedDate} (${getTimeLeftToDate(date)})`
+                : formattedDate
+        );
+    }
 
     return p(errorMessage);
 };
