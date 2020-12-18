@@ -20,7 +20,10 @@ import { StyledGrid, StyledGridRow } from '../../components/Grid';
 import { randomizeColor } from '../../utils/utils';
 import PieChartGridItem from '../../components/charts/PieChartGridItem';
 import ChartTitle from '../../components/charts/ChartTitle';
-import { CHART_WIDTH, REDUCED_CHART_WIDTH } from '../../components/charts/constans';
+import {
+    CHART_WIDTH,
+    REDUCED_CHART_WIDTH,
+} from '../../components/charts/constans';
 import RenderDrivingRows from '../../components/charts/RenderDrivingRows';
 
 const Spinner = styled(FontAwesomeIcon)`

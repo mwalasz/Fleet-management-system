@@ -25,32 +25,34 @@ const Company = ({ user }) => {
 
     useEffect(() => {
         setLoading(true);
-        axios
-            .get(`${API_URL}/managers/get_company?mail=${user.email}`, {
-                withCredentials: true,
-                headers: {
-                    Authorization: 'Bearer ' + user.token,
-                },
-            })
-            .then((res) => {
-                setLoading(false);
-                const data = res.data.result;
 
-                if (data) {
-                    console.log('company info', data);
-                    data.driversNumber = data.drivers.length;
-                    data.vehiclesNumber = data.vehicles.length;
-                    delete data.vehicles;
-                    delete data.drivers;
-                    setData(data);
-                }
-            })
-            .catch((err) => {
-                setLoading(false);
-                console.log(
-                    `An error occurred while downloading user's vehicles: ${err}`
-                );
-            }, []);
+        !data &&
+            axios
+                .get(`${API_URL}/managers/get_company?mail=${user.email}`, {
+                    withCredentials: true,
+                    headers: {
+                        Authorization: 'Bearer ' + user.token,
+                    },
+                })
+                .then((res) => {
+                    setLoading(false);
+                    const data = res.data.result;
+
+                    if (data) {
+                        console.log('company info', data);
+                        data.driversNumber = data.drivers.length;
+                        data.vehiclesNumber = data.vehicles.length;
+                        delete data.vehicles;
+                        delete data.drivers;
+                        setData(data);
+                    }
+                })
+                .catch((err) => {
+                    setLoading(false);
+                    console.log(
+                        `An error occurred while downloading user's vehicles: ${err}`
+                    );
+                });
         setLoading(false);
     });
 
