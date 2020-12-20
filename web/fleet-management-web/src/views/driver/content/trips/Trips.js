@@ -100,7 +100,6 @@ const Trips = ({ user }) => {
                 trip={selectedTrip}
                 isVisible={modalVisible}
                 handleClose={() => setModalVisible(false)}
-                setRefresh={() => setRefresh(!refresh)}
             />
         </ContentWrapper>
     );

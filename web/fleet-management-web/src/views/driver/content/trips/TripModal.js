@@ -23,7 +23,7 @@ const CountryIcon = styled.img`
     border: 1px solid black;
 `;
 
-const TripModal = ({ isVisible, handleClose, trip }) => {
+const TripModal = ({ isVisible, handleClose, trip, ultraWide }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -77,7 +77,8 @@ const TripModal = ({ isVisible, handleClose, trip }) => {
                 handleClose={handleClose}
                 error={error}
                 isLoading={isLoading}
-                wide
+                wide={!ultraWide}
+                ultraWide={ultraWide}
             >
                 <Heading doubleLine>{createTitle()}</Heading>
                 {isVisible && (

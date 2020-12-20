@@ -107,7 +107,7 @@ export const VEHICLE_TRIPS_COLUMNS = [
     },
     {
         field: 'averageSpeed',
-        headerName: 'Śr. prędkość',
+        headerName: 'V avg',
         width: 120,
         align: 'center',
         headerAlign: 'center',
@@ -115,8 +115,8 @@ export const VEHICLE_TRIPS_COLUMNS = [
     },
     {
         field: 'maximumSpeed',
-        headerName: 'Maks. prędkość',
-        width: 140,
+        headerName: 'V max',
+        width: 120,
         align: 'center',
         headerAlign: 'center',
         renderCell: (params) => formatSpeed(params.data.maximumSpeed),
