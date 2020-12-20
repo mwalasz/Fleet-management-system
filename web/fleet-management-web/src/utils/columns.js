@@ -194,7 +194,7 @@ export const VEHICLES_CONDENSED_COLUMNS = [
     {
         field: 'vin',
         headerName: 'Numer VIN',
-        width: 190,
+        width: 215,
         sortable: false,
         align: 'center',
         headerAlign: 'center',

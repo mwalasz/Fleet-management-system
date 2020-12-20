@@ -85,11 +85,11 @@ const Company = ({ user }) => {
                         />
                         <StyledGridRow
                             heading={'Ilość kierowców'}
-                            text={data.vehiclesNumber}
+                            text={data.driversNumber}
                         />
                         <StyledGridRow
                             heading={'Ilość pojazdów'}
-                            text={data.driversNumber}
+                            text={data.vehiclesNumber}
                         />
                     </div>
                 )}

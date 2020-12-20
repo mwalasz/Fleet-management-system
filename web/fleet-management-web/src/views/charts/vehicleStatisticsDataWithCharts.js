@@ -7,18 +7,14 @@ import {
     Bar,
     XAxis,
     YAxis,
-    LineChart,
-    Line,
     CartesianGrid,
 } from 'recharts';
 import {
     formatDurationWithNoStyling,
     formatPriceWithNoStyling,
     formatPrice,
+    formatDistanceWithoutStyling,
 } from '../../utils/formating';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import styled from 'styled-components';
 import { Grid } from '@material-ui/core';
 import { StyledGridRow } from '../../components/Grid';
 import { randomizeColor } from '../../utils/utils';
@@ -33,7 +29,6 @@ import RenderDrivingRows from '../../components/charts/RenderDrivingRows';
 const VehicleStatisticsData = ({
     user,
     loadedStatisticsData,
-    reducedSize,
     costSelected,
 }) => {
     const [colors, setColors] = useState([]);
@@ -56,7 +51,8 @@ const VehicleStatisticsData = ({
     }, [loadedStatisticsData]);
 
     const formatLabelDistance = (entry) => {
-        return `${entry.value} km`;
+        console.log(entry.value);
+        return formatDistanceWithoutStyling(entry.value);
     };
 
     const formatLabelDuration = (entry) => {

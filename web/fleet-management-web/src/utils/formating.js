@@ -57,15 +57,19 @@ export const formatDate = (date, dateToCompare = false) => {
 };
 
 export const formatDistance = (distance) => {
+    return p(formatDistanceWithoutStyling(distance));
+};
+
+export const formatDistanceWithoutStyling = (distance) => {
     if (distance) {
         if (distance < 1000) {
-            return p(`${roundTo(0, distance)} m`);
+            return `${roundTo(0, distance)} m`;
         } else {
-            return p(`${roundTo(1, distance / 1000)} km`);
+            return `${roundTo(1, distance / 1000)} km`;
         }
     }
 
-    return p('0 km');
+    return '0 km';
 };
 
 export const formatSpeed = (speed) => {

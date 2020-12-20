@@ -245,7 +245,7 @@ const Vehicles = ({ user }) => {
             headerAlign: 'center',
             field: 'trips',
             headerName: 'Trasy',
-            width: 100,
+            width: 90,
             sortable: false,
             renderCell: (params) => {
                 return (
