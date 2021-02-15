@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Input, Select as MaterialUISelect } from '@material-ui/core';
+import { styled as styledui } from '@material-ui/core/styles';
 
 const Select = ({
     options,
