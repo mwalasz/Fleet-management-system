@@ -16,7 +16,10 @@ It consists of React web application and ASP.NET Core backend.
 
 The other part is React Native application for recording vehicles usage. Data from that mobile application is subsequently used to display routes for each vehicle. You can find it here: [Fleet management Mobile App](https://github.com/mwalasz/Fleet-management-system-mobile).
 
-### Functionality:
+## System schema
+![schema](/readme/system_schema.png)
+
+### Functionality
 - storing data of vehicles usage
 - assignment of vehicle usage rights and data
 - calculating and displaying charts and statistics, such as:
@@ -25,7 +28,32 @@ The other part is React Native application for recording vehicles usage. Data fr
   - max and average speed per vehicle
   - time spend in vehicle
 
+### Available roles for users
+- administrator - manages all accounts accross system (companies, drivers and managers)
+- manager - manages company, company's drivers and vehicles
+- driver - uses company's vehicles
+
 ## Screenshots
+
+### Accounts management:
+![accounts management](/readme/admin_companies.png)
+
+### Adding new account (manager in this particular example):
+![new account](/readme/admin_add_manager.png)
+
+### Route displayment:
+![route](/readme/driver_map.png)
+
+### Driver's statistics:
+![statistics](/readme/driver_stats.png)
+
+### Management of vehicles assigned to driver by manager:
+![vehicles_management](/readme/drivers_vehicles_assignement.png)
+
+### Real life usage:
+![usage](/readme/usage.gid)
+
+
 ## Future plans: 
 - [ ]  docker integration
 - [ ]  language selection
