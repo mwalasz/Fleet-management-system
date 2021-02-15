@@ -50,9 +50,6 @@ The other part is React Native application for recording vehicles usage. Data fr
 ### Management of vehicles assigned to driver by manager:
 ![vehicles_management](/readme/drivers_vehicles_assignement.png)
 
-### Real life usage:
-![usage](/readme/real_usage.gif)
-
 
 ## Future plans: 
 - [ ]  docker integration
