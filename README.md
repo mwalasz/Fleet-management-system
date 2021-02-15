@@ -51,7 +51,7 @@ The other part is React Native application for recording vehicles usage. Data fr
 ![vehicles_management](/readme/drivers_vehicles_assignement.png)
 
 ### Real life usage:
-![usage](/readme/real_usage.gid)
+![usage](/readme/real_usage.gif)
 
 
 ## Future plans: 
